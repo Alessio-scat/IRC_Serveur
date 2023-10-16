@@ -11,7 +11,8 @@ User::~User(){}
 
 User User::operator=(User const &rhs)
 {
-    *this = rhs;
+    this->_nickname = rhs._nickname;
+    this->_username = rhs._username;
     return(*this);
 }
 
