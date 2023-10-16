@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ClientImpl.hpp                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: avaganay <avaganay@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/12 10:57:37 by avaganay          #+#    #+#             */
-/*   Updated: 2023/10/12 11:06:32 by avaganay         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #ifndef CLIENTIMPL_HPP
 #define CLIENTIMPL_HPP
@@ -16,7 +5,7 @@
 
 class ClientImpl
 {
-	enum class State {
+	enum State {
 		Connecting,
 		Connected,
 		Disconnected,
@@ -30,7 +19,7 @@ class ClientImpl
 		// State mState{ State::Disconnected };
         
 	public:
-		ClientImpl()= default;
+		ClientImpl();
 		~ClientImpl();
 
 		// bool connect(const std::string& ipaddress, unsigned short port);
