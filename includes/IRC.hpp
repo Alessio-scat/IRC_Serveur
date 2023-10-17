@@ -6,7 +6,7 @@
 /*   By: avaganay <avaganay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 10:59:07 by avaganay          #+#    #+#             */
-/*   Updated: 2023/10/16 14:40:26 by avaganay         ###   ########.fr       */
+/*   Updated: 2023/10/17 13:42:59 by avaganay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,3 @@
 #include <cerrno>
 #include <vector>
 #include <map>
-
-void socket(void);

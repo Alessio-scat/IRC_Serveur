@@ -1,6 +1,34 @@
-#include "../../includes/IRC.hpp"
+#include "../../includes/server/socket.hpp"
 
-void socket(void)
+Socket::Socket(void)
+{
+    this->_mdp = "NULL";
+    this->_host = 0;
+}
+
+Socket::Socket(std::string host, std::string mdp)
+{
+    this->_mdp = mdp;
+    this->_host = atoi(host.c_str());
+}
+
+Socket::Socket(Socket const &src)
+{
+    *this = src;
+}
+
+Socket::~Socket(){}
+
+Socket Socket::operator=(Socket const &assignment)
+{
+    if (this == &assignment)
+        return (*this);
+    this->_mdp = assignment._mdp;
+    this->_host = assignment._host;
+    return(*this);
+}
+
+void Socket::connect(void)
 {
     int serverSocket, newSocket;
     struct sockaddr_in serverAddr, newAddr;
@@ -41,7 +69,7 @@ void socket(void)
     {
         //en attente d'un event
         int activity = poll(clientSockets.data(), clientSockets.size(), -1);
-        
+
         if ((activity < 0) && (errno != EINTR))
         {
             std::cerr << "Erreur lors de l'appel à poll" << std::endl;
