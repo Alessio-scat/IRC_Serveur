@@ -6,12 +6,11 @@
 /*   By: avaganay <avaganay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 10:59:07 by avaganay          #+#    #+#             */
-/*   Updated: 2023/10/12 11:06:57 by avaganay         ###   ########.fr       */
+/*   Updated: 2023/10/16 14:40:26 by avaganay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef IRC_HPP
-#define IRC_HPP
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -31,4 +30,4 @@
 #include <vector>
 #include <map>
 
-#endif
+void socket(void);

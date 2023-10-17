@@ -6,13 +6,11 @@
 /*   By: avaganay <avaganay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 10:57:37 by avaganay          #+#    #+#             */
-/*   Updated: 2023/10/12 11:06:32 by avaganay         ###   ########.fr       */
+/*   Updated: 2023/10/16 14:40:40 by avaganay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CLIENTIMPL_HPP
-#define CLIENTIMPL_HPP
-
+#pragma once
 
 class ClientImpl
 {
@@ -39,5 +37,3 @@ class ClientImpl
 		// std::unique_ptr<Messages::Base> poll();
 
 };
-
-#endif
