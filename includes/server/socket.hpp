@@ -8,6 +8,7 @@ class Socket
 private:
     std::string _mdp;
     unsigned int _host;
+    int serverSocket;
 
 public:
     Socket(void);

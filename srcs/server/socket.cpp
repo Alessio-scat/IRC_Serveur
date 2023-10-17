@@ -30,39 +30,46 @@ Socket Socket::operator=(Socket const &assignment)
 
 void Socket::connect(void)
 {
-    int serverSocket, newSocket;
+    int newSocket;
     struct sockaddr_in serverAddr, newAddr;
     socklen_t addrSize;
     char buffer[1024];
 
     // Création d'un socket serveur IPv4 et TCP
-    serverSocket = socket(AF_INET, SOCK_STREAM, 0);
-    if (serverSocket < 0)
+    this->serverSocket = socket(AF_INET, SOCK_STREAM, 0);
+    if (this->serverSocket < 0)
     {
         perror("Erreur lors de la création du socket serveur");
         exit(1);
     }
 
     serverAddr.sin_family = AF_INET;
-    serverAddr.sin_port = htons(30000);
+    serverAddr.sin_port = htons(this->_host);
     serverAddr.sin_addr.s_addr = INADDR_ANY;
+    
+    int opt = 1;
+    if (setsockopt(this->serverSocket, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(int)) < 0)
+    {
+        perror("Erreur lors de la configuration de SO_REUSEADDR");
+        exit(1);
+    }
 
     // Liaison du socket serveur à une adresse IP et un port
-    if (bind(serverSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0)
+    if (bind(this->serverSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0)
     {
         perror("Erreur lors de la liaison du socket serveur");
         exit(1);
     }
 
     // Attente de connexions entrantes 10 maximum
-    listen(serverSocket, 10);
+    listen(this->serverSocket, 10);
     std::cout << "En attente de connexions..." << std::endl;
 
     int maxClients = 5; // Nombre maximal de clients que le serveur peut gérer
     std::vector<struct pollfd> clientSockets(maxClients + 1);
 
     // Ajout du socket serveur à la liste des sockets à surveiller
-    clientSockets[0].fd = serverSocket;
+    clientSockets[0].fd = this->serverSocket;
     clientSockets[0].events = POLLIN;
 
     while (true)
@@ -77,7 +84,7 @@ void Socket::connect(void)
 
         if (clientSockets[0].revents & POLLIN) {
             // Nouvelle connexion entrante
-            newSocket = accept(serverSocket, (struct sockaddr*)&newAddr, &addrSize);
+            newSocket = accept(this->serverSocket, (struct sockaddr*)&newAddr, &addrSize);
             if (newSocket < 0)
             {
                 perror("Erreur lors de l'acceptation de la connexion");
@@ -116,5 +123,5 @@ void Socket::connect(void)
             }
         }
     }
-    close(serverSocket);
+    close(this->serverSocket);
 }
