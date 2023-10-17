@@ -2,45 +2,91 @@
 
 void socket(void)
 {
-    int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    int serverSocket, newSocket;
+    struct sockaddr_in serverAddr, newAddr;
+    socklen_t addrSize;
+    char buffer[1024];
 
-    if (sockfd < 0) 
+    // Création d'un socket serveur IPv4 et TCP
+    serverSocket = socket(AF_INET, SOCK_STREAM, 0);
+    if (serverSocket < 0)
     {
-        std::cerr << "Error creating socket" << std::endl;
-        return;
+        perror("Erreur lors de la création du socket serveur");
+        exit(1);
     }
-    int opt = 1;
-    if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
-        std::cerr << "Error setting SO_REUSEADDR" << std::endl;
-        close(sockfd);
-        return;
-    }
-    struct sockaddr_in servaddr;
-    servaddr.sin_family = AF_INET;
-    servaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
-    servaddr.sin_port = htons(4001);
-    if (bind(sockfd, (struct sockaddr*)&servaddr, sizeof(servaddr)) < 0) {
-        std::cerr << "Error binding" << std::endl;
-        close(sockfd);
-        return;
-    }
-    std::cout << "SOCKFD " << sockfd << std::endl;
-    if (listen(sockfd, 2) < 0)
+
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_port = htons(30000);
+    serverAddr.sin_addr.s_addr = INADDR_ANY;
+
+    // Liaison du socket serveur à une adresse IP et un port
+    if (bind(serverSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0)
     {
-        std::cerr << "Error listening" << std::endl;
-        close(sockfd);
-        return;
+        perror("Erreur lors de la liaison du socket serveur");
+        exit(1);
     }
-    struct sockaddr_in client;
-    socklen_t clientSize = sizeof(client);
-    int clientSocket = accept(sockfd, (struct sockaddr*)&client, &clientSize);
-    if (clientSocket < 0)
+
+    // Attente de connexions entrantes 10 maximum
+    listen(serverSocket, 10);
+    std::cout << "En attente de connexions..." << std::endl;
+
+    int maxClients = 5; // Nombre maximal de clients que le serveur peut gérer
+    std::vector<struct pollfd> clientSockets(maxClients + 1);
+
+    // Ajout du socket serveur à la liste des sockets à surveiller
+    clientSockets[0].fd = serverSocket;
+    clientSockets[0].events = POLLIN;
+
+    while (true)
     {
-        std::cerr << "Error accepting client" << std::endl;
-        close(sockfd);
-        return;
+        //en attente d'un event
+        int activity = poll(clientSockets.data(), clientSockets.size(), -1);
+        
+        if ((activity < 0) && (errno != EINTR))
+        {
+            std::cerr << "Erreur lors de l'appel à poll" << std::endl;
+        }
+
+        if (clientSockets[0].revents & POLLIN) {
+            // Nouvelle connexion entrante
+            newSocket = accept(serverSocket, (struct sockaddr*)&newAddr, &addrSize);
+            if (newSocket < 0)
+            {
+                perror("Erreur lors de l'acceptation de la connexion");
+                exit(1);
+            }
+
+            std::cout << "Nouvelle connexion, socket FD : " << newSocket << std::endl;
+
+            // Ajout du nouveau socket client à la liste des sockets à surveiller
+            for (int i = 1; i <= maxClients; i++) {
+                if (clientSockets[i].fd == 0)
+                {
+                    clientSockets[i].fd = newSocket;
+                    clientSockets[i].events = POLLIN;
+                    break;
+                }
+            }
+        }
+
+        // Gestion des données reçues des clients
+        for (int i = 1; i <= maxClients; i++)
+        {
+            if (clientSockets[i].revents & POLLIN)
+            {
+                int bytesRead = recv(clientSockets[i].fd, buffer, sizeof(buffer), 0);
+                if (bytesRead <= 0)
+                {
+                    close(clientSockets[i].fd);
+                    clientSockets[i].fd = 0;
+                }
+                else
+                {
+                    buffer[bytesRead] = '\0';
+                    std::cout << "Client " << i << " : " << buffer << std::endl;
+                }
+            }
+        }
     }
-    std::cout << "CLIENT " << clientSocket << std::endl;
-    close(clientSocket);
-    close(sockfd);
+    close(serverSocket);
 }
