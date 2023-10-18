@@ -158,7 +158,8 @@ void Socket::discussion(void)
                 else
                 {
                     this->buffer[bytesRead] = '\0';
-                    std::cout << "Client " << i << " : " << this->buffer << std::endl;
+                    std::cout << "Client " << i << " : " << std::endl;
+                    std::cout << this->buffer << std::endl;
                 }
             }
         }
