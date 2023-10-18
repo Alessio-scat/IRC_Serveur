@@ -1,7 +1,4 @@
-
-#ifndef CLIENTIMPL_HPP
-#define CLIENTIMPL_HPP
-
+#pragma once
 
 class ClientImpl
 {
@@ -28,5 +25,3 @@ class ClientImpl
 		// std::unique_ptr<Messages::Base> poll();
 
 };
-
-#endif

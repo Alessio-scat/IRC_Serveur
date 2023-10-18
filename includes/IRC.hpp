@@ -1,6 +1,4 @@
-
-#ifndef IRC_HPP
-#define IRC_HPP
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -19,5 +17,3 @@
 #include <cerrno>
 #include <vector>
 #include <map>
-
-#endif
