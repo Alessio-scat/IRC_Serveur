@@ -8,11 +8,11 @@ RM						=	rm -rf
 BUILD_DIR				= 	build/
 
 INC_DIR					=	includes
-INC_FILE				= 	IRC server/socket
+INC_FILE				= 	IRC server/socket user/User
 INC						= 	$(addsuffix .hpp, $(addprefix $(INC_DIR)/, $(INC_FILE)))
 
 SRCS_DIR				=	srcs
-SRCS_FILE				=	main server/socket
+SRCS_FILE				=	main server/socket user/User
 SRCS					=  	$(addsuffix .cpp, $(addprefix $(SRCS_DIR)/, $(SRCS_FILE)))
 
 OBJS			    	= 	$(SRCS:%.cpp=$(BUILD_DIR)%.o)

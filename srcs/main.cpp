@@ -2,10 +2,7 @@
 #include "../includes/IRC.hpp"
 #include "../includes/user/User.hpp"
 #include "../includes/server/socket.hpp"
-
 #include "../includes/IRC.hpp"
-#include "../includes/server/ClientImpl.hpp"
-#include "../includes/server/ReceptionHandler.hpp"
 
 int main(int ac, char **av)
 {
