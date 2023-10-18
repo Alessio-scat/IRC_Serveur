@@ -25,5 +25,6 @@ public:
 
     void connect(void);
     void discussion(void);
+    int password(void);
 
 };
