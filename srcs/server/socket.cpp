@@ -116,6 +116,7 @@ void Socket::discussion(void)
     {
         //en attente d'un event
         int activity = poll(clientSockets.data(), clientSockets.size(), -1);
+        printf("ici\n");
 
         if ((activity < 0) && (errno != EINTR))
         {

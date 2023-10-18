@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../includes/IRC.hpp"
+#include "../IRC.hpp"
 
 class Socket
 {
