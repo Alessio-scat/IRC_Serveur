@@ -152,14 +152,38 @@ void Server::Run_Server(void)
 /*
         *** Run server test ! ***
 
-    - 
+    - pfds.begin().base() renvoie un it pointant sur le premier element du vecteur pfds et base() pour obtenir un pointeur sur les structure pour la fonction poll
+    - -1 pour signale que la fonction doit etre bloquante --> attendra indefiniment qu'un fd genere un evenement. 
 */
 // void Server::Run_Server(void)
 // {
 //     std::vector<struct pollfd> pfds;
+//     typename std::vector<struct pollfd>::iterator pfd_it;
 
 //     while (true)
 //     {
+//         if (poll(pfds.begin().base(), pfds.size(), -1) < 0)
+//             throw std::runtime_error("Error: poll()");
 
+//         for (pfd_it it = pfds.begin(); it != pfds.end(); it++)
+//         {
+//             if (it->revents == 0) // revents == 0 --> Aucun evenement n'a ete detecte donc on pass au fd suivant.
+//                 continue ;
+
+//             if ((it->revents & POLLHUB) == POLLHUB) // event de deconnexion
+//             {
+//                 //gerer la deconnexion
+//                 break ;
+//             }
+
+//             if ((it->revents & POLLIN) == POLLIN) // fd a genere un evenement de lecture et je verifie que le fd est celui du serveur lui - meme 
+//             {
+//                 if (it->fd == this->serverSocket) // ou !=
+//                 {
+//                      // gerer la nouvelle connexion d'un client
+//                 }
+//                 // faire une fonction qui permet juste de traiter les donnes recu du client.
+//             }
+//         }
 //     }
 // }
