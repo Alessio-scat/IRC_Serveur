@@ -147,3 +147,19 @@ void Server::Run_Server(void)
         }
     }
 }
+
+
+/*
+        *** Run server test ! ***
+
+    - 
+*/
+// void Server::Run_Server(void)
+// {
+//     std::vector<struct pollfd> pfds;
+
+//     while (true)
+//     {
+
+//     }
+// }
