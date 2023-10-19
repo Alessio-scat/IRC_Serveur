@@ -30,19 +30,21 @@ AllClient AllClient::operator=(AllClient const &assigment)
     return (*this);
 }
 
-void AllClient::addUser(User user)
+void AllClient::addUser(const User user)
 {
     for (int i = 0; i < MAX_USERS ; i++)
     {
-        if (this->_tabUser[i].getNickname() == "")
-        {
-            this->_tabUser[i] = user;
-            break;
-        }
+        (void)user;
+        // std::cout << this->_tabUser[i].getNickname() << std::endl;
+        // if (this->_tabUser[i].getNickname() == "")
+        // {
+        //     this->_tabUser[i] = user;
+        //     break;
+        // }
     }
 }
 
-// User *AllClient::getTabUser(void)
-// {
-//     return (this->_tabUser);
-// }
+User AllClient::getTabUser(int i)
+{
+    return (this->_tabUser[i]);
+}

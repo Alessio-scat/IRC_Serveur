@@ -14,6 +14,7 @@ public:
     ~AllClient();
     AllClient(AllClient const &src);
     AllClient operator=(AllClient const &assigment);
-    void addUser(User user);
-    // User *getTabUser(void);
+    void addUser(const User user);
+    User getTabUser(int i);
+
 };

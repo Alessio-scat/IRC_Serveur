@@ -25,6 +25,6 @@ public:
 
     void connect(void);
     void discussion(void);
-    int password(void);
+    void fillUser(User *_tabUser, int i);
 
 };

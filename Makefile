@@ -3,7 +3,7 @@
 NAME					=	ircserv
 
 CMP						=	c++
-FLG						=	-Wall -Wextra -Werror -std=c++98
+FLG						=	-Wall -Wextra -Werror -std=c++98 -fsanitize=address
 RM						=	rm -rf
 BUILD_DIR				= 	build/
 

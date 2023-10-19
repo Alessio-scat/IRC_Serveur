@@ -1,6 +1,10 @@
 #include "../includes/user/User.hpp"
 
-User::User(/* args */){}
+User::User()
+{
+    this->_nickname = "";
+    this->_username = "";
+}
 
 User::User(User const &src)
 {
@@ -11,6 +15,8 @@ User::~User(){}
 
 User User::operator=(User const &rhs)
 {
+    if (this == &rhs)
+        return (*this);
     this->_nickname = rhs._nickname;
     this->_username = rhs._username;
     return(*this);

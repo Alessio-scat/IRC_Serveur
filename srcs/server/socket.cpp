@@ -68,42 +68,6 @@ void Socket::connect(void)
     close(this->serverSocket);
 }
 
-// int Socket::password(void)
-// {
-//     std::cout << "Enter in password" << std::endl;
-//     char passwordBuffer[1024];
-//     // Demandez au client de saisir un mot de passe
-//     send(this->newSocket, "Veuillez entrer le mot de passe : ", 29, 0);
-
-//     // Attendez que le client réponde en recevant le mot de passe
-//     int bytesRead = recv(this->newSocket, passwordBuffer, sizeof(passwordBuffer), 0);
-//     if (bytesRead <= 0)
-//     {
-//         close(this->newSocket);
-//         return (0);
-//     }
-//     else
-//     {
-//         passwordBuffer[bytesRead] = '\0';
-
-//         // Vérifiez le mot de passe
-//         if (strcmp(passwordBuffer, this->_mdp.c_str()) == 0)
-//         {
-//             std::cout << "Mot de passe correct. Connexion autorisée." << std::endl;
-
-//             // Autorisez le client à poursuivre en appelant la fonction discussion
-//             return (1);
-//         }
-//         else
-//         {
-//             std::cout << "Mot de passe incorrect. Connexion refusée." << std::endl;
-//             close(this->newSocket);
-//             return (0);
-//         }
-//     }
-//     return (0);
-// }
-
 void Socket::discussion(void)
 {
     std::vector<struct pollfd> clientSockets(this->maxClients + 1);
@@ -111,11 +75,14 @@ void Socket::discussion(void)
     clientSockets[0].fd = this->serverSocket;
     clientSockets[0].events = POLLIN;
 
+    // AllClient allClients;
+    User _tabUser[MAX_USERS];
+
     while (true)
     {
         //en attente d'un event
         int activity = poll(clientSockets.data(), clientSockets.size(), -1);
-        // password();
+
         std::cout <<  "Discussion avec le client..." << std::endl;
 
         if ((activity < 0) && (errno != EINTR))
@@ -125,12 +92,15 @@ void Socket::discussion(void)
 
         if (clientSockets[0].revents & POLLIN) {
             // Nouvelle connexion entrante
+            addrSize = sizeof(this->newAddr);
             this->newSocket = accept(this->serverSocket, (struct sockaddr*)&this->newAddr, &this->addrSize);
             if (this->newSocket < 0)
             {
                 perror("Erreur lors de l'acceptation de la connexion");
                 exit(1);
             }
+
+
 
             std::cout << "Nouvelle connexion, socket FD : " << this->newSocket << std::endl;
 
@@ -160,8 +130,24 @@ void Socket::discussion(void)
                 {
                     this->buffer[bytesRead] = '\0';
                     std::cout << "Client " << i << " : " << this->buffer << std::endl;
+
+                    // User newUser;
+                    // newUser.setNickname("Nick");
+                    // newUser.setUsername("Use");
+                    // allClients.addUser(newUser);
+                    // std::cout << "Username :" << allClients.getTabUser(i)->getUsername() << std::endl;
+
+                    fillUser(_tabUser, i);
                 }
             }
         }
     }
+}
+
+void Socket::fillUser(User *_tabUser, int i)
+{
+    _tabUser[i].setNickname("Nick");
+    _tabUser[i].setUsername("Use");
+    std::cout << "Nickname :" << _tabUser[i].getNickname() << std::endl;
+    std::cout << "Username :" << _tabUser[i].getUsername() << std::endl;
 }
