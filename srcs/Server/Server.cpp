@@ -1,27 +1,27 @@
-#include "../../includes/server/socket.hpp"
+#include "../../includes/Server/Server.hpp"
 
-Socket::Socket(void)
+Server::Server(void)
 {
     this->_mdp = "NULL";
     this->_host = 1001;
     this->maxClients = 10;
 }
 
-Socket::Socket(std::string host, std::string mdp)
+Server::Server(std::string host, std::string mdp)
 {
     this->_mdp = mdp;
     this->_host = atoi(host.c_str());
     this->maxClients = 10;
 }
 
-Socket::Socket(Socket const &src)
+Server::Server(Server const &src)
 {
     *this = src;
 }
 
-Socket::~Socket(){}
+Server::~Server(){}
 
-Socket Socket::operator=(Socket const &assignment)
+Server Server::operator=(Server const &assignment)
 {
     if (this == &assignment)
         return (*this);
@@ -30,7 +30,7 @@ Socket Socket::operator=(Socket const &assignment)
     return(*this);
 }
 
-void Socket::connect(void)
+void Server::Start_Server(void)
 {
     // Création d'un socket serveur IPv4 et TCP
     this->serverSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -63,48 +63,12 @@ void Socket::connect(void)
     listen(this->serverSocket, 10);
     std::cout << "En attente de connexions..." << std::endl;
 
-    discussion();
+    Run_Server();
 
     close(this->serverSocket);
 }
 
-// int Socket::password(void)
-// {
-//     std::cout << "Enter in password" << std::endl;
-//     char passwordBuffer[1024];
-//     // Demandez au client de saisir un mot de passe
-//     send(this->newSocket, "Veuillez entrer le mot de passe : ", 29, 0);
-
-//     // Attendez que le client réponde en recevant le mot de passe
-//     int bytesRead = recv(this->newSocket, passwordBuffer, sizeof(passwordBuffer), 0);
-//     if (bytesRead <= 0)
-//     {
-//         close(this->newSocket);
-//         return (0);
-//     }
-//     else
-//     {
-//         passwordBuffer[bytesRead] = '\0';
-
-//         // Vérifiez le mot de passe
-//         if (strcmp(passwordBuffer, this->_mdp.c_str()) == 0)
-//         {
-//             std::cout << "Mot de passe correct. Connexion autorisée." << std::endl;
-
-//             // Autorisez le client à poursuivre en appelant la fonction discussion
-//             return (1);
-//         }
-//         else
-//         {
-//             std::cout << "Mot de passe incorrect. Connexion refusée." << std::endl;
-//             close(this->newSocket);
-//             return (0);
-//         }
-//     }
-//     return (0);
-// }
-
-void Socket::discussion(void)
+void Server::Run_Server(void)
 {
     std::vector<struct pollfd> clientSockets(this->maxClients + 1);
     // Ajout du socket serveur à la liste des sockets à surveiller
@@ -161,6 +125,23 @@ void Socket::discussion(void)
                     this->buffer[bytesRead] = '\0';
                     std::cout << "Client " << i << " : " << std::endl;
                     std::cout << this->buffer << std::endl;
+
+                    if (strncmp(this->buffer, "JOIN", 4) == 0)
+                    {
+                        // Extraction du nom du canal (remplacez "JOIN" par le préfixe réel de la commande)
+                        std::string joinCommand(this->buffer);
+                        size_t pos = joinCommand.find("#");
+                        if (pos != std::string::npos)
+                        {
+                            std::string channelName = joinCommand.substr(pos);
+
+                            // Création et envoi de la commande au serveur IRC
+                            std::string createChannelCommand = "/JOIN " + channelName;
+                            send(clientSockets[i].fd, createChannelCommand.c_str(), createChannelCommand.length(), 0);
+
+                            std::cout << "Création du canal " << channelName << " !" << std::endl;
+                        }
+                    }
                 }
             }
         }
