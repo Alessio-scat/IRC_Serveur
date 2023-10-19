@@ -2,7 +2,7 @@
 #include "../includes/IRC.hpp"
 #include "../includes/user/User.hpp"
 #include "../includes/server/socket.hpp"
-#include "../includes/IRC.hpp"
+#include "../includes/user/AllClient.hpp"
 
 int main(int ac, char **av)
 {

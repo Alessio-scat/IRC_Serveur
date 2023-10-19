@@ -17,3 +17,8 @@
 #include <cerrno>
 #include <vector>
 #include <map>
+
+#define MAX_USERS 10
+
+#include "user/User.hpp"
+#include "user/AllClient.hpp"
