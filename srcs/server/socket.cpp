@@ -146,8 +146,18 @@ void Socket::discussion(void)
 
 void Socket::fillUser(User *_tabUser, int i)
 {
-    _tabUser[i].setNickname("Nick");
-    _tabUser[i].setUsername("Use");
+    std::string bufferStr(this->buffer);
+
+    std::string nickname, username;
+
+    ////////////////////////////////////////////////////////////////////MODIFIER
+    nickname = bufferStr.substr(4, bufferStr.find(" ", 4));
+    username = bufferStr.substr(4, bufferStr.find(" ", 4));
+
+    _tabUser[i].setNickname(nickname);
+    _tabUser[i].setUsername(username);
+    // _tabUser[i].setNickname("Nick");
+    // _tabUser[i].setUsername("Use");
     std::cout << "Nickname :" << _tabUser[i].getNickname() << std::endl;
     std::cout << "Username :" << _tabUser[i].getUsername() << std::endl;
 }
