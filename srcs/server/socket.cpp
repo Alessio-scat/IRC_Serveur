@@ -71,34 +71,55 @@ void Socket::connect(void)
 
 int Socket::password(void)
 {
-    char passwordBuffer[1024];
-    // Demandez au client de saisir un mot de passe
-    send(this->newSocket, "Veuillez entrer le mot de passe : ", 29, 0);
+    // char passwordBuffer[1024];
+    // // Demandez au client de saisir un mot de passe
+    // send(this->newSocket, "Veuillez entrer le mot de passe : ", 29, 0);
 
-    // Attendez que le client réponde en recevant le mot de passe
-    int bytesRead = recv(this->newSocket, passwordBuffer, sizeof(passwordBuffer), 0);
-    if (bytesRead <= 0)
+    // // Attendez que le client réponde en recevant le mot de passe
+    // int bytesRead = recv(this->newSocket, passwordBuffer, sizeof(passwordBuffer), 0);
+    // if (bytesRead <= 0)
+    // {
+    //     close(this->newSocket);
+    //     return (0);
+    // }
+    // else
+    // {
+    //     passwordBuffer[bytesRead] = '\0';
+
+    //     // Vérifiez le mot de passe
+    //     if (strcmp(passwordBuffer, this->_mdp.c_str()) == 0)
+    //     {
+    //         std::cout << "Mot de passe correct. Connexion autorisée." << std::endl;
+
+    //         // Autorisez le client à poursuivre en appelant la fonction discussion
+    //         return (1);
+    //     }
+    //     else
+    //     {
+    //         std::cout << "Mot de passe incorrect. Connexion refusée." << std::endl;
+    //         close(this->newSocket);
+    //         return (0);
+    //     }
+    // }
+    std::string str;
+    std::string mdp;
+    size_t pos;
+    size_t sizeStr;
+    std::istringstream iss(this->buffer);
+    while (std::getline(iss, str))
     {
-        close(this->newSocket);
-        return (0);
-    }
-    else
-    {
-        passwordBuffer[bytesRead] = '\0';
-
-        // Vérifiez le mot de passe
-        if (strcmp(passwordBuffer, this->_mdp.c_str()) == 0)
+        sizeStr = str.size() - 1;
+        // pos = str.find_last_of("PASS");
+        pos = str.find("PASS");
+        if (pos !=  std::string::npos)
         {
-            std::cout << "Mot de passe correct. Connexion autorisée." << std::endl;
-
-            // Autorisez le client à poursuivre en appelant la fonction discussion
-            return (1);
-        }
-        else
-        {
-            std::cout << "Mot de passe incorrect. Connexion refusée." << std::endl;
-            close(this->newSocket);
-            return (0);
+            mdp = str.substr(pos + 5, sizeStr - (pos + 5));
+            // std::cout << "|" << mdp << "|" << std::endl;
+            if (mdp != this->_mdp)
+            {
+                std::cout << "<client> :Password incorrect\n";
+                return (1);
+            }
         }
     }
     return (0);
@@ -111,13 +132,12 @@ void Socket::discussion(void)
     // Ajout du socket serveur à la liste des sockets à surveiller
     clientSockets[0].fd = this->serverSocket;
     clientSockets[0].events = POLLIN;
+    // int i = 0;
 
     while (true)
     {
         //en attente d'un event
         int activity = poll(clientSockets.data(), clientSockets.size(), -1);
-        printf("ici\n");
-
         if ((activity < 0) && (errno != EINTR))
         {
             std::cerr << "Erreur lors de l'appel à poll" << std::endl;
@@ -158,6 +178,11 @@ void Socket::discussion(void)
                 }
                 else
                 {
+                    if (password())
+                    {
+                        close(clientSockets[i].fd);
+                        clientSockets[i].fd = 0;
+                    }
                     this->buffer[bytesRead] = '\0';
                     std::cout << "Client " << i << " : " << this->buffer << std::endl;
                 }
