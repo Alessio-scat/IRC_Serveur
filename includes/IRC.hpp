@@ -17,6 +17,7 @@
 #include <cerrno>
 #include <vector>
 #include <map>
+#include <deque>
 
 #define MAX_USERS 10
 
