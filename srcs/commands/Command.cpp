@@ -36,12 +36,14 @@ void Command::whatCommand(char *buffer, User *_tabUser, int i)
         pos = str.find("INVITE");
         if (pos !=  std::string::npos)
         {
-            std::cout << "INVITE command : " << str << std::endl;
+            std::cout << "INVITE BY: " << _tabUser[i].getUsername() << std::endl;
+            Invite invite(str);
         }
         pos = str.find("TOPIC");
         if (pos !=  std::string::npos)
         {
-            std::cout << "TOPIC command : " << str << std::endl;
+            std::cout << "TOPIC BY: " << _tabUser[i].getUsername() << std::endl;
+            Topic topic(str);
         }
         pos = str.find("MODE");
         if (pos !=  std::string::npos)

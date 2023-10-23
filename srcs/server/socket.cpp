@@ -185,12 +185,12 @@ void Socket::fillUser(User *_tabUser, int i)
         sizeNick = (indexUser - 1) - (indexNick + 4);
         sizeUser = bufferStr.find(" 0 *") - (indexUser + 4);
     }
-    nickname = bufferStr.substr(indexNick + 4, sizeNick);
-    username = bufferStr.substr(indexUser + 4, sizeUser);
+    nickname = bufferStr.substr(indexNick + 5, sizeNick);
+    username = bufferStr.substr(indexUser + 5, sizeUser);
     if (nickname == "")
         return ;
     _tabUser[i].setNickname(nickname);
     _tabUser[i].setUsername(username);
-    std::cout << "Nickname :" << _tabUser[i].getNickname() << std::endl;
-    std::cout << "Username :" << _tabUser[i].getUsername() << std::endl;
+    std::cout << "Nickname : " << _tabUser[i].getNickname() << std::endl;
+    std::cout << "Username : " << _tabUser[i].getUsername() << std::endl;
 }

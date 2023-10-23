@@ -1,5 +1,4 @@
-# ifndef KICK_HPP
-#define KICK_HPP
+#pragma once
 
 #include "../IRC.hpp"
 
@@ -17,5 +16,3 @@ public:
 
     Kick operator=(Kick const &rhs);
 };
-
-#endif

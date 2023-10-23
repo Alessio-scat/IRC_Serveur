@@ -3,6 +3,8 @@
 
 #include "../IRC.hpp"
 #include "Kick.hpp"
+#include "Invite.hpp"
+#include "Topic.hpp"
 
 class Command
 {
