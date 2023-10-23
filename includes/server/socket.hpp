@@ -1,6 +1,8 @@
 #pragma once
 
-#include "../includes/IRC.hpp"
+#include "../IRC.hpp"
+#include "../commands/Command.hpp"
+
 
 class Socket
 {
@@ -26,5 +28,6 @@ public:
     void connect(void);
     void discussion(void);
     void fillUser(User *_tabUser, int i);
+    int password(void);
 
 };

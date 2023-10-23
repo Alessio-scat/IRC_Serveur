@@ -68,12 +68,39 @@ void Socket::connect(void)
     close(this->serverSocket);
 }
 
+int Socket::password(void)
+{
+    std::string str;
+    std::string mdp;
+    size_t pos;
+    size_t sizeStr;
+    std::istringstream iss(this->buffer);
+    while (std::getline(iss, str))
+    {
+        sizeStr = str.size() - 1;
+        // pos = str.find_last_of("PASS");
+        pos = str.find("PASS");
+        if (pos !=  std::string::npos)
+        {
+            mdp = str.substr(pos + 5, sizeStr - (pos + 5));
+            // std::cout << "|" << mdp << "|" << std::endl;
+            if (mdp != this->_mdp)
+            {
+                std::cout << "<client> :Password incorrect\n";
+                return (1);
+            }
+        }
+    }
+    return (0);
+}
+
 void Socket::discussion(void)
 {
     std::vector<struct pollfd> clientSockets(this->maxClients + 1);
     // Ajout du socket serveur à la liste des sockets à surveiller
     clientSockets[0].fd = this->serverSocket;
     clientSockets[0].events = POLLIN;
+    Command command;
 
     // AllClient allClients;
     User _tabUser[MAX_USERS];
@@ -82,9 +109,6 @@ void Socket::discussion(void)
     {
         //en attente d'un event
         int activity = poll(clientSockets.data(), clientSockets.size(), -1);
-
-        std::cout <<  "Discussion avec le client..." << std::endl;
-
         if ((activity < 0) && (errno != EINTR))
         {
             std::cerr << "Erreur lors de l'appel à poll" << std::endl;
@@ -128,7 +152,13 @@ void Socket::discussion(void)
                 }
                 else
                 {
+                    if (password())
+                    {
+                        close(clientSockets[i].fd);
+                        clientSockets[i].fd = 0;
+                    }
                     this->buffer[bytesRead] = '\0';
+                    command.whatCommand(this->buffer);
                     std::cout << "Client " << i << " : " << this->buffer << std::endl;
 
                     fillUser(_tabUser, i);
