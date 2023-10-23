@@ -2,6 +2,7 @@
 #define COMMAND_HPP
 
 #include "../IRC.hpp"
+#include "Kick.hpp"
 
 class Command
 {

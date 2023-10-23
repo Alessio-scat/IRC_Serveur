@@ -30,6 +30,7 @@ void Command::whatCommand(char *buffer)
         if (pos !=  std::string::npos)
         {
             std::cout << "KICK command : " << str << std::endl;
+            Kick kick(str);
         }
         pos = str.find("INVITE");
         if (pos !=  std::string::npos)
