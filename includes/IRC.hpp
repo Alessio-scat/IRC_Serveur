@@ -17,3 +17,5 @@
 #include <cerrno>
 #include <vector>
 #include <map>
+
+# define MAXCLIENT 10

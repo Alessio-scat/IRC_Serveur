@@ -29,6 +29,8 @@ public:
 
     void Start_Server(void);
     void Run_Server(void);
+    void connect_client(void);
+    void Interpret_Data(int fd);
     int password(void);
 
     /*Test Creation Channel*/
