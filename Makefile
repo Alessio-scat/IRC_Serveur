@@ -8,7 +8,7 @@ RM						=	rm -rf
 BUILD_DIR				= 	build/
 
 INC_DIR					=	includes
-INC_FILE				= 	IRC server/socket user/User user/AllClient commands/Command commands/Kick
+INC_FILE				= 	IRC server/socket server/ErrorValue user/User user/AllClient commands/Command commands/Kick
 INC						= 	$(addsuffix .hpp, $(addprefix $(INC_DIR)/, $(INC_FILE)))
 
 SRCS_DIR				=	srcs

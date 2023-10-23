@@ -31,7 +31,7 @@ void Command::whatCommand(char *buffer, User *_tabUser, int i)
         if (pos !=  std::string::npos)
         {
             std::cout << "KICK command : " << str << std::endl;
-            Kick kick(str);
+            Kick kick(str, _tabUser[i]);
         }
         pos = str.find("INVITE");
         if (pos !=  std::string::npos)

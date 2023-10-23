@@ -124,8 +124,6 @@ void Socket::discussion(void)
                 exit(1);
             }
 
-
-
             std::cout << "Nouvelle connexion, socket FD : " << this->newSocket << std::endl;
 
             // Ajout du nouveau socket client à la liste des sockets à surveiller
