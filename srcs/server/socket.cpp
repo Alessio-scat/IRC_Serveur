@@ -157,11 +157,13 @@ void Socket::discussion(void)
                         close(clientSockets[i].fd);
                         clientSockets[i].fd = 0;
                     }
-                    this->buffer[bytesRead] = '\0';
-                    command.whatCommand(this->buffer);
-                    std::cout << "Client " << i << " : " << this->buffer << std::endl;
 
                     fillUser(_tabUser, i);
+
+                    this->buffer[bytesRead] = '\0';
+                    command.whatCommand(this->buffer, _tabUser, i);
+                    std::cout << "Client " << i << " : " << this->buffer << std::endl;
+
                 }
             }
         }
@@ -185,8 +187,10 @@ void Socket::fillUser(User *_tabUser, int i)
     }
     nickname = bufferStr.substr(indexNick + 4, sizeNick);
     username = bufferStr.substr(indexUser + 4, sizeUser);
+    if (nickname == "")
+        return ;
     _tabUser[i].setNickname(nickname);
     _tabUser[i].setUsername(username);
-    // std::cout << "Nickname :" << _tabUser[i].getNickname() << std::endl;
-    // std::cout << "Username :" << _tabUser[i].getUsername() << std::endl;
+    std::cout << "Nickname :" << _tabUser[i].getNickname() << std::endl;
+    std::cout << "Username :" << _tabUser[i].getUsername() << std::endl;
 }

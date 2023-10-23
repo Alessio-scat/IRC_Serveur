@@ -19,7 +19,7 @@ Command Command::operator=(Command const &rhs)
     return (*this);
 }
 
-void Command::whatCommand(char *buffer)
+void Command::whatCommand(char *buffer, User *_tabUser, int i)
 {
     std::string str;
     std::istringstream iss(buffer);
@@ -51,6 +51,7 @@ void Command::whatCommand(char *buffer)
         pos = str.find("JOIN");
         if (pos !=  std::string::npos)
         {
+            std::cout << _tabUser[i].getUsername() << std::endl;
             std::cout << "JOIN command : " << str << std::endl;
         }
     }

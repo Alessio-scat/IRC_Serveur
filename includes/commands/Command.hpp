@@ -15,7 +15,7 @@ public:
 
     Command operator=(Command const &rhs);
 
-    void whatCommand(char *buffer);
+    void whatCommand(char *buffer, User *_tabUser, int i);
 };
 
 #endif
