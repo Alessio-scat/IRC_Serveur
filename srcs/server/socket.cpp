@@ -131,12 +131,6 @@ void Socket::discussion(void)
                     this->buffer[bytesRead] = '\0';
                     std::cout << "Client " << i << " : " << this->buffer << std::endl;
 
-                    // User newUser;
-                    // newUser.setNickname("Nick");
-                    // newUser.setUsername("Use");
-                    // allClients.addUser(newUser);
-                    // std::cout << "Username :" << allClients.getTabUser(i)->getUsername() << std::endl;
-
                     fillUser(_tabUser, i);
                 }
             }
@@ -147,17 +141,22 @@ void Socket::discussion(void)
 void Socket::fillUser(User *_tabUser, int i)
 {
     std::string bufferStr(this->buffer);
-
     std::string nickname, username;
 
-    ////////////////////////////////////////////////////////////////////MODIFIER
-    nickname = bufferStr.substr(4, bufferStr.find(" ", 4));
-    username = bufferStr.substr(4, bufferStr.find(" ", 4));
+    size_t indexNick = bufferStr.find("NICK");
+    size_t indexUser = bufferStr.find("USER");
 
+    int sizeNick = 0;
+    int sizeUser = 0;
+    if (indexNick != std::string::npos && indexUser != std::string::npos)
+    {
+        sizeNick = (indexUser - 1) - (indexNick + 4);
+        sizeUser = bufferStr.find(" 0 *") - (indexUser + 4);
+    }
+    nickname = bufferStr.substr(indexNick + 4, sizeNick);
+    username = bufferStr.substr(indexUser + 4, sizeUser);
     _tabUser[i].setNickname(nickname);
     _tabUser[i].setUsername(username);
-    // _tabUser[i].setNickname("Nick");
-    // _tabUser[i].setUsername("Use");
-    std::cout << "Nickname :" << _tabUser[i].getNickname() << std::endl;
-    std::cout << "Username :" << _tabUser[i].getUsername() << std::endl;
+    // std::cout << "Nickname :" << _tabUser[i].getNickname() << std::endl;
+    // std::cout << "Username :" << _tabUser[i].getUsername() << std::endl;
 }

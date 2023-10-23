@@ -8,9 +8,6 @@ class User
 private:
     std::string _username;
     std::string _nickname;
-    // std::string _pass;
-    // std::string _nick;
-    // std::string _user;
 
 public:
     User();
