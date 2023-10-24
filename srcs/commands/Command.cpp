@@ -48,7 +48,9 @@ void Command::whatCommand(char *buffer, User *_tabUser, int i)
         pos = str.find("MODE");
         if (pos !=  std::string::npos)
         {
-            std::cout << "MODE command : " << str << std::endl;
+            std::cout << "MODE BY: " << _tabUser[i].getUsername() << std::endl;
+            Mode mode(str);
+            mode.changeMode();
         }
         pos = str.find("JOIN");
         if (pos !=  std::string::npos)

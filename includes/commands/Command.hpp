@@ -5,6 +5,7 @@
 #include "Kick.hpp"
 #include "Invite.hpp"
 #include "Topic.hpp"
+#include "Mode.hpp"
 
 class Command
 {

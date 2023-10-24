@@ -5,8 +5,8 @@
 class Topic
 {
 private:
-    std::string _msgTopic;
     std::string _channelTopic;
+    std::string _msgTopic;
 
 public:
     Topic(void);
