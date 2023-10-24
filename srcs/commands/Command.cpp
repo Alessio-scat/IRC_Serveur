@@ -66,7 +66,7 @@ void Command::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
             // {
             //     std::cout << "Nombre d'octets envoyés : " << bytesSent << std::endl;
             // }
-            std::string message = ":" + _tabUser[i].getUsername() + " " + str + "\r\n";
+            std::string message = ":" + _tabUser[i].getNickname() + " " + str + "\r\n";
             std::cout << "message : " << message << std::endl;
             write(_pfds[i].fd, message.c_str(), message.size());
         }
