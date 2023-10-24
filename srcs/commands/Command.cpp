@@ -53,6 +53,15 @@ void Command::whatCommand(char *buffer, User *_tabUser, int i)
         {
             std::cout << _tabUser[i].getUsername() << std::endl;
             std::cout << "JOIN command : " << str << std::endl;
+            // int bytesSent = send(clientSockets[i].fd, str, str.size(), 0);
+            // if (bytesSent == -1)
+            // {
+            //     std::cerr << "Erreur lors de l'envoi des données." << std::endl;
+            // }
+            // else
+            // {
+            //     std::cout << "Nombre d'octets envoyés : " << bytesSent << std::endl;
+            // }
         }
     }
 }

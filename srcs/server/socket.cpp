@@ -161,7 +161,17 @@ void Socket::discussion(void)
                     this->buffer[bytesRead] = '\0';
                     command.whatCommand(this->buffer, _tabUser, i);
                     std::cout << "Client " << i << " : " << this->buffer << std::endl;
-
+                    const char* message = "IRCyo 332 lveloso #Salut :Topic about channel\r\n";
+                    int messageLength = strlen(message);
+                    int bytesSent = send(clientSockets[i].fd, message, messageLength, MSG_OOB);
+                    if (bytesSent == -1)
+                    {
+                        std::cerr << "Erreur lors de l'envoi des données." << std::endl;
+                    }
+                    else
+                    {
+                        std::cout << "Nombre d'octets envoyés : " << bytesSent << std::endl;
+                    }
                 }
             }
         }
