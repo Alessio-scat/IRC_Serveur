@@ -1,27 +1,27 @@
-#include "../../includes/server/socket.hpp"
+#include "../../includes/Server/Server.hpp"
 
-Socket::Socket(void)
+Server::Server(void)
 {
     this->_mdp = "NULL";
     this->_host = 1001;
-    this->maxClients = 10;
+    this->_pfds.resize(MAXCLIENT + 1);
 }
 
-Socket::Socket(std::string host, std::string mdp)
+Server::Server(std::string host, std::string mdp)
 {
     this->_mdp = mdp;
     this->_host = atoi(host.c_str());
-    this->maxClients = 10;
+    this->_pfds.resize(MAXCLIENT + 1);
 }
 
-Socket::Socket(Socket const &src)
+Server::Server(Server const &src)
 {
     *this = src;
 }
 
-Socket::~Socket(){}
+Server::~Server(){}
 
-Socket Socket::operator=(Socket const &assignment)
+Server Server::operator=(Server const &assignment)
 {
     if (this == &assignment)
         return (*this);
@@ -30,7 +30,7 @@ Socket Socket::operator=(Socket const &assignment)
     return(*this);
 }
 
-void Socket::connect(void)
+void Server::Start_Server(void)
 {
     // Création d'un socket serveur IPv4 et TCP
     this->serverSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -63,12 +63,12 @@ void Socket::connect(void)
     listen(this->serverSocket, 10);
     std::cout << "En attente de connexions..." << std::endl;
 
-    discussion();
+    Run_Server();
 
     close(this->serverSocket);
 }
 
-int Socket::password(void)
+int Server::password(void)
 {
     std::string str;
     std::string mdp;
@@ -94,91 +94,7 @@ int Socket::password(void)
     return (0);
 }
 
-void Socket::discussion(void)
-{
-    std::vector<struct pollfd> clientSockets(this->maxClients + 1);
-    // Ajout du socket serveur à la liste des sockets à surveiller
-    clientSockets[0].fd = this->serverSocket;
-    clientSockets[0].events = POLLIN;
-    Command command;
-
-    // AllClient allClients;
-    User _tabUser[MAX_USERS];
-
-    while (true)
-    {
-        //en attente d'un event
-        int activity = poll(clientSockets.data(), clientSockets.size(), -1);
-        if ((activity < 0) && (errno != EINTR))
-        {
-            std::cerr << "Erreur lors de l'appel à poll" << std::endl;
-        }
-
-        if (clientSockets[0].revents & POLLIN) {
-            // Nouvelle connexion entrante
-            addrSize = sizeof(this->newAddr);
-            this->newSocket = accept(this->serverSocket, (struct sockaddr*)&this->newAddr, &this->addrSize);
-            if (this->newSocket < 0)
-            {
-                perror("Erreur lors de l'acceptation de la connexion");
-                exit(1);
-            }
-
-            std::cout << "Nouvelle connexion, socket FD : " << this->newSocket << std::endl;
-
-            // Ajout du nouveau socket client à la liste des sockets à surveiller
-            for (int i = 1; i <= this->maxClients; i++) {
-                if (clientSockets[i].fd == 0)
-                {
-                    clientSockets[i].fd = this->newSocket;
-                    clientSockets[i].events = POLLIN;
-                    break;
-                }
-            }
-        }
-
-        // Gestion des données reçues des clients
-        for (int i = 1; i <= this->maxClients; i++)
-        {
-            if (clientSockets[i].revents & POLLIN)
-            {
-                int bytesRead = recv(clientSockets[i].fd, this->buffer, sizeof(this->buffer), 0);
-                if (bytesRead <= 0)
-                {
-                    close(clientSockets[i].fd);
-                    clientSockets[i].fd = 0;
-                }
-                else
-                {
-                    if (password())
-                    {
-                        close(clientSockets[i].fd);
-                        clientSockets[i].fd = 0;
-                    }
-
-                    fillUser(_tabUser, i);
-
-                    this->buffer[bytesRead] = '\0';
-                    command.whatCommand(this->buffer, _tabUser, i);
-                    std::cout << "Client " << i << " : " << this->buffer << std::endl;
-                    const char* message = "IRCyo 332 lveloso #Salut :Topic about channel\r\n";
-                    int messageLength = strlen(message);
-                    int bytesSent = send(clientSockets[i].fd, message, messageLength, MSG_OOB);
-                    if (bytesSent == -1)
-                    {
-                        std::cerr << "Erreur lors de l'envoi des données." << std::endl;
-                    }
-                    else
-                    {
-                        std::cout << "Nombre d'octets envoyés : " << bytesSent << std::endl;
-                    }
-                }
-            }
-        }
-    }
-}
-
-void Socket::fillUser(User *_tabUser, int i)
+void Server::fillUser(User *_tabUser, int i)
 {
     std::string bufferStr(this->buffer);
     std::string nickname, username;
@@ -193,12 +109,101 @@ void Socket::fillUser(User *_tabUser, int i)
         sizeNick = (indexUser - 1) - (indexNick + 4);
         sizeUser = bufferStr.find(" 0 *") - (indexUser + 4);
     }
-    nickname = bufferStr.substr(indexNick + 5, sizeNick);
-    username = bufferStr.substr(indexUser + 5, sizeUser);
+    nickname = bufferStr.substr(indexNick + 4, sizeNick);
+    username = bufferStr.substr(indexUser + 4, sizeUser);
     if (nickname == "")
         return ;
     _tabUser[i].setNickname(nickname);
     _tabUser[i].setUsername(username);
-    std::cout << "Nickname : " << _tabUser[i].getNickname() << std::endl;
-    std::cout << "Username : " << _tabUser[i].getUsername() << std::endl;
+    std::cout << "Nickname :" << _tabUser[i].getNickname() << std::endl;
+    std::cout << "Username :" << _tabUser[i].getUsername() << std::endl;
+}
+
+void Server::Run_Server(void)
+{
+    _pfds[0].fd = this->serverSocket;
+    _pfds[0].events = POLLIN;
+
+    while (true)
+    {
+        //en attente d'un event
+
+        if (!_pfds.empty())
+        {
+            if (poll(&_pfds.front(), _pfds.size(), -1) < 0)
+                throw std::runtime_error("Error while polling from fd!");
+        }
+
+        // event de connexion
+        if (_pfds[0].revents & POLLIN)
+            connect_client();
+
+        // Gestion des données reçues des clients
+        for (int i = 1; i <= MAXCLIENT; i++)
+        {
+            if (_pfds[i].revents & POLLIN)
+            {
+                int bytesRead = recv(_pfds[i].fd, this->buffer, sizeof(this->buffer), 0);
+                if (bytesRead <= 0)
+                {
+                    close(_pfds[i].fd);
+                    _pfds[i].fd = 0;
+                }
+                else
+                {
+                    if (password())
+                    {
+                        close(_pfds[i].fd);
+                        _pfds[i].fd = 0;
+                    }
+
+                    fillUser(_tabUser, i);
+
+                    std::string channelName = "teammm";
+
+                        // Créer un message RPL_TOPIC pour définir le sujet du canal
+                    std::string rplTopicMessage = ":your_server_name 332 " + _tabUser[i].getNickname() + " " + channelName + " :Channel topic goes here\r\n";
+
+                        // Envoi du message RPL_TOPIC
+                    send(_pfds[i].fd, rplTopicMessage.c_str(), rplTopicMessage.size(), 0);
+                    this->buffer[bytesRead] = '\0';
+                    command.whatCommand(this->buffer, _tabUser, i);
+                    std::cout << "Client " << i << " : " << this->buffer << std::endl;
+                    const char* message = "IRCyo 332 lveloso #Salut :Topic about channel\r\n";
+                    int messageLength = strlen(message);
+                    int bytesSent = send(_pfds[i].fd, message, messageLength, MSG_OOB);
+                    if (bytesSent == -1)
+                    {
+                        std::cerr << "Erreur lors de l'envoi des données." << std::endl;
+                    }
+                    else
+                    {
+                        std::cout << "Nombre d'octets envoyés : " << bytesSent << std::endl;
+                    }
+                }
+            }
+        }
+    }
+}
+
+void Server::connect_client(void)
+{
+    // Nouvelle connexion entrante
+    addrSize = sizeof(this->newAddr);
+    this->newSocket = accept(this->serverSocket, (struct sockaddr*)&this->newAddr, &this->addrSize);
+    if (this->newSocket < 0)
+        throw std::runtime_error("Error: failed accept()");
+
+    std::cout << "Nouvelle connexion, socket FD : " << this->newSocket << std::endl;
+
+    // Ajout du nouveau socket client à la liste des sockets à surveiller
+    for (int i = 1; i <= MAXCLIENT; i++)
+    {
+        if (_pfds[i].fd == 0)
+        {
+            _pfds[i].fd = this->newSocket;
+            _pfds[i].events = POLLIN;
+             break;
+        }
+    }
 }

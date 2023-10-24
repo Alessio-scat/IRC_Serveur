@@ -2,7 +2,7 @@
 
 #include "../IRC.hpp"
 #include "../user/User.hpp"
-#include "../server/ErrorValue.hpp"
+#include "../Server/ErrorValue.hpp"
 
 class Kick
 {
