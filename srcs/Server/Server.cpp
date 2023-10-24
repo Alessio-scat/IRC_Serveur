@@ -106,7 +106,7 @@ void Server::fillUser(User *_tabUser, int i)
     int sizeUser = 0;
     if (indexNick != std::string::npos && indexUser != std::string::npos)
     {
-        sizeNick = (indexUser - 1) - (indexNick + 4);
+        sizeNick = (indexUser - 2) - (indexNick + 4);
         sizeUser = bufferStr.find(" 0 *") - (indexUser + 4);
     }
     nickname = bufferStr.substr(indexNick + 5, sizeNick);

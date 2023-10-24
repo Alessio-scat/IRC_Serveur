@@ -55,20 +55,13 @@ void Command::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
         pos = str.find("JOIN");
         if (pos !=  std::string::npos)
         {
-            std::cout << _tabUser[i].getUsername() << std::endl;
-            std::cout << "JOIN command : " << str << std::endl;
-            // int bytesSent = send(clientSockets[i].fd, str, str.size(), 0);
-            // if (bytesSent == -1)
-            // {
-            //     std::cerr << "Erreur lors de l'envoi des données." << std::endl;
-            // }
-            // else
-            // {
-            //     std::cout << "Nombre d'octets envoyés : " << bytesSent << std::endl;
-            // }
-            std::string message = ":" + _tabUser[i].getUsername() + " " + str + "\r\n";
-            std::cout << "message : " << message << std::endl;
-            write(_pfds[i].fd, message.c_str(), message.size());
+            std::cout << "JOIN BY: " << _tabUser[i].getUsername() << std::endl;
+            Join join(str, _tabUser, i, _pfds);
+            // std::cout << _tabUser[i].getUsername() << std::endl;
+            // std::cout << "JOIN command : " << str << std::endl;
+            // std::string message = ":" + _tabUser[i].getNickname() + " " + str + "\r\n";
+            // std::cout << "message : " << message << std::endl;
+            // write(_pfds[i].fd, message.c_str(), message.size());
         }
     }
 }

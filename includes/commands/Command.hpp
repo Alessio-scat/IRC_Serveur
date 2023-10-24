@@ -6,6 +6,7 @@
 #include "Invite.hpp"
 #include "Topic.hpp"
 #include "Mode.hpp"
+#include "Join.hpp"
 
 class Command
 {
