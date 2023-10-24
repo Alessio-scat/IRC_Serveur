@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../IRC.hpp"
+#include "../user/User.hpp"
+#include "../server/ErrorValue.hpp"
 
 class Kick
 {
@@ -10,7 +12,7 @@ private:
     std::string _reason;
 public:
     Kick(void);
-    Kick(std::string str);
+    Kick(std::string str, User &user);
     Kick(Kick const &src);
     ~Kick();
     Kick operator=(Kick const &rhs);
