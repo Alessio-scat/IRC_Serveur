@@ -159,7 +159,7 @@ void Server::Run_Server(void)
 
                     fillUser(_tabUser, i);
 
-                    std::string channelName = "team";
+                    std::string channelName = "teammm";
 
                         // Créer un message RPL_TOPIC pour définir le sujet du canal
                     std::string rplTopicMessage = ":your_server_name 332 " + _tabUser[i].getNickname() + " " + channelName + " :Channel topic goes here\r\n";
