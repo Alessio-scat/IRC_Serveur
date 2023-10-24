@@ -18,7 +18,7 @@ public:
 
     Command operator=(Command const &rhs);
 
-    void whatCommand(char *buffer, User *_tabUser, int i);
+    void whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
 };
 
 #endif

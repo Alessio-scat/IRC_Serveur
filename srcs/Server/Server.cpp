@@ -109,8 +109,8 @@ void Server::fillUser(User *_tabUser, int i)
         sizeNick = (indexUser - 1) - (indexNick + 4);
         sizeUser = bufferStr.find(" 0 *") - (indexUser + 4);
     }
-    nickname = bufferStr.substr(indexNick + 4, sizeNick);
-    username = bufferStr.substr(indexUser + 4, sizeUser);
+    nickname = bufferStr.substr(indexNick + 5, sizeNick);
+    username = bufferStr.substr(indexUser + 5, sizeUser);
     if (nickname == "")
         return ;
     _tabUser[i].setNickname(nickname);
@@ -167,7 +167,7 @@ void Server::Run_Server(void)
                         // Envoi du message RPL_TOPIC
                     send(_pfds[i].fd, rplTopicMessage.c_str(), rplTopicMessage.size(), 0);
                     this->buffer[bytesRead] = '\0';
-                    command.whatCommand(this->buffer, _tabUser, i);
+                    command.whatCommand(this->buffer, _tabUser, i, _pfds);
                     std::cout << "Client " << i << " : " << this->buffer << std::endl;
                     const char* message = "IRCyo 332 lveloso #Salut :Topic about channel\r\n";
                     int messageLength = strlen(message);

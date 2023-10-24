@@ -19,7 +19,7 @@ Command Command::operator=(Command const &rhs)
     return (*this);
 }
 
-void Command::whatCommand(char *buffer, User *_tabUser, int i)
+void Command::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct pollfd> _pfds)
 {
     std::string str;
     std::istringstream iss(buffer);
@@ -66,6 +66,9 @@ void Command::whatCommand(char *buffer, User *_tabUser, int i)
             // {
             //     std::cout << "Nombre d'octets envoyés : " << bytesSent << std::endl;
             // }
+            std::string message = ":" + _tabUser[i].getUsername() + " " + str + "\r\n";
+            std::cout << "message : " << message << std::endl;
+            write(_pfds[i].fd, message.c_str(), message.size());
         }
     }
 }
