@@ -79,4 +79,16 @@ class Join: public Command
         void execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
 };
 
+class Message: public Command
+{
+private:
+public:
+    Message(void);
+    Message(Message const &src);
+    Message(std::string str, User &user);
+    ~Message();
+    Message operator=(Message const &rhs);
+    void execute_cmd(std::string str);
+};
+
 #endif
