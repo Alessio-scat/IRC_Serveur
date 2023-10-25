@@ -5,6 +5,7 @@
 #include "../includes/user/AllClient.hpp"
 #include "../includes/Server/Server.hpp"
 #include "../includes/IRC.hpp"
+#include "../includes/Channel/Channel.hpp"
 
 int main(int ac, char **av)
 {

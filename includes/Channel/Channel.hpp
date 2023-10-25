@@ -2,6 +2,7 @@
 # define CHANNEL_CLASS_HPP
 
 # include "../IRC.hpp"
+# include <list>
 
 class Channel
 {
@@ -11,8 +12,7 @@ class Channel
         Channel &operator=(Channel const &rhs);
         ~Channel(void);
 
-        void creationChannel(void);
-
+        std::map<std::string, std::list<std::string> > channel;
     private:
 };
 

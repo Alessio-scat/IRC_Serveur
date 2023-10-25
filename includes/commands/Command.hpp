@@ -71,24 +71,23 @@ class Topic: public Command
 class Join: public Command
 {
     private:
-
     public:
+        std::string nameChannel;
         Join(void);
         ~Join(void);
         void execute_cmd(std::string str);
         void execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
 };
 
-class Message: public Command
-{
-private:
-public:
-    Message(void);
-    Message(Message const &src);
-    Message(std::string str, User &user);
-    ~Message();
-    Message operator=(Message const &rhs);
-    void execute_cmd(std::string str);
-};
+// class Message: public Command
+// {
+// private:
+// public:
+//     Message(void);
+//     Message(Message const &src);
+//     ~Message();
+//     Message operator=(Message const &rhs);
+//     void execute_cmd(std::string str, User *_tabUser, std::deque<struct pollfd> _pfds);
+// };
 
 #endif

@@ -123,7 +123,7 @@ void Server::Run_Server(void)
 {
     _pfds[0].fd = this->serverSocket;
     _pfds[0].events = POLLIN;
-
+    Channel channel;
     while (true)
     {
         //en attente d'un event
@@ -159,7 +159,8 @@ void Server::Run_Server(void)
 
                     fillUser(_tabUser, i);
                     this->buffer[bytesRead] = '\0';
-                    command.whatCommand(this->buffer, _tabUser, i, _pfds);
+                    command.whatCommand(this->buffer, _tabUser, i, _pfds, channel);
+                    std::cout << "yyyyyyy : " << this->buffer << std::endl;
                 }
             }
         }
