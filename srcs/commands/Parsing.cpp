@@ -2,17 +2,25 @@
 #include "../../includes/commands/Command.hpp"
 #include "../../includes/Channel/Channel.hpp"
 
-void printMap(const std::map<std::string, std::list<std::string> >& channel) {
+std::string printMap(const std::map<std::string, std::list<std::string> >& channel) {
+    std::string list;
+    int i = 0;
     for (std::map<std::string, std::list<std::string> >::const_iterator it = channel.begin(); it != channel.end(); ++it) {
         std::cout << "Channel: " << it->first << std::endl;
         std::cout << "Subscribers: ";
         
         for (std::list<std::string>::const_iterator subIt = it->second.begin(); subIt != it->second.end(); ++subIt) {
             std::cout << *subIt << " ";
+            if (i == 0)
+                list += *subIt;
+            else
+                list += " " + *subIt;
+            i++;
         }
         
         std::cout << std::endl;
     }
+    return (list);
 }
 
 void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct pollfd> _pfds, Channel &channel)
@@ -49,11 +57,21 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
         pos = str.find("JOIN");
         if (pos !=  std::string::npos)
         {
+            std::string list;
             std::cout << "JOIN BY: " << _tabUser[i].getUsername() << std::endl;
             Join join;
             join.execute_cmd(str, _tabUser, i, _pfds);
             channel.channel[join.nameChannel].push_back(_tabUser[i].getUsername());
-            printMap(channel.channel);
+            list = printMap(channel.channel);
+            std::string message = ":IRCyo 353 " + _tabUser[i].getNickname() + " = #a : " + list + "\r\n";
+            std::cout << CURSIVE << list << "|" << RESET << std::endl;
+            std::cout << CURSIVE << "message : |" << message << "|" << RESET << std::endl;
+            write(_pfds[i].fd, message.c_str(), message.size());
+            // size_t size = send(_pfds[i].fd, message.c_str(), message.size(), 0);
+            // if (size < 0)
+            //     std::cout << "null\n";
+            // else
+            //     std::cout << "good\n";
         }
         pos = str.find("MODE");
         if (pos !=  std::string::npos)

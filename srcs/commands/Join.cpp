@@ -15,7 +15,6 @@ void Join::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct
     std::string message = ":" + _tabUser[i].getNickname() + " " + str + "\r\n";
     std::cout << "message : " << message << std::endl;
     write(_pfds[i].fd, message.c_str(), message.size());
-    //map #a -> list.push.back(_tabUser[i].getUsername())
 }
 
 Join::~Join(){}
