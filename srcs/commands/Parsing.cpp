@@ -1,7 +1,21 @@
 #include "../../includes/commands/Parsing.hpp"
 #include "../../includes/commands/Command.hpp"
+#include "../../includes/Channel/Channel.hpp"
 
-void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct pollfd> _pfds)
+void printMap(const std::map<std::string, std::list<std::string> >& channel) {
+    for (std::map<std::string, std::list<std::string> >::const_iterator it = channel.begin(); it != channel.end(); ++it) {
+        std::cout << "Channel: " << it->first << std::endl;
+        std::cout << "Subscribers: ";
+        
+        for (std::list<std::string>::const_iterator subIt = it->second.begin(); subIt != it->second.end(); ++subIt) {
+            std::cout << *subIt << " ";
+        }
+        
+        std::cout << std::endl;
+    }
+}
+
+void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct pollfd> _pfds, Channel &channel)
 {
     std::string str;
     std::istringstream iss(buffer);
@@ -38,6 +52,8 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
             std::cout << "JOIN BY: " << _tabUser[i].getUsername() << std::endl;
             Join join;
             join.execute_cmd(str, _tabUser, i, _pfds);
+            channel.channel[join.nameChannel].push_back(_tabUser[i].getUsername());
+            printMap(channel.channel);
         }
         pos = str.find("MODE");
         if (pos !=  std::string::npos)
@@ -48,5 +64,12 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
             mode.execute_cmd(str);
             mode.changeMode();
         }
+        // pos = str.find("PRIVMSG");
+        // if (pos !=  std::string::npos)
+        // {
+        //     std::cout << "PRIVMSG BY: " << _tabUser[i].getUsername() << std::endl;
+        //     // Message message;
+        //     // message.execute_cmd(str);
+        // }
     }
 }

@@ -10,11 +10,7 @@ Channel::Channel(Channel const &src)
 Channel &Channel::operator=(Channel const &rhs)
 {
     (void)rhs;
+    return (*this);
 }
 
 Channel::~Channel(void){}
-
-void Channel::creationChannel(void)
-{
-    
-}

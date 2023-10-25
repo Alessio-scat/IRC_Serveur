@@ -14,7 +14,8 @@ INC_FILE				= 	IRC \
 							user/AllClient \
 							commands/Command \
 							Server/ErrorValue \
-							commands/Parsing 
+							commands/Parsing \
+							Channel/Channel
 INC						= 	$(addsuffix .hpp, $(addprefix $(INC_DIR)/, $(INC_FILE)))
 
 SRCS_DIR				=	srcs
@@ -28,7 +29,8 @@ SRCS_FILE				=	main \
 							commands/Topic \
 							commands/Mode \
 							commands/Parsing \
-							commands/Join
+							commands/Join \
+							Channel/Channel
 SRCS					=  	$(addsuffix .cpp, $(addprefix $(SRCS_DIR)/, $(SRCS_FILE)))
 
 OBJS			    	= 	$(SRCS:%.cpp=$(BUILD_DIR)%.o)
