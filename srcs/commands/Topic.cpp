@@ -1,13 +1,8 @@
-#include "../../includes/commands/Topic.hpp"
+#include "../../includes/commands/Command.hpp"
 
 Topic::Topic(void){}
 
-Topic::Topic(Topic const &src)
-{
-    *this = src;
-}
-
-Topic::Topic(std::string str)
+void Topic::execute_cmd(std::string str)
 {
     size_t endChannel = str.find(" ", 7);
     size_t startTopic;
@@ -45,12 +40,3 @@ Topic::Topic(std::string str)
 }
 
 Topic::~Topic(){}
-
-Topic Topic::operator=(Topic const &rhs)
-{
-    if (this == &rhs)
-        return (*this);
-    this->_msgTopic = rhs._msgTopic;
-    this->_channelTopic = rhs._channelTopic;
-    return (*this);
-}

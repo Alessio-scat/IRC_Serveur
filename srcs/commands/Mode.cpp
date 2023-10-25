@@ -1,13 +1,8 @@
-#include "../../includes/commands/Mode.hpp"
+#include "../../includes/commands/Command.hpp"
 
 Mode::Mode(void){}
 
-Mode::Mode(Mode const &src)
-{
-    *this = src;
-}
-
-Mode::Mode(std::string str)
+void Mode::execute_cmd(std::string str)
 {
     size_t endChannel = str.find(" ", 6);
     size_t startOpt;
@@ -47,18 +42,7 @@ Mode::Mode(std::string str)
     std::cout << "msgTopic : " << this->_opt << std::endl;
 }
 
-Mode::~Mode()
-{
-}
-
-Mode Mode::operator=(Mode const &rhs)
-{
-    if (this == &rhs)
-        return (*this);
-    // this->_nickMode = rhs._nickMode;
-    // this->_channelMode = rhs._channelMode;
-    return (*this);
-}
+Mode::~Mode(){}
 
 void Mode::changeMode(void)
 {

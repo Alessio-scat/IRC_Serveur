@@ -8,11 +8,27 @@ RM						=	rm -rf
 BUILD_DIR				= 	build/
 
 INC_DIR					=	includes
-INC_FILE				= 	IRC  Server/Server user/User user/AllClient commands/Command commands/Kick commands/Invite commands/Topic commands/Mode commands/Join Server/ErrorValue 
+INC_FILE				= 	IRC \
+							Server/Server \
+							user/User \
+							user/AllClient \
+							commands/Command \
+							Server/ErrorValue \
+							commands/Parsing 
 INC						= 	$(addsuffix .hpp, $(addprefix $(INC_DIR)/, $(INC_FILE)))
 
 SRCS_DIR				=	srcs
-SRCS_FILE				=	main Server/Server user/User user/AllClient commands/Command commands/Kick commands/Invite commands/Topic commands/Mode commands/Join
+SRCS_FILE				=	main \
+							Server/Server \
+							user/User \
+							user/AllClient \
+							commands/Command \
+							commands/Kick \
+							commands/Invite \
+							commands/Topic \
+							commands/Mode \
+							commands/Parsing \
+							commands/Join
 SRCS					=  	$(addsuffix .cpp, $(addprefix $(SRCS_DIR)/, $(SRCS_FILE)))
 
 OBJS			    	= 	$(SRCS:%.cpp=$(BUILD_DIR)%.o)

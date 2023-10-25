@@ -1,13 +1,13 @@
-#include "../../includes/commands/Join.hpp"
+#include "../../includes/commands/Command.hpp"
 
 Join::Join(void){}
 
-Join::Join(Join const &src)
+void Join::execute_cmd(std::string str)
 {
-    *this = src;
+    (void)str;
 }
 
-Join::Join(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds)
+void Join::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds)
 {
     std::cout << _tabUser[i].getUsername() << std::endl;
     std::cout << "JOIN command : " << str << std::endl;
@@ -17,9 +17,3 @@ Join::Join(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pf
 }
 
 Join::~Join(){}
-
-Join Join::operator=(Join const &rhs)
-{
-    (void)rhs;
-    return (*this);
-}
