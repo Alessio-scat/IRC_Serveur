@@ -2,6 +2,7 @@
 #define COMMAND_HPP
 
 #include "../IRC.hpp"
+#include "../Channel/Channel.hpp"
 
 class Command
 {
@@ -66,6 +67,7 @@ class Topic: public Command
         Topic(void);
         ~Topic(void);
         void execute_cmd(std::string str);
+        void rpl(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds, Channel &channel);
 };
 
 class Join: public Command

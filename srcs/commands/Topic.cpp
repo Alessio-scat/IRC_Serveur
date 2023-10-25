@@ -1,4 +1,5 @@
 #include "../../includes/commands/Command.hpp"
+#include "../../includes/Channel/Channel.hpp"
 
 Topic::Topic(void){}
 
@@ -29,6 +30,7 @@ void Topic::execute_cmd(std::string str)
         // throw ERR_NEEDMOREPARAMS();
         return ;
     }
+    std::cout << "caca" ;
     tmpChannel = str.substr(6, endChannel - 6);
 
     this->_channelTopic = tmpChannel;
@@ -49,7 +51,20 @@ void Topic::execute_cmd(std::string str)
     }
     this->_msgTopic = tmpTopic.substr(1);
     std::cout << "msgTopic : " << this->_msgTopic << std::endl;
+}
 
+void Topic::rpl(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds, Channel &channel)
+{
+    (void)str;
+    (void)channel;
+    std::string message = ":IRCauto 332 " + _tabUser[i].getNickname() + " " + "#a" + " :" + this->_msgTopic + "\r\n";
+    std::cout << "message : |" << message << "|" << std::endl;
+    // write(_pfds[i].fd, message.c_str(), message.size());
+    size_t size = send(_pfds[i].fd, message.c_str(), message.size(), 0);
+    if (size < 0)
+        std::cout << "null\n";
+    else
+        std::cout << "good\n";
 }
 
 Topic::~Topic(){}

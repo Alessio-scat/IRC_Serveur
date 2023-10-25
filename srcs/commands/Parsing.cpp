@@ -45,6 +45,7 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
             // Topic topic(str);
             Topic topic;
             topic.execute_cmd(str);
+            topic.rpl(str, _tabUser, i, _pfds, channel);
         }
         pos = str.find("JOIN");
         if (pos !=  std::string::npos)
