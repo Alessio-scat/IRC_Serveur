@@ -1,13 +1,10 @@
-#include "../../includes/commands/Invite.hpp"
+#include "../../includes/commands/Command.hpp"
 
-Invite::Invite(void){}
+Invite::Invite(void):Command(){}
 
-Invite::Invite(Invite const &src)
-{
-    *this = src;
-}
+Invite::~Invite(void){}
 
-Invite::Invite(std::string str)
+void Invite::execute_cmd(std::string str)
 {
     size_t index = 7;
     size_t endNick = str.find('#', index);
@@ -46,27 +43,4 @@ Invite::Invite(std::string str)
     this->_channelInvite = tmpChannel;
     std::cout << "nickInvite : " << this->_nickInvite << std::endl;
     std::cout << "channelInvite : " << this->_channelInvite << std::endl;
-}
-
-Invite::~Invite()
-{
-}
-
-Invite Invite::operator=(Invite const &rhs)
-{
-    if (this == &rhs)
-        return (*this);
-    this->_nickInvite = rhs._nickInvite;
-    this->_channelInvite = rhs._channelInvite;
-    return (*this);
-}
-
-void Invite::getNickInvite(std::string nickInvite)
-{
-    this->_nickInvite = nickInvite;
-}
-
-void Invite::getChannelInvite(std::string channelInvite)
-{
-    this->_channelInvite = channelInvite;
 }

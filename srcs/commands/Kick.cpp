@@ -1,15 +1,9 @@
-#include "../../includes/commands/Kick.hpp"
+#include "../../includes/commands/Command.hpp"
 
 Kick::Kick(void){}
 
-Kick::Kick(Kick const &src)
+void Kick::execute_cmd(std::string str)
 {
-    *this = src;
-}
-
-Kick::Kick(std::string str, User &user)
-{
-    (void)user;
     size_t pos;
     size_t pos2 = 0;
 
@@ -42,10 +36,3 @@ Kick::Kick(std::string str, User &user)
 }
 
 Kick::~Kick(){}
-
-Kick Kick::operator=(Kick const &rhs)
-{
-    this->_channel = rhs._channel;
-    this->_user = rhs._user;
-    return (*this);
-}

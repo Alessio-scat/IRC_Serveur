@@ -2,23 +2,70 @@
 #define COMMAND_HPP
 
 #include "../IRC.hpp"
-#include "Kick.hpp"
-#include "Invite.hpp"
-#include "Topic.hpp"
-#include "Mode.hpp"
 
 class Command
 {
-private:
-    /* data */
-public:
-    Command(/* args */);
-    Command(Command const &src);
-    ~Command();
+    private:
 
-    Command operator=(Command const &rhs);
+    
+    public:
+        Command(void);
+        Command(Command const &src);
+        Command &operator=(Command const &rhs);
+        virtual ~Command(void);
 
-    void whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
+        virtual void execute_cmd(std::string str) = 0;
+
+};
+
+class Invite: public Command
+{
+    private:
+        std::string _nickInvite;
+        std::string _channelInvite;
+
+    public:
+        Invite(void);
+        ~Invite(void);
+        void execute_cmd(std::string str);
+};
+
+class Kick: public Command
+{
+    private:
+        std::string _user;
+        std::string _channel;
+        std::string _reason;
+
+    public:
+        Kick(void);
+        ~Kick(void);
+        void execute_cmd(std::string str);
+};
+
+class Mode: public Command
+{
+    private:
+        std::string _channelMode;
+        std::string _opt;
+
+    public:
+        Mode(void);
+        ~Mode(void);
+        void execute_cmd(std::string str);
+        void changeMode(void);
+};
+
+class Topic: public Command
+{
+    private:
+       std::string _channelTopic;
+        std::string _msgTopic;
+
+    public:
+        Topic(void);
+        ~Topic(void);
+        void execute_cmd(std::string str);
 };
 
 #endif

@@ -4,6 +4,7 @@
 # include "../Channel/Channel.hpp"
 #include "../../includes/user/User.hpp"
 #include "../../includes/commands/Command.hpp"
+#include "../../includes/commands/Parsing.hpp"
 
 # define MAXCLIENT 10
 
@@ -20,7 +21,8 @@ private:
     socklen_t addrSize;
     std::deque<struct pollfd> _pfds;
     int serverSocket;
-    Command command;
+    // Command command;
+    Parsing command;
     User _tabUser[MAX_USERS];
 
 public:
