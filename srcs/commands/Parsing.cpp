@@ -32,6 +32,13 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
             Topic topic;
             topic.execute_cmd(str);
         }
+        pos = str.find("JOIN");
+        if (pos !=  std::string::npos)
+        {
+            std::cout << "JOIN BY: " << _tabUser[i].getUsername() << std::endl;
+            Join join;
+            join.execute_cmd(str, _tabUser, i, _pfds);
+        }
         pos = str.find("MODE");
         if (pos !=  std::string::npos)
         {
@@ -40,13 +47,6 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
             Mode mode;
             mode.execute_cmd(str);
             mode.changeMode();
-        }
-        pos = str.find("JOIN");
-        if (pos !=  std::string::npos)
-        {
-            std::cout << "JOIN BY: " << _tabUser[i].getUsername() << std::endl;
-            Join join;
-            join.execute_cmd(str, _tabUser, i, _pfds);
         }
     }
 }

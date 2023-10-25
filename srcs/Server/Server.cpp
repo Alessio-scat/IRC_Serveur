@@ -160,6 +160,7 @@ void Server::Run_Server(void)
                     fillUser(_tabUser, i);
                     this->buffer[bytesRead] = '\0';
                     command.whatCommand(this->buffer, _tabUser, i, _pfds);
+                    std::cout << "yyyyyyy : " << this->buffer << std::endl;
                 }
             }
         }
