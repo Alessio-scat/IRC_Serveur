@@ -6,6 +6,11 @@ Invite::~Invite(void){}
 
 void Invite::execute_cmd(std::string str)
 {
+    (void)str;
+}
+
+void Invite::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser)
+{
     size_t index = 7;
     size_t endNick = str.find('#', index);
     std::string tmpNick;
@@ -43,4 +48,17 @@ void Invite::execute_cmd(std::string str)
     this->_channelInvite = tmpChannel;
     std::cout << "nickInvite : " << this->_nickInvite << std::endl;
     std::cout << "channelInvite : " << this->_channelInvite << std::endl;
+    int i;
+    for (i = 0; i < MAX_USERS; i++)
+    {
+        std::cout << "|" <<_tabUser[i].getNickname() << "|" << std::endl;
+        if (_tabUser[i].getNickname() == _nickInvite)
+            break ;
+    }
+    std::cout << i << std::endl;
+    // std::string message2 = "Hello, Server!\r\n";
+    std::string message = "You have been invited to" + _channelInvite + "by" + _nickInvite + "\r\n";
+    // send(_pfds[i].fd, message.c_str(), message.size(), 0);
+    write(_pfds[i].fd, message.c_str(), message.size());
+    // write(_pfds[i].fd, message2.c_str(), message.size());
 }

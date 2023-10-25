@@ -36,7 +36,7 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
         {
             std::cout << "INVITE BY: " << _tabUser[i].getUsername() << std::endl;
             Invite invite;
-            invite.execute_cmd(str);
+            invite.execute_cmd(str, _pfds, _tabUser);
         }
         pos = str.find("TOPIC");
         if (pos !=  std::string::npos)

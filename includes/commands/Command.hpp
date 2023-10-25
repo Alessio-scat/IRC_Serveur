@@ -28,6 +28,7 @@ class Invite: public Command
         Invite(void);
         ~Invite(void);
         void execute_cmd(std::string str);
+        void execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser);
 };
 
 class Kick: public Command
