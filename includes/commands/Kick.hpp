@@ -16,5 +16,4 @@ public:
     Kick(Kick const &src);
     ~Kick();
     Kick operator=(Kick const &rhs);
-    
 };

@@ -57,18 +57,18 @@ void Command::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
         {
             std::cout << _tabUser[i].getUsername() << std::endl;
             std::cout << "JOIN command : " << str << std::endl;
-            // int bytesSent = send(clientSockets[i].fd, str, str.size(), 0);
-            // if (bytesSent == -1)
-            // {
-            //     std::cerr << "Erreur lors de l'envoi des données." << std::endl;
-            // }
-            // else
-            // {
-            //     std::cout << "Nombre d'octets envoyés : " << bytesSent << std::endl;
-            // }
             std::string message = ":" + _tabUser[i].getUsername() + " " + str + "\r\n";
             std::cout << "message : " << message << std::endl;
             write(_pfds[i].fd, message.c_str(), message.size());
+        }
+        pos = str.find("PRIVMSG");
+        if (pos !=  std::string::npos)
+        {
+            std::cout << _tabUser[i].getUsername() << std::endl;
+            std::cout << "PRIVMSG command : " << str << std::endl;
+            // std::string message = ":" + _tabUser[i].getUsername() + " " + str + "\r\n";
+            // std::cout << "message : " << message << std::endl;
+            // write(_pfds[i].fd, message.c_str(), message.size());
         }
     }
 }
