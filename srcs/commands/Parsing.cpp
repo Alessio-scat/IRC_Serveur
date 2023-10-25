@@ -6,7 +6,7 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
     std::string str;
     std::istringstream iss(buffer);
     size_t pos;
-    // std::cout << "ici" << std::endl;
+    std::cout << "BUFFER: " << buffer << std::endl;
     while (std::getline(iss, str))
     {
         pos = str.find("KICK");
