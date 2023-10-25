@@ -26,15 +26,14 @@ void Topic::execute_cmd(std::string str)
         return ;
     }
     startTopic = str.find(":");
-    tmpTopic = str.substr(startTopic + 1);
-    // if (tmpTopic.size() == 3 && (tmpTopic[0] == ':' && tmpTopic[1] != ':'))
-    if (tmpTopic.size() == 2 && tmpTopic[1] != ':')
+    tmpTopic = str.substr(startTopic);
+    if (tmpTopic.size() == 3 && (tmpTopic[0] == ':' && tmpTopic[1] != ':'))
     {
         std::cout << "CLEAR" << std::endl;
         //Clearing the topic on channel
         return ;
     }
-    this->_msgTopic = tmpTopic;
+    this->_msgTopic = tmpTopic.substr(1);
     std::cout << "msgTopic : " << this->_msgTopic << std::endl;
 
 }
