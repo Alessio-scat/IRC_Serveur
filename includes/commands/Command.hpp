@@ -2,6 +2,7 @@
 #define COMMAND_HPP
 
 #include "../IRC.hpp"
+#include "../Channel/Channel.hpp"
 
 class Command
 {
@@ -28,9 +29,10 @@ class Invite: public Command
     public:
         Invite(void);
         ~Invite(void);
+        void ExistChannel(const std::map<std::string, std::list<std::string> >& channel, std::deque<struct pollfd> _pfds, int i);
         void ParseInviteCmd(std::string &str);
         void execute_cmd(std::string str);
-        void execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser, int y);
+        void execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser, int y, Channel &channel);
 };
 
 class Kick: public Command

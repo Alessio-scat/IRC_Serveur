@@ -17,7 +17,23 @@ void Invite::ParseInviteCmd(std::string &str)
     std::cout << UNDER << _cmd << RESET << std::endl;
 }
 
-void Invite::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser, int y)
+void Invite::ExistChannel(const std::map<std::string, std::list<std::string> >& channel, std::deque<struct pollfd> _pfds, int i)
+{
+    (void)_pfds;
+    (void)i;
+    for (std::map<std::string, std::list<std::string> >::const_iterator it = channel.begin(); it != channel.end(); ++it) {
+        std::cout << "CHANNEL: " << it->first << std::endl;
+        // std::cout << "Subscribers: ";
+        
+        // for (std::list<std::string>::const_iterator subIt = it->second.begin(); subIt != it->second.end(); ++subIt) {
+        //     std::cout << *subIt << " ";
+        // }
+        
+        std::cout << std::endl;
+    }
+}
+
+void Invite::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser, int y, Channel &channel)
 {
     size_t index = 7;
     size_t endNick = str.find('#', index);
@@ -25,6 +41,7 @@ void Invite::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User 
     std::string tmpChannel;
 
     ParseInviteCmd(str);
+    ExistChannel(channel.channel, _pfds, y);
     if (str.find('#', index) == std::string::npos)
     {
         std::cout << "ERROR: INVITE need #" << std::endl;

@@ -18,6 +18,7 @@
 #include <vector>
 #include <map>
 #include <deque>
+#include <list>
 
 #define MAX_USERS 10
 
