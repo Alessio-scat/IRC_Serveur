@@ -67,12 +67,13 @@ class Topic: public Command
         Topic(void);
         ~Topic(void);
         void execute_cmd(std::string str);
-        void rpl(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds, Channel &channel);
+        void rpl(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
 };
 
 class Join: public Command
 {
     private:
+        std::string _channelJoin;
     public:
         std::string nameChannel;
         Join(void);

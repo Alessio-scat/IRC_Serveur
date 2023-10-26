@@ -30,15 +30,17 @@ void Topic::execute_cmd(std::string str)
         // throw ERR_NEEDMOREPARAMS();
         return ;
     }
-    std::cout << "caca" ;
     tmpChannel = str.substr(6, endChannel - 6);
 
+    // this->_channelTopic = tmpChannel.substr(1, tmpChannel.size() - 1);
     this->_channelTopic = tmpChannel;
     std::cout << "channelTopic : " << this->_channelTopic << std::endl;
     if (str.find(":") == std::string::npos)
     {
         std::cout << "CHECK" << std::endl;
         // Checking the topic for the channel
+        this->_msgTopic = "";
+        std::cout << "msgTopic : " << "|" << this->_msgTopic << "|" << std::endl;
         return ;
     }
     startTopic = str.find(":");
@@ -49,17 +51,15 @@ void Topic::execute_cmd(std::string str)
         //Clearing the topic on channel
         return ;
     }
-    this->_msgTopic = tmpTopic.substr(1);
-    std::cout << "msgTopic : " << this->_msgTopic << std::endl;
+    this->_msgTopic = tmpTopic.substr(1, tmpTopic.size() - 1);
+    std::cout << "msgTopic : " << "|" << this->_msgTopic << "|" << std::endl;
 }
 
-void Topic::rpl(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds, Channel &channel)
+void Topic::rpl(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds)
 {
     (void)str;
-    (void)channel;
-    std::string message = ":IRCauto 332 " + _tabUser[i].getNickname() + " " + "#a" + " :" + this->_msgTopic + "\r\n";
+    std::string message = ":IRChub 332 " + _tabUser[i].getNickname() + " " + this->_channelTopic + " :" + this->_msgTopic + "\r\n";
     std::cout << "message : |" << message << "|" << std::endl;
-    // write(_pfds[i].fd, message.c_str(), message.size());
     size_t size = send(_pfds[i].fd, message.c_str(), message.size(), 0);
     if (size < 0)
         std::cout << "null\n";

@@ -14,6 +14,7 @@ class Channel
 
         std::map<std::string, std::list<std::string> > channel;
     private:
+    
 };
 
 # endif 
