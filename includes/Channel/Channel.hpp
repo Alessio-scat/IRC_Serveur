@@ -6,6 +6,8 @@
 
 class Channel
 {
+    private:
+    
     public:
         Channel(void);
         Channel(Channel const &src);
@@ -13,7 +15,7 @@ class Channel
         ~Channel(void);
 
         std::map<std::string, std::list<std::string> > channel;
-    private:
+        std::map<std::string, std::string> mapTopic;
     
 };
 

@@ -19,13 +19,14 @@ void Join::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct
         // throw ERR_NEEDMOREPARAMS();
         return ;
     }
-    this->_channelJoin = str.substr(6);
+    this->_channelJoin = str.substr(5, str.size() - 6);
     this->nameChannel = this->_channelJoin;
     std::cout << _tabUser[i].getUsername() << std::endl;
     std::cout << "JOIN command : " << str << std::endl;
     std::string message = ":" + _tabUser[i].getNickname() + " " + str + "\r\n";
     std::cout << "message : " << message << std::endl;
     write(_pfds[i].fd, message.c_str(), message.size());
+    //IL FAUT SEND RPL_NOTOPIC 331 quand on join un channel sans topic
     //map #a -> list.push.back(_tabUser[i].getUsername())
 }
 

@@ -68,6 +68,9 @@ class Topic: public Command
         ~Topic(void);
         void execute_cmd(std::string str);
         void rpl(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
+        std::string getChannelTopic(void);
+        std::string getMsgTopic(void);
+
 };
 
 class Join: public Command

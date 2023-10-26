@@ -3,6 +3,8 @@
 
 Topic::Topic(void){}
 
+Topic::~Topic(){}
+
 bool isOnlySpace(std::string str)
 {
     if (str.size() < 3)
@@ -67,4 +69,13 @@ void Topic::rpl(std::string str, User *_tabUser, int i, std::deque<struct pollfd
         std::cout << "good\n";
 }
 
-Topic::~Topic(){}
+
+std::string Topic::getChannelTopic(void)
+{
+    return (this->_channelTopic);
+}
+
+std::string Topic::getMsgTopic(void)
+{
+    return (this->_msgTopic);
+}
