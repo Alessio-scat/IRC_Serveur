@@ -56,6 +56,7 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
             topic.rpl(str, _tabUser, i, _pfds);
             channel.mapTopic[topic.getChannelTopic()] = topic.getMsgTopic();
             printMapTopic(channel.mapTopic);
+            ///ERREUR PARSING _channelTopic QUAND PAS DE TOPIC
         }
         pos = str.find("JOIN");
         if (pos !=  std::string::npos)

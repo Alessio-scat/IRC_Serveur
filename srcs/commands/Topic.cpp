@@ -32,7 +32,7 @@ void Topic::execute_cmd(std::string str)
         // throw ERR_NEEDMOREPARAMS();
         return ;
     }
-    tmpChannel = str.substr(6, endChannel - 6);
+    tmpChannel = str.substr(6, endChannel - 7);
 
     // this->_channelTopic = tmpChannel.substr(1, tmpChannel.size() - 1);
     this->_channelTopic = tmpChannel;
@@ -53,7 +53,7 @@ void Topic::execute_cmd(std::string str)
         //Clearing the topic on channel
         return ;
     }
-    this->_msgTopic = tmpTopic.substr(1, tmpTopic.size() - 1);
+    this->_msgTopic = tmpTopic.substr(1, tmpTopic.size() - 2);
     std::cout << "msgTopic : " << "|" << this->_msgTopic << "|" << std::endl;
 }
 
