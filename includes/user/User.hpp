@@ -22,6 +22,7 @@ public:
     void setNickname(std::string nickname);
     std::string getUsername(void)const;
     void setUsername(std::string username);
+    void setOperateur(bool ope);
 };
 
 #endif

@@ -13,13 +13,24 @@ std::string printMap(const std::map<std::string, std::list<std::string> >& chann
         
         for (std::list<std::string>::const_iterator subIt = it->second.begin(); subIt != it->second.end(); ++subIt) {
             std::cout << *subIt << " ";
-            if (i == 0)
+            if (i == 0) //&& it->second.size() == 1)
+            {
+                std::cout << "1 size\n";
+                for (int j = 1;j <= MAXCLIENT; j++)
+                {
+                    if (*subIt == _tabUser[j].getNickname())
+                        _tabUser[j].setOperateur(1);
+                }
+                list += "@" + *subIt;
+            }    
+            else if (i == 0)
                 list += *subIt;
             else
                 list += " " + *subIt;
             i++;
         }
         
+        std::cout << CURSIVE << list << RESET << std::endl;
         std::cout << CURSIVE << i << RESET << std::endl;
         std::cout << std::endl;
     }
@@ -66,12 +77,9 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
             join.execute_cmd(str, _tabUser, i, _pfds);
             channel.channel[join.nameChannel].push_back(_tabUser[i].getUsername());
             list = printMap(channel.channel, _tabUser);
-            std::string message = ":IRChub 353 " + _tabUser[i].getNickname() + " = #a : " + list + "\r\n";
+            std::string message = ":IRChub 353 " + _tabUser[i].getNickname() + " = #a :" + list + "\r\n";
             std::cout << CURSIVE << list << "|" << RESET << std::endl;
             std::cout << CURSIVE << "message : |" << message << "|" << RESET << std::endl;
-            // write(_pfds[i].fd, message.c_str(), message.size());
-            // if (_pfds[2].fd > 0)
-            //     write(_pfds[1].fd, message.c_str(), message.size());
             std::istringstream ss(list);
             std::string word;
             while (ss >> word)
