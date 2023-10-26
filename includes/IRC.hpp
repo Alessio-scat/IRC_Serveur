@@ -38,3 +38,9 @@
 
     - CUIRSIVE --> buffer
 */
+
+#define RPL_JOIN(source)                       ":" + source //+ " JOIN :" + channel
+
+/*INVITE*/
+
+#define ERR_NEEDMOREPARAMS(source, command)    "461 " + source + " " + command + " :Not enough paramters"

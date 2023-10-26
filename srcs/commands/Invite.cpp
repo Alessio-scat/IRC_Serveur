@@ -1,4 +1,5 @@
 #include "../../includes/commands/Command.hpp"
+# include "../../includes/Utils.hpp"
 
 Invite::Invite(void):Command(){}
 
@@ -9,17 +10,26 @@ void Invite::execute_cmd(std::string str)
     (void)str;
 }
 
-void Invite::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser)
+void Invite::ParseInviteCmd(std::string &str)
+{
+    ft_trim(str);
+    _cmd = str.substr(0, 6);
+    std::cout << UNDER << _cmd << RESET << std::endl;
+}
+
+void Invite::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser, int y)
 {
     size_t index = 7;
     size_t endNick = str.find('#', index);
     std::string tmpNick;
     std::string tmpChannel;
 
+    ParseInviteCmd(str);
     if (str.find('#', index) == std::string::npos)
     {
         std::cout << "ERROR: INVITE need #" << std::endl;
         // throw ERR_NEEDMOREPARAMS();
+        writeInfd(ERR_NEEDMOREPARAMS(_tabUser[y].getNickname(), _cmd), y, _pfds);
         return ;
     }
     while (str[index] == ' ')
@@ -56,9 +66,10 @@ void Invite::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User 
             break ;
     }
     std::cout << i << std::endl;
-    // std::string message2 = "Hello, Server!\r\n";
-    std::string message = "You have been invited to" + _channelInvite + "by" + _nickInvite + "\r\n";
+    std::string message2 = ":" + _tabUser[y].getUsername() + " INVITE " + _nickInvite + " " + _channelInvite + "\r\n";
+    // std::string message = "You have been invited to" + _channelInvite + "by" + _nickInvite + "\r\n";
     // send(_pfds[i].fd, message.c_str(), message.size(), 0);
-    write(_pfds[i].fd, message.c_str(), message.size());
-    // write(_pfds[i].fd, message2.c_str(), message.size());
+    // write(_pfds[i].fd, message.c_str(), message.size());
+    write(_pfds[i].fd, message2.c_str(), message2.size());
+    write(_pfds[y].fd, message2.c_str(), message2.size());
 }

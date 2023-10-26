@@ -23,12 +23,14 @@ class Invite: public Command
     private:
         std::string _nickInvite;
         std::string _channelInvite;
+        std::string _cmd;
 
     public:
         Invite(void);
         ~Invite(void);
+        void ParseInviteCmd(std::string &str);
         void execute_cmd(std::string str);
-        void execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser);
+        void execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser, int y);
 };
 
 class Kick: public Command
