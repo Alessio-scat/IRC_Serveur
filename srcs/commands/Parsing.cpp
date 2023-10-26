@@ -1,10 +1,12 @@
 #include "../../includes/commands/Parsing.hpp"
 #include "../../includes/commands/Command.hpp"
 #include "../../includes/Channel/Channel.hpp"
+#include "../../includes/Server/Server.hpp"
 
-std::string printMap(const std::map<std::string, std::list<std::string> >& channel) {
+std::string printMap(const std::map<std::string, std::list<std::string> >& channel, User *_tabUser) {
     std::string list;
     int i = 0;
+    (void)_tabUser;
     for (std::map<std::string, std::list<std::string> >::const_iterator it = channel.begin(); it != channel.end(); ++it) {
         std::cout << "Channel: " << it->first << std::endl;
         std::cout << "Subscribers: ";
@@ -18,6 +20,7 @@ std::string printMap(const std::map<std::string, std::list<std::string> >& chann
             i++;
         }
         
+        std::cout << CURSIVE << i << RESET << std::endl;
         std::cout << std::endl;
     }
     return (list);
@@ -62,16 +65,24 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
             Join join;
             join.execute_cmd(str, _tabUser, i, _pfds);
             channel.channel[join.nameChannel].push_back(_tabUser[i].getUsername());
-            list = printMap(channel.channel);
-            std::string message = ":IRCyo 353 " + _tabUser[i].getNickname() + " = #a : " + list + "\r\n";
+            list = printMap(channel.channel, _tabUser);
+            std::string message = ":IRChub 353 " + _tabUser[i].getNickname() + " = #a : " + list + "\r\n";
             std::cout << CURSIVE << list << "|" << RESET << std::endl;
             std::cout << CURSIVE << "message : |" << message << "|" << RESET << std::endl;
-            write(_pfds[i].fd, message.c_str(), message.size());
-            // size_t size = send(_pfds[i].fd, message.c_str(), message.size(), 0);
-            // if (size < 0)
-            //     std::cout << "null\n";
-            // else
-            //     std::cout << "good\n";
+            // write(_pfds[i].fd, message.c_str(), message.size());
+            // if (_pfds[2].fd > 0)
+            //     write(_pfds[1].fd, message.c_str(), message.size());
+            std::istringstream ss(list);
+            std::string word;
+            while (ss >> word)
+            {
+                std::cout << CURSIVE << word << RESET << std::endl;
+                for (int j = 1;j <= MAXCLIENT; j++)
+                {
+                    if (word == _tabUser[j].getNickname())
+                        write(_pfds[j].fd, message.c_str(), message.size());
+                }
+            }
         }
         pos = str.find("MODE");
         if (pos !=  std::string::npos)
