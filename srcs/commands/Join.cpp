@@ -27,7 +27,8 @@ void Join::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct
         // throw ERR_NEEDMOREPARAMS();
         return ;
     }
-    this->_channelJoin = str.substr(6);
+    this->_channelJoin = str.substr(5, str.size() - 6);
+    std::cout << "nameChannel" << "|" << _channelJoin << "|" << std::endl;
     this->nameChannel = this->_channelJoin;
     std::cout << _tabUser[i].getUsername() << std::endl;
     std::cout << "JOIN command : " << str << std::endl;

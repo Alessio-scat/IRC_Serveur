@@ -76,10 +76,12 @@ class Topic: public Command
 class Join: public Command
 {
     private:
+        std::string _channelJoin;
     public:
         std::string nameChannel;
         Join(void);
         ~Join(void);
+
         void execute_cmd(std::string str);
         void execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
 };

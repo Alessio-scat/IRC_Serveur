@@ -21,8 +21,14 @@ void Invite::ExistChannel(const std::map<std::string, std::list<std::string> >& 
 {
     (void)_pfds;
     (void)i;
+    std::cout << "ChannelInvite: " << "|" << this->_channelInvite << "|" << std::endl;
     for (std::map<std::string, std::list<std::string> >::const_iterator it = channel.begin(); it != channel.end(); ++it) {
-        std::cout << "CHANNEL: " << it->first << std::endl;
+        std::cout << "CHANNEL: " << "|" << it->first << "|" << std::endl;
+        if (it->first == this->_channelInvite)
+            std::cout << "Le Channel existe" << std::endl;
+        else
+            std::cout << "Le Channel n'existe pas" << std::endl;
+
         // std::cout << "Subscribers: ";
         
         // for (std::list<std::string>::const_iterator subIt = it->second.begin(); subIt != it->second.end(); ++subIt) {
@@ -41,7 +47,6 @@ void Invite::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User 
     std::string tmpChannel;
 
     ParseInviteCmd(str);
-    ExistChannel(channel.channel, _pfds, y);
     if (str.find('#', index) == std::string::npos)
     {
         std::cout << "ERROR: INVITE need #" << std::endl;
@@ -73,8 +78,9 @@ void Invite::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User 
     }
     this->_nickInvite = tmpNick;
     this->_channelInvite = tmpChannel;
-    std::cout << "nickInvite : " << this->_nickInvite << std::endl;
-    std::cout << "channelInvite : " << this->_channelInvite << std::endl;
+    ExistChannel(channel.channel, _pfds, y);
+    // std::cout << "nickInvite : " << this->_nickInvite << std::endl;
+    // std::cout << "channelInvite : " << this->_channelInvite << std::endl;
     int i;
     for (i = 0; i < MAX_USERS; i++)
     {
@@ -82,11 +88,7 @@ void Invite::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User 
         if (_tabUser[i].getNickname() == _nickInvite)
             break ;
     }
-    std::cout << i << std::endl;
     std::string message2 = ":" + _tabUser[y].getUsername() + " INVITE " + _nickInvite + " " + _channelInvite + "\r\n";
-    // std::string message = "You have been invited to" + _channelInvite + "by" + _nickInvite + "\r\n";
-    // send(_pfds[i].fd, message.c_str(), message.size(), 0);
-    // write(_pfds[i].fd, message.c_str(), message.size());
     write(_pfds[i].fd, message2.c_str(), message2.size());
     write(_pfds[y].fd, message2.c_str(), message2.size());
 }
