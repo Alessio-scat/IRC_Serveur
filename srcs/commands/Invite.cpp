@@ -16,7 +16,7 @@ void Invite::ParseInviteCmd(std::string &str)
     std::string token;
     int i = 0;
     // ft_trim(str);
-    // _cmd = str.substr(0, 6);
+
     while (ss >> token)
     {
         std::cout << UNDER << "str|" << token << "|" << RESET << std::endl;
@@ -58,46 +58,8 @@ int Invite::ExistChannel(const std::map<std::string, std::list<std::string> >& c
     return 1;
 }
 
-void Invite::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser, int y, Channel &channel)
+void Invite::InviteClient(User *_tabUser, std::deque<struct pollfd> _pfds, int y)
 {
-    // size_t index = 7;
-    // size_t endNick = str.find('#', index);
-    // std::string tmpNick;
-    // std::string tmpChannel;
-
-    ParseInviteCmd(str);
-    if (_cmd.empty() || _nickInvite.empty() || _channelInvite.empty())
-    {
-        std::cout << "COUCOU" << std::endl;
-        writeInfd(ERR_NEEDMOREPARAMS(_tabUser[y].getNickname(), _cmd), y, _pfds);
-        return ;
-    }
-    // while (str[index] == ' ')
-    //     index++;
-    // if (index == std::string::npos)
-    // {
-    //     std::cout << "ERROR: INVITE need more param" << std::endl;
-    //     // throw ERR_NEEDMOREPARAMS();
-    //     return ;
-    // }
-    // tmpNick = str.substr(index, endNick - index - 1);
-    // if (tmpNick.find(' ') != std::string::npos)
-    // {
-    //     std::cout << "ERROR: INVITE wrong nickname" << std::endl;
-    //     // throw ERR_NEEDMOREPARAMS();
-    //     return ;
-    // }
-    // tmpChannel = str.substr(endNick);
-    // if (tmpChannel.find(' ') != std::string::npos || tmpChannel.size() == 2)
-    // {
-    //     std::cout << "ERROR: INVITE wrong channel" << std::endl;
-    //     // throw ERR_NOSUCHCHANNEL();
-    //     return ;
-    // }
-    // this->_nickInvite = tmpNick;
-    // this->_channelInvite = tmpChannel;
-    if (ExistChannel(channel.channel, _pfds, y, _nickInvite) == 1)
-        return ;
     int i;
     for (i = 0; i < MAX_USERS; i++)
     {
@@ -105,7 +67,24 @@ void Invite::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User 
         if (_tabUser[i].getNickname() == _nickInvite)
             break ;
     }
-    std::string message2 = ":" + _tabUser[y].getUsername() + " INVITE " + _nickInvite + " " + _channelInvite + "\r\n";
-    write(_pfds[i].fd, message2.c_str(), message2.size());
-    write(_pfds[y].fd, message2.c_str(), message2.size());
+    std::string message = ":" + _tabUser[y].getUsername() + " INVITE " + _nickInvite + " " + _channelInvite + "\r\n";
+    write(_pfds[i].fd, message.c_str(), message.size());
+    write(_pfds[y].fd, message.c_str(), message.size());
+}
+
+void Invite::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser, int y, Channel &channel)
+{
+    ParseInviteCmd(str);
+
+    if (_cmd.empty() || _nickInvite.empty() || _channelInvite.empty())
+    {
+        std::cout << "COUCOU" << std::endl;
+        writeInfd(ERR_NEEDMOREPARAMS(_tabUser[y].getNickname(), _cmd), y, _pfds);
+        return ;
+    }
+
+    if (ExistChannel(channel.channel, _pfds, y, _nickInvite) == 1)
+        return ;
+    
+    InviteClient(_tabUser, _pfds, y); 
 }
