@@ -86,5 +86,5 @@ void Invite::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User 
     if (ExistChannel(channel.channel, _pfds, y, _nickInvite) == 1)
         return ;
     
-    InviteClient(_tabUser, _pfds, y); 
+     InviteClient(_tabUser, _pfds, y); 
 }
