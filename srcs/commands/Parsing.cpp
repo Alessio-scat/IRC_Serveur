@@ -39,14 +39,6 @@ std::string printMap(const std::map<std::string, std::list<std::string> >& chann
     return (list);
 }
 
-void printMapTopic(const std::map<std::string, std::string>& mapTopic)
-{
-    for (std::map<std::string,  std::string>::const_iterator it = mapTopic.begin(); it != mapTopic.end(); ++it) {
-        std::cout << "\033[34m" << "MAPTOPIC: |" << it->first << "| |" << it->second << "| \033[0m" << std::endl;
-        std::cout << std::endl;
-    }
-}
-
 void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct pollfd> _pfds, Channel &channel)
 {
     std::string str;
@@ -71,10 +63,7 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
         if (pos !=  std::string::npos)
         {
             Topic topic;
-            topic.execute_cmd(str);
-            topic.rpl(str, _tabUser, i, _pfds);
-            channel.mapTopic[topic.getChannelTopic()] = topic.getMsgTopic();
-            printMapTopic(channel.mapTopic);
+            topic.execute_cmd(str, _tabUser, i, _pfds, channel);
             ///ERREUR PARSING _channelTopic QUAND PAS DE TOPIC
         }
         pos = str.find("JOIN");

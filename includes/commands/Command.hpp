@@ -72,7 +72,10 @@ class Topic: public Command
         Topic(void);
         ~Topic(void);
         void execute_cmd(std::string str);
+        void execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds, Channel &channel);
         void rpl(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
+        void printTopic(std::string channelTopic, std::map<std::string, std::string>& mapTopic);
+        void printMapTopic(const std::map<std::string, std::string>& mapTopic);
         std::string getChannelTopic(void);
         std::string getMsgTopic(void);
 
