@@ -45,7 +45,7 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
         {
             Join join;
             join.execute_cmd(str, _tabUser, i, _pfds);
-            std::cout << "nameChannel" << "|" << join.nameChannel << "|" << std::endl;
+            // std::cout << "nameChannel" << "|" << join.nameChannel << "|" << std::endl;
             channel.channel[join.nameChannel].push_back(_tabUser[i].getUsername());
             // printMap(channel.channel);
         }

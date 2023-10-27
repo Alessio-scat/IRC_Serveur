@@ -29,7 +29,7 @@ class Invite: public Command
     public:
         Invite(void);
         ~Invite(void);
-        void ExistChannel(const std::map<std::string, std::list<std::string> >& channel, std::deque<struct pollfd> _pfds, int i);
+        int ExistChannel(const std::map<std::string, std::list<std::string> >& channel, std::deque<struct pollfd> _pfds, int i, std::string &client);
         void ParseInviteCmd(std::string &str);
         void execute_cmd(std::string str);
         void execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser, int y, Channel &channel);

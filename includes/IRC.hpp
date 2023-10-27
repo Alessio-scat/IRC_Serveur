@@ -45,3 +45,4 @@
 /*INVITE*/
 
 #define ERR_NEEDMOREPARAMS(source, command)    "461 " + source + " " + command + " :Not enough paramters"
+#define ERR_NOSUCHCHANNEL(source, channel)     "403 " + source + " " + channel + " :No such channel"

@@ -159,7 +159,7 @@ void Server::Run_Server(void)
 
                     fillUser(_tabUser, i);
                     this->buffer[bytesRead] = '\0';
-                    std::cout << CURSIVE << UNDER << "buffer" << RESET << CURSIVE << ": " << "|" << this->buffer << "|" << RESET << std::endl;
+                    // std::cout << CURSIVE << UNDER << "buffer" << RESET << CURSIVE << ": " << "|" << this->buffer << "|" << RESET << std::endl;
                     command.whatCommand(this->buffer, _tabUser, i, _pfds, channel);
                 }
             }
