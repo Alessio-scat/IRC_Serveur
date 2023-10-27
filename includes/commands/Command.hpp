@@ -24,11 +24,15 @@ class Invite: public Command
     private:
         std::string _nickInvite;
         std::string _channelInvite;
+        std::string _cmd;
 
     public:
         Invite(void);
         ~Invite(void);
+        int ExistChannel(const std::map<std::string, std::list<std::string> >& channel, std::deque<struct pollfd> _pfds, int i, std::string &client);
+        void ParseInviteCmd(std::string &str);
         void execute_cmd(std::string str);
+        void execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser, int y, Channel &channel);
 };
 
 class Kick: public Command
@@ -81,6 +85,7 @@ class Join: public Command
         std::string nameChannel;
         Join(void);
         ~Join(void);
+
         void execute_cmd(std::string str);
         void execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
 };

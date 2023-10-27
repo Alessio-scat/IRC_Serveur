@@ -49,29 +49,23 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
     std::string str;
     std::istringstream iss(buffer);
     size_t pos;
-    std::cout << "BUFFER: " << buffer << std::endl;
     while (std::getline(iss, str))
     {
         pos = str.find("KICK");
         if (pos !=  std::string::npos)
         {
-            std::cout << "KICK command : " << str << std::endl;
-            // Kick kick(str, _tabUser[i]);
             Kick kick;
             kick.execute_cmd(str);
         }
         pos = str.find("INVITE");
         if (pos !=  std::string::npos)
         {
-            std::cout << "INVITE BY: " << _tabUser[i].getUsername() << std::endl;
             Invite invite;
-            invite.execute_cmd(str);
+            invite.execute_cmd(str, _pfds, _tabUser, i, channel);
         }
         pos = str.find("TOPIC");
         if (pos !=  std::string::npos)
         {
-            std::cout << "TOPIC BY: " << _tabUser[i].getUsername() << std::endl;
-            // Topic topic(str);
             Topic topic;
             topic.execute_cmd(str);
             topic.rpl(str, _tabUser, i, _pfds);
@@ -86,6 +80,7 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
             std::cout << "JOIN BY: " << _tabUser[i].getUsername() << std::endl;
             Join join;
             join.execute_cmd(str, _tabUser, i, _pfds);
+            // std::cout << "nameChannel" << "|" << join.nameChannel << "|" << std::endl;
             channel.channel[join.nameChannel].push_back(_tabUser[i].getUsername());
             list = printMap(channel.channel, _tabUser);
             std::string message = ":IRChub 353 " + _tabUser[i].getNickname() + " = #a :" + list + "\r\n";
@@ -107,18 +102,9 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
         pos = str.find("MODE");
         if (pos !=  std::string::npos)
         {
-            std::cout << "MODE BY: " << _tabUser[i].getUsername() << std::endl;
-            // Mode mode(str);
             Mode mode;
             mode.execute_cmd(str);
             mode.changeMode();
         }
-        // pos = str.find("PRIVMSG");
-        // if (pos !=  std::string::npos)
-        // {
-        //     std::cout << "PRIVMSG BY: " << _tabUser[i].getUsername() << std::endl;
-        //     // Message message;
-        //     // message.execute_cmd(str);
-        // }
     }
 }

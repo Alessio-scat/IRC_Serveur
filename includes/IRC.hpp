@@ -23,6 +23,7 @@
 #define MAX_USERS 10
 
 #include "user/User.hpp"
+// #include "user/AllClient.hpp"
 
 #define GREEN2 "\033[1;32m"
 #define GREEN "\e[92;5;118m"
@@ -32,3 +33,16 @@
 #define RED "\033[0;31m"
 #define BOLD "\x1b[1m"
 #define UNDER "\x1b[4m" //souligné
+
+/*
+    =================CODE COULEUR====================
+
+    - CUIRSIVE --> buffer
+*/
+
+#define RPL_JOIN(source)                       ":" + source //+ " JOIN :" + channel
+
+/*INVITE*/
+
+#define ERR_NEEDMOREPARAMS(source, command)    "461 " + source + " " + command + " :Not enough paramters"
+#define ERR_NOSUCHCHANNEL(source, channel)     "403 " + source + " " + channel + " :No such channel"

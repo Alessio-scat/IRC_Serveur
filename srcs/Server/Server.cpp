@@ -115,8 +115,8 @@ void Server::fillUser(User *_tabUser, int i)
         return ;
     _tabUser[i].setNickname(nickname);
     _tabUser[i].setUsername(username);
-    // std::cout << "Nickname :" << _tabUser[i].getNickname() << std::endl;
-    // std::cout << "Username :" << _tabUser[i].getUsername() << std::endl;
+    std::cout << "Nickname :" << "|" << _tabUser[i].getNickname() << "|" << std::endl;
+    std::cout << "Username :" << "|" << _tabUser[i].getUsername() << "|" << std::endl;
 }
 
 void Server::Run_Server(void)
@@ -159,6 +159,7 @@ void Server::Run_Server(void)
 
                     fillUser(_tabUser, i);
                     this->buffer[bytesRead] = '\0';
+                    // std::cout << CURSIVE << UNDER << "buffer" << RESET << CURSIVE << ": " << "|" << this->buffer << "|" << RESET << std::endl;
                     command.whatCommand(this->buffer, _tabUser, i, _pfds, channel);
                 }
             }
