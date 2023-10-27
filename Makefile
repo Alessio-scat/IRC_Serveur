@@ -11,7 +11,6 @@ INC_DIR					=	includes
 INC_FILE				= 	IRC \
 							Server/Server \
 							user/User \
-							user/AllClient \
 							commands/Command \
 							Server/ErrorValue \
 							commands/Parsing \
@@ -22,7 +21,6 @@ SRCS_DIR				=	srcs
 SRCS_FILE				=	main \
 							Server/Server \
 							user/User \
-							user/AllClient \
 							commands/Command \
 							commands/Kick \
 							commands/Invite \

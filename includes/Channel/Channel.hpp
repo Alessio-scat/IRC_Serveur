@@ -2,7 +2,6 @@
 # define CHANNEL_CLASS_HPP
 
 # include "../IRC.hpp"
-# include <list>
 
 class Channel
 {

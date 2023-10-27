@@ -4,6 +4,7 @@ User::User()
 {
     this->_nickname = "";
     this->_username = "";
+    this->_operator = 0;
 }
 
 User::User(User const &src)
@@ -40,4 +41,9 @@ std::string User::getUsername(void)const
 void User::setUsername(std::string username)
 {
     this->_username = username;
+}
+
+void User::setOperateur(bool ope)
+{
+    this->_operator = ope;
 }
