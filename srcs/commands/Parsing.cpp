@@ -12,7 +12,7 @@ std::string printMap(const std::map<std::string, std::list<std::string> >& chann
         std::cout << "Subscribers: ";
         
         for (std::list<std::string>::const_iterator subIt = it->second.begin(); subIt != it->second.end(); ++subIt) {
-            std::cout << *subIt << " ";
+            std::cout << CURSIVE << *subIt << " " << RESET;
             if (i == 0) //&& it->second.size() == 1)
             {
                 std::cout << "1 size\n";
@@ -29,7 +29,6 @@ std::string printMap(const std::map<std::string, std::list<std::string> >& chann
                 list += " " + *subIt;
             i++;
         }
-        
         std::cout << CURSIVE << list << RESET << std::endl;
         std::cout << CURSIVE << i << RESET << std::endl;
         std::cout << std::endl;
@@ -87,8 +86,9 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
                 std::cout << CURSIVE << word << RESET << std::endl;
                 for (int j = 1;j <= MAXCLIENT; j++)
                 {
-                    if (word == _tabUser[j].getNickname())
-                        write(_pfds[j].fd, message.c_str(), message.size());
+                    if (word == _tabUser[j].getNickname() || word == "@" + _tabUser[j].getNickname())
+                        send(_pfds[j].fd, message.c_str(), message.size(), 0);
+                        // write(_pfds[j].fd, message.c_str(), message.size());
                 }
             }
         }
