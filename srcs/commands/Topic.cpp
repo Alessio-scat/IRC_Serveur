@@ -32,7 +32,7 @@ void Topic::execute_cmd(std::string str)
         // throw ERR_NEEDMOREPARAMS();
         return ;
     }
-    tmpChannel = str.substr(6, endChannel - 7);
+    tmpChannel = str.substr(6, endChannel - 6);
 
     // this->_channelTopic = tmpChannel.substr(1, tmpChannel.size() - 1);
     this->_channelTopic = tmpChannel;
