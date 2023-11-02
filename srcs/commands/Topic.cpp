@@ -41,18 +41,15 @@ void Topic::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struc
 
     if (str.find(":") == std::string::npos)
     {
-        this->_channelTopic = tmpChannel.substr(0, tmpChannel.size() - 1);
-        // this->_channelTopic = tmpChannel;
-        std::cout << "channelTopic : " << this->_channelTopic << std::endl;
         std::cout << "CHECK" << std::endl;
         // Checking the topic for the channel
-        // this->_msgTopic = "";
-        // std::cout << "msgTopic : " << "|" << this->_msgTopic << "|" << std::endl;
+        this->_channelTopic = tmpChannel.substr(0, tmpChannel.size() - 1);
+        std::cout << "channelTopic : " << this->_channelTopic << std::endl;
         std::cout << "channelTopic : " << "|" << this->_channelTopic << "|" << std::endl;
         printTopic(this->getChannelTopic(), channel.mapTopic);
         printMapTopic(channel.mapTopic);
         this->_msgTopic = channel.mapTopic[this->getChannelTopic()];
-        this->rpl(str, _tabUser, i, _pfds);
+        this->rplTopic(str, _tabUser, i, _pfds);
         return ;
     }
     this->_channelTopic = tmpChannel;
@@ -67,16 +64,32 @@ void Topic::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struc
     }
     this->_msgTopic = tmpTopic.substr(1, tmpTopic.size() - 2);
     std::cout << "msgTopic : " << "|" << this->_msgTopic << "|" << std::endl;
-    this->rpl(str, _tabUser, i, _pfds);
+    this->rplTopicWhoTime(str, _tabUser, i, _pfds);
+    this->rplTopic(str, _tabUser, i, _pfds);
     channel.mapTopic[this->getChannelTopic()] = this->getMsgTopic();
     printMapTopic(channel.mapTopic);
 }
 
-void Topic::rpl(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds)
+void Topic::rplTopic(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds)
 {
     (void)str;
-    std::cout << "MSGTOPIC: " << this->_msgTopic << std::endl;
+    // std::cout << "MSGTOPIC: " << this->_msgTopic << std::endl;
     std::string message = ":IRChub 332 " + _tabUser[i].getNickname() + " " + this->_channelTopic + " :" + this->_msgTopic + "\r\n";
+    std::cout << "message : |" << message << "|" << std::endl;
+    size_t size = send(_pfds[i].fd, message.c_str(), message.size(), 0);
+    if (size < 0)
+        std::cout << "null\n";
+    else
+        std::cout << "good\n";
+}
+
+void Topic::rplTopicWhoTime(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds)
+{
+    struct timeval currentTime;
+    getCurrentTime(currentTime);
+
+    (void)str;
+    std::string message = ":IRChub 333 " + _tabUser[i].getNickname() + " " + this->_channelTopic + " " + _tabUser[i].getNickname() + " " + intToString(currentTime.tv_sec) + "\r\n";
     std::cout << "message : |" << message << "|" << std::endl;
     size_t size = send(_pfds[i].fd, message.c_str(), message.size(), 0);
     if (size < 0)
@@ -114,4 +127,16 @@ std::string Topic::getChannelTopic(void)
 std::string Topic::getMsgTopic(void)
 {
     return (this->_msgTopic);
+}
+
+void Topic::getCurrentTime(struct timeval& tv)
+{
+    gettimeofday(&tv, NULL);
+}
+
+std::string Topic::intToString(int value)
+{
+    std::ostringstream ss;
+    ss << value;
+    return ss.str();
 }

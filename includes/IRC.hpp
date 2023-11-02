@@ -15,6 +15,7 @@
 #include <sstream>
 #include <poll.h>
 #include <cerrno>
+#include <ctime>
 #include <vector>
 #include <map>
 #include <deque>
