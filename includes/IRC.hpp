@@ -47,3 +47,6 @@
 
 #define ERR_NEEDMOREPARAMS(source, command)    "461 " + source + " " + command + " :Not enough paramters"
 #define ERR_NOSUCHCHANNEL(source, channel)     "403 " + source + " " + channel + " :No such channel"
+
+#define RPL_TOPIC(network, nick, channel, topic)      ":" + network + " 332 " + nick + " " + channel + " :" + topic + "\r\n"
+#define RPL_TOPICWHOTIME(network, nick, channel, who, time)      ":" + network + " 333 " + nick + " " + channel + " " + who + " " + time + "\r\n"
