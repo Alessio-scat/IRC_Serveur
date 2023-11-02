@@ -39,19 +39,24 @@ void Topic::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struc
     }
     tmpChannel = str.substr(6, endChannel - 6);
 
-    // this->_channelTopic = tmpChannel.substr(1, tmpChannel.size() - 1);
-    this->_channelTopic = tmpChannel.substr(0, tmpChannel.size() - 1);
-    std::cout << "channelTopic : " << this->_channelTopic << std::endl;
     if (str.find(":") == std::string::npos)
     {
+        this->_channelTopic = tmpChannel.substr(0, tmpChannel.size() - 1);
+        // this->_channelTopic = tmpChannel;
+        std::cout << "channelTopic : " << this->_channelTopic << std::endl;
         std::cout << "CHECK" << std::endl;
         // Checking the topic for the channel
         // this->_msgTopic = "";
         // std::cout << "msgTopic : " << "|" << this->_msgTopic << "|" << std::endl;
         std::cout << "channelTopic : " << "|" << this->_channelTopic << "|" << std::endl;
         printTopic(this->getChannelTopic(), channel.mapTopic);
+        printMapTopic(channel.mapTopic);
+        this->_msgTopic = channel.mapTopic[this->getChannelTopic()];
+        this->rpl(str, _tabUser, i, _pfds);
         return ;
     }
+    this->_channelTopic = tmpChannel;
+    std::cout << "channelTopic : " << this->_channelTopic << std::endl;
     startTopic = str.find(":");
     tmpTopic = str.substr(startTopic);
     if ((tmpTopic.size() == 3 && (tmpTopic[0] == ':' && tmpTopic[1] != ':')) || isOnlySpace(tmpTopic))
@@ -70,6 +75,7 @@ void Topic::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struc
 void Topic::rpl(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds)
 {
     (void)str;
+    std::cout << "MSGTOPIC: " << this->_msgTopic << std::endl;
     std::string message = ":IRChub 332 " + _tabUser[i].getNickname() + " " + this->_channelTopic + " :" + this->_msgTopic + "\r\n";
     std::cout << "message : |" << message << "|" << std::endl;
     size_t size = send(_pfds[i].fd, message.c_str(), message.size(), 0);
