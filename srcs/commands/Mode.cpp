@@ -32,28 +32,38 @@ void Mode::execute_cmd(std::string str)
     }
     startOpt = str.find("+");
     tmpOpt = str.substr(startOpt);
-    if (tmpOpt.size() != 3 || (tmpOpt[1] != 'i' && tmpOpt[1] != 't'
-        && tmpOpt[1] != 'k' && tmpOpt[1] != 'o' && tmpOpt[1] != 'l'))
-    {
-        std::cout << "ERROR: Opt incorrect" << std::endl;
-        return ;
-    }
+    // if (tmpOpt.size() != 3 || (tmpOpt[1] != 'i' && tmpOpt[1] != 't'
+    //     && tmpOpt[1] != 'k' && tmpOpt[1] != 'o' && tmpOpt[1] != 'l'))
+    // {
+    //     std::cout << "ERROR: Opt incorrect" << std::endl;
+    //     return ;
+    // }
     this->_opt = tmpOpt;
-    std::cout << "msgTopic : " << this->_opt << std::endl;
+    std::cout << "option Mode : " << this->_opt << std::endl;
 }
 
 Mode::~Mode(){}
 
 void Mode::changeMode(void)
 {
-    if (this->_opt[1] == 'i')
-        std::cout << "MODE +i" << std::endl;
-    else if (this->_opt[1] == 't')
-        std::cout << "MODE +t" << std::endl;
-    else if (this->_opt[1] == 'k')
-        std::cout << "MODE +k" << std::endl;
-    else if (this->_opt[1] == 'o')
-        std::cout << "MODE +o" << std::endl;
-    else if (this->_opt[1] == 'l')
-        std::cout << "MODE +l" << std::endl;
+    if (this->_opt.size() == 2)
+    {
+        std::cout << "AAAAAAA" << std::endl;
+        return ;
+    }
+    for (size_t i = 1; i < this->_opt.size(); i++)
+    {
+        if (this->_opt[i] == 'i')
+            std::cout << "MODE +i" << std::endl;
+        else if (this->_opt[i] == 't')
+            std::cout << "MODE +t" << std::endl;
+        else if (this->_opt[i] == 'k')
+            std::cout << "MODE +k" << std::endl;
+        else if (this->_opt[i] == 'o')
+            std::cout << "MODE +o" << std::endl;
+        else if (this->_opt[i] == 'l')
+            std::cout << "MODE +l" << std::endl;
+        else
+            std::cout << this->_opt[i] << ":is not a recognised channel mode." << std::endl;
+    }
 }

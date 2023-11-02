@@ -35,6 +35,8 @@
 #define BOLD "\x1b[1m"
 #define UNDER "\x1b[4m" //souligné
 
+#define IRChub = "IRChub"
+
 /*
     =================CODE COULEUR====================
 
@@ -48,5 +50,11 @@
 #define ERR_NEEDMOREPARAMS(source, command)    "461 " + source + " " + command + " :Not enough paramters"
 #define ERR_NOSUCHCHANNEL(source, channel)     "403 " + source + " " + channel + " :No such channel"
 
-#define RPL_TOPIC(network, nick, channel, topic)      ":" + network + " 332 " + nick + " " + channel + " :" + topic + "\r\n"
+#define RPL_TOPIC(nick, channel, topic)      ":IRChub 332 " + nick + " " + channel + " :" + topic + "\r\n"
+// #define RPL_TOPIC(network, nick, channel, topic)      ":" + network + " 332 " + nick + " " + channel + " :" + topic + "\r\n"
 #define RPL_TOPICWHOTIME(network, nick, channel, who, time)      ":" + network + " 333 " + nick + " " + channel + " " + who + " " + time + "\r\n"
+
+#define RPL_UMODEIS(network, nick, mode)      ":" + network + " 221 " + nick + " " + mode + "\r\n"
+#define RPL_CREATIONTIME(network, nick, channel, time)      ":" + network + " 329 " + nick + " " + channel + " " + time + "\r\n"
+#define ERR_UNKNOWNMODE(network, nick, mode)      ":" + network + " 472 " + nick + " " + mode + " :is unknown mode char to me\r\n"
+#define RPL_CHANNELMODEIS(network, nick, channel, mode)      ":" + network + " 324 " + nick + " " + channel + " " + mode + "\r\n"

@@ -75,6 +75,7 @@ void Topic::rplTopic(std::string str, User *_tabUser, int i, std::deque<struct p
     (void)str;
     // std::cout << "MSGTOPIC: " << this->_msgTopic << std::endl;
     std::string message = ":IRChub 332 " + _tabUser[i].getNickname() + " " + this->_channelTopic + " :" + this->_msgTopic + "\r\n";
+    // std::string message = RPL_TOPIC(_tabUser[i].getNickname(), this->_channelTopic, this->_msgTopic);
     std::cout << "message : |" << message << "|" << std::endl;
     size_t size = send(_pfds[i].fd, message.c_str(), message.size(), 0);
     if (size < 0)
