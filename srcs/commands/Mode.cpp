@@ -24,13 +24,16 @@ void Mode::execute_cmd(std::string str)
     }
     this->_channelMode = tmpChannel;
     std::cout << "channelMode : " << this->_channelMode << std::endl;
-    if (str.find("+") == std::string::npos)
+    if (str.find("+") == std::string::npos && str.find("-") == std::string::npos)
     {
         std::cout << "ERROR: MODE wrong opt" << std::endl;
         // Checking the topic for the channel
         return ;
     }
-    startOpt = str.find("+");
+    if (str.find("-") == std::string::npos)
+        startOpt = str.find("+");
+    else
+        startOpt = str.find("-");
     tmpOpt = str.substr(startOpt);
     // if (tmpOpt.size() != 3 || (tmpOpt[1] != 'i' && tmpOpt[1] != 't'
     //     && tmpOpt[1] != 'k' && tmpOpt[1] != 'o' && tmpOpt[1] != 'l'))
@@ -46,15 +49,18 @@ Mode::~Mode(){}
 
 void Mode::changeMode(void)
 {
-    if (this->_opt.size() == 2)
-    {
-        std::cout << "AAAAAAA" << std::endl;
+    if (this->_opt.size() <= 2)
         return ;
-    }
-    for (size_t i = 1; i < this->_opt.size(); i++)
+    for (size_t i = 1; i < this->_opt.size() - 1; i++)
     {
         if (this->_opt[i] == 'i')
-            std::cout << "MODE +i" << std::endl;
+            if (this->_opt[0] == '+')
+            {
+                std::cout << "MODE +i" << std::endl;
+                addMode('i');
+            }
+            else
+                std::cout << "MODE -i" << std::endl;
         else if (this->_opt[i] == 't')
             std::cout << "MODE +t" << std::endl;
         else if (this->_opt[i] == 'k')
@@ -64,6 +70,18 @@ void Mode::changeMode(void)
         else if (this->_opt[i] == 'l')
             std::cout << "MODE +l" << std::endl;
         else
-            std::cout << this->_opt[i] << ":is not a recognised channel mode." << std::endl;
+            std::cout << this->_opt[i] << " :is not a recognised channel mode." << std::endl;
     }
+}
+
+void Mode::addMode(char mode)
+{
+    std::vector<char>::iterator iterator = _listMode.begin();
+    while (iterator != this->_listMode.end())
+    {
+        if (*iterator == mode)
+            return ;
+        iterator++;
+    }
+    this->_listMode.push_back(mode);
 }
