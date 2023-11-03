@@ -55,14 +55,17 @@ class Mode: public Command
     private:
         std::string _channelMode;
         std::string _opt;
-        std::vector<char> _listMode;
 
     public:
         Mode(void);
         ~Mode(void);
         void execute_cmd(std::string str);
-        void changeMode(void);
-        void addMode(char mode);
+        void execute_cmd(std::string str, Channel &channel);
+        void changeMode(Channel &channel);
+        void addMode(char mode, Channel &channel);
+        void removeMode(char mode, Channel &channel);
+        void printListMode(Channel &channel);
+        std::string getChannelMode(void);
 };
 
 class Topic: public Command

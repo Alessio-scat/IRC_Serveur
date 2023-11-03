@@ -4,6 +4,11 @@ Mode::Mode(void){}
 
 void Mode::execute_cmd(std::string str)
 {
+    (void)str;
+}
+
+void Mode::execute_cmd(std::string str, Channel &channel)
+{
     size_t endChannel = str.find(" ", 6);
     size_t startOpt;
     std::string tmpChannel;
@@ -43,45 +48,97 @@ void Mode::execute_cmd(std::string str)
     // }
     this->_opt = tmpOpt;
     std::cout << "option Mode : " << this->_opt << std::endl;
+    channel.mapTopic[this->getChannelMode()];
 }
 
 Mode::~Mode(){}
 
-void Mode::changeMode(void)
+void Mode::changeMode(Channel &channel)
 {
     if (this->_opt.size() <= 2)
         return ;
     for (size_t i = 1; i < this->_opt.size() - 1; i++)
     {
         if (this->_opt[i] == 'i')
+        {
             if (this->_opt[0] == '+')
-            {
-                std::cout << "MODE +i" << std::endl;
-                addMode('i');
-            }
+                addMode('i', channel);
             else
-                std::cout << "MODE -i" << std::endl;
+                removeMode('i', channel);
+        }
         else if (this->_opt[i] == 't')
-            std::cout << "MODE +t" << std::endl;
+        {
+            if (this->_opt[0] == '+')
+                addMode('t', channel);
+            else
+                removeMode('t', channel);
+        }
         else if (this->_opt[i] == 'k')
-            std::cout << "MODE +k" << std::endl;
+        {
+            if (this->_opt[0] == '+')
+                addMode('k', channel);
+            else
+                removeMode('k', channel);
+        }
         else if (this->_opt[i] == 'o')
-            std::cout << "MODE +o" << std::endl;
+        {
+            if (this->_opt[0] == '+')
+                addMode('o', channel);
+            else
+                removeMode('o', channel);
+        }
         else if (this->_opt[i] == 'l')
-            std::cout << "MODE +l" << std::endl;
+        {
+            if (this->_opt[0] == '+')
+                addMode('l', channel);
+            else
+                removeMode('l', channel);
+        }
         else
             std::cout << this->_opt[i] << " :is not a recognised channel mode." << std::endl;
     }
 }
 
-void Mode::addMode(char mode)
+void Mode::addMode(char mode, Channel &channel)
 {
-    std::vector<char>::iterator iterator = _listMode.begin();
-    while (iterator != this->_listMode.end())
+    std::vector<char>::iterator iterator = channel.mapMode[this->_channelMode].begin();
+    while (iterator != channel.mapMode[this->_channelMode].end())
     {
         if (*iterator == mode)
             return ;
         iterator++;
     }
-    this->_listMode.push_back(mode);
+    channel.mapMode[this->_channelMode].push_back(mode);
+}
+
+void Mode::removeMode(char mode, Channel &channel)
+{
+    std::vector<char>::iterator iterator = channel.mapMode[this->_channelMode].begin();
+    while (iterator != channel.mapMode[this->_channelMode].end())
+    {
+        if (*iterator == mode)
+        {
+            channel.mapMode[this->_channelMode].erase(iterator);
+            return ;
+        }
+        iterator++;
+    }
+}
+
+void Mode::printListMode(Channel &channel)
+{
+    std::vector<char>::iterator iterator = channel.mapMode[this->_channelMode].begin();
+
+    std::cout << "List of mode : [";
+    while (iterator != channel.mapMode[this->_channelMode].end())
+    {
+        std::cout << *iterator << " ";
+        iterator++;
+    }
+    std::cout << "]" << std::endl;
+}
+
+std::string Mode::getChannelMode(void)
+{
+    return (this->_channelMode);
 }

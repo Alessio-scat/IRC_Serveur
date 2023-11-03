@@ -96,8 +96,9 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
         if (pos !=  std::string::npos)
         {
             Mode mode;
-            mode.execute_cmd(str);
-            mode.changeMode();
+            mode.execute_cmd(str, channel);
+            mode.changeMode(channel);
+            mode.printListMode(channel);
         }
     }
 }
