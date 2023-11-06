@@ -4,14 +4,14 @@ Server::Server(void)
 {
     this->_mdp = "NULL";
     this->_host = 1001;
-    this->_pfds.resize(MAXCLIENT + 1);
+    this->_pfds.resize(MAX_USERS + 1);
 }
 
 Server::Server(std::string host, std::string mdp)
 {
     this->_mdp = mdp;
     this->_host = atoi(host.c_str());
-    this->_pfds.resize(MAXCLIENT + 1);
+    this->_pfds.resize(MAX_USERS + 1);
 }
 
 Server::Server(Server const &src)
@@ -139,7 +139,7 @@ void Server::Run_Server(void)
             connect_client();
 
         // Gestion des données reçues des clients
-        for (int i = 1; i <= MAXCLIENT; i++)
+        for (int i = 1; i <= MAX_USERS; i++)
         {
             if (_pfds[i].revents & POLLIN)
             {
@@ -178,7 +178,7 @@ void Server::connect_client(void)
     std::cout << "Nouvelle connexion, socket FD : " << this->newSocket << std::endl;
 
     // Ajout du nouveau socket client à la liste des sockets à surveiller
-    for (int i = 1; i <= MAXCLIENT; i++)
+    for (int i = 1; i <= MAX_USERS; i++)
     {
         if (_pfds[i].fd == 0)
         {

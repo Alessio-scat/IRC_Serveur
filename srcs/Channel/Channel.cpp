@@ -17,13 +17,13 @@ Channel::~Channel(void){}
 
 int isInChannel(std::string channelFind, std::string nick, Channel &channel)
 {
-    std::map<std::string, std::list<std::string> >::iterator it = channel.channel.begin();
-    for (; it != channel.channel.end(); ++it)
+    std::map<std::string, std::list<std::string> >::iterator it = channel.mapChannel.begin();
+    for (; it != channel.mapChannel.end(); ++it)
     {
         if (it->first == channelFind)
             break ;
     }
-    if (it != channel.channel.end())
+    if (it != channel.mapChannel.end())
     {
         for (std::list<std::string>::iterator it2 = it->second.begin(); it2 != it->second.end(); ++it2)
         {

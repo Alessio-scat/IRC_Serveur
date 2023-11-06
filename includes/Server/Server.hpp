@@ -6,8 +6,6 @@
 #include "../../includes/commands/Command.hpp"
 #include "../../includes/commands/Parsing.hpp"
 
-# define MAXCLIENT 10
-
 class Server
 {
 

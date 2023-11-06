@@ -24,6 +24,7 @@
 #define MAX_USERS 10
 
 #include "user/User.hpp"
+#include "Utils.hpp"
 // #include "user/AllClient.hpp"
 
 #define GREEN2 "\033[1;32m"
