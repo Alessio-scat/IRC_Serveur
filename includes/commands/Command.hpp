@@ -30,6 +30,7 @@ class Invite: public Command
     public:
         Invite(void);
         ~Invite(void);
+        int User_on_channel(const std::map<std::string, std::list<std::string> >& channel, User *_tabUser);
         void InviteClient(User *_tabUser, std::deque<struct pollfd> _pfds, int y);
         int ExistChannel(const std::map<std::string, std::list<std::string> >& channel, std::deque<struct pollfd> _pfds, int i, std::string &client);
         void ParseInviteCmd(std::string &str);
