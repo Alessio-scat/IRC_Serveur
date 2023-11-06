@@ -1,7 +1,10 @@
 #include "../../includes/commands/Command.hpp"
 # include "../../includes/Utils.hpp"
 
-Invite::Invite(void):Command(){}
+Invite::Invite(void):Command()
+{
+    this->_isActive = 0;
+}
 
 Invite::~Invite(void){}
 

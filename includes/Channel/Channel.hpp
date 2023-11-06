@@ -19,4 +19,6 @@ class Channel
     
 };
 
+int isInChannel(std::string channelFind, std::string nick, Channel &channel);
+
 # endif 

@@ -23,6 +23,7 @@ class Command
 class Invite: public Command
 {
     private:
+        bool _isActive;
         std::string _nickInvite;
         std::string _channelInvite;
         std::string _cmd;
@@ -72,7 +73,7 @@ class Mode: public Command
 class Topic: public Command
 {
     private:
-       std::string _channelTopic;
+        std::string _channelTopic;
         std::string _msgTopic;
 
     public:
@@ -88,7 +89,6 @@ class Topic: public Command
         std::string getMsgTopic(void);
         void getCurrentTime(struct timeval& tv);
         std::string intToString(int value);
-        int isInChannel(std::string channelFind, std::string nick, Channel &channel);
 
 };
 
