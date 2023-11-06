@@ -14,7 +14,8 @@ Message::Message(std::string str, User &user)
 
 Message::~Message(){}
 
-Message Message::operator=(Message const &rhs)
-{
-
-}
+// Message Message::operator=(Message const &rhs)
+// {
+//     (void)rhs;
+//     return (*this);
+// }

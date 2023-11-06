@@ -3,21 +3,21 @@
 #include "../../includes/Channel/Channel.hpp"
 #include "../../includes/Server/Server.hpp"
 
-std::string printMap(const std::map<std::string, std::list<std::string> >& channel, User *_tabUser, Join join) {
+std::string printMap(const std::map<std::string, std::list<std::string> >& channel, User *_tabUser, std::string join) {
     std::string list;
     int i = 0;
     (void)_tabUser;
     for (std::map<std::string, std::list<std::string> >::const_iterator it = channel.begin(); it != channel.end(); ++it) {
-        std::cout << "Channel: " << it->first << std::endl;
-        std::cout << "Subscribers: ";
-        if (it->first == join.nameChannel)
+        // std::cout << "Channel: " << it->first << std::endl;
+        // std::cout << "Subscribers: ";
+        if (it->first == join)
         {
             for (std::list<std::string>::const_iterator subIt = it->second.begin(); subIt != it->second.end(); ++subIt)
             {
                 std::cout << CURSIVE << *subIt << " " << RESET;
                 if (i == 0) //&& it->second.size() == 1)
                 {
-                    std::cout << "1 size\n";
+                    // std::cout << "1 size\n";
                     for (int j = 1; j <= MAXCLIENT; j++)
                     {
                         if (*subIt == _tabUser[j].getNickname())
@@ -31,9 +31,9 @@ std::string printMap(const std::map<std::string, std::list<std::string> >& chann
                     list += " " + *subIt;
                 i++;
             }
-            std::cout << CURSIVE << list << RESET << std::endl;
-            std::cout << CURSIVE << i << RESET << std::endl;
-            std::cout << std::endl;
+            // std::cout << CURSIVE << list << RESET << std::endl;
+            // std::cout << CURSIVE << i << RESET << std::endl;
+            // std::cout << std::endl;
         }
     }
     return (list);
@@ -81,20 +81,20 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
         if (pos !=  std::string::npos)
         {
             std::string list;
-            std::cout << "JOIN BY: " << _tabUser[i].getUsername() << std::endl;
+            // std::cout << "JOIN BY: " << _tabUser[i].getUsername() << std::endl;
             Join join;
             join.execute_cmd(str, _tabUser, i, _pfds);
             // std::cout << "nameChannel" << "|" << join.nameChannel << "|" << std::endl;
             channel.channel[join.nameChannel].push_back(_tabUser[i].getUsername());
-            list = printMap(channel.channel, _tabUser, join);
+            list = printMap(channel.channel, _tabUser, join.nameChannel);
             std::string message = ":IRChub 353 " + _tabUser[i].getNickname() + " = " + join.nameChannel + " :" + list + "\r\n";
-            std::cout << CURSIVE << list << "|" << RESET << std::endl;
-            std::cout << CURSIVE << "message : |" << message << "|" << RESET << std::endl;
+            // std::cout << CURSIVE << list << "|" << RESET << std::endl;
+            // std::cout << CURSIVE << "message : |" << message << "|" << RESET << std::endl;
             std::istringstream ss(list);
             std::string word;
             while (ss >> word)
             {
-                std::cout << CURSIVE << word << RESET << std::endl;
+                // std::cout << CURSIVE << word << RESET << std::endl;
                 for (int j = 1;j <= MAXCLIENT; j++)
                 {
                     if (word == _tabUser[j].getNickname() || word == "@" + _tabUser[j].getNickname())
@@ -109,6 +109,36 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
             Mode mode;
             mode.execute_cmd(str);
             mode.changeMode();
+        }
+        pos = str.find("PRIVMSG");
+        if (pos !=  std::string::npos)
+        {
+            std::string list;
+            pos = str.find("#");
+            if (pos !=  std::string::npos)
+            {
+                int j = pos;
+                int size = 0;
+                while (str[j] && str[j] != ' ')
+                {
+                    j++;
+                    size++;
+                }
+                std::string channelName = str.substr(pos, size);
+                std::cout << "|" << channelName << "|" << std::endl;
+                list = printMap(channel.channel, _tabUser, channelName);
+                str = ":" + _tabUser[i].getNickname() + " " + str + "\r\n";
+                std::istringstream ss(list);
+                std::string word;
+                while (ss >> word)
+                {
+                    for (int j = 1; j <= MAXCLIENT; j++)
+                    {
+                        if ((word == _tabUser[j].getNickname() || word == "@" + _tabUser[j].getNickname()) && word != _tabUser[i].getNickname() && word != "@" + _tabUser[i].getNickname())
+                            send(_pfds[j].fd, str.c_str(), str.size(), 0);
+                    }
+                }
+            }
         }
     }
 }
