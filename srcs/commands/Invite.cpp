@@ -47,8 +47,6 @@ void Invite::ParseInviteCmd(std::string &str)
             break;
         }
     }
-
-
 }
 
 int Invite::ExistChannel(const std::map<std::string, std::list<std::string> >& channel, std::deque<struct pollfd> _pfds, int i, std::string &client)
@@ -99,8 +97,7 @@ int Invite::User_on_channel(const std::map<std::string, std::list<std::string> >
 }
 
 /* 
-    Make a : ERR_NOTONCHANNEL (442)
-             ERR_CHANOPRIVSNEEDED (482)
+    Make a : ERR_CHANOPRIVSNEEDED (482)
 */
 
 void Invite::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser, int y, Channel &channel)
@@ -114,13 +111,18 @@ void Invite::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User 
         return ;
     }
 
+    if (ExistChannel(channel.channel, _pfds, y, _nickInvite) == 1)
+        return ;
+
+    if (isInChannel(_channelInvite, _tabUser[y].getNickname(), channel) == 1){
+        writeInfd(ERR_NOTONCHANNEL(_tabUser[y].getNickname(), _cmd), y, _pfds);
+        return ;
+    }
+
     if (User_on_channel(channel.channel, _tabUser) == 1){
         writeInfd(ERR_USERONCHANNEL(_tabUser[y].getNickname(), _cmd), y, _pfds);
         return ;
     }
 
-    if (ExistChannel(channel.channel, _pfds, y, _nickInvite) == 1)
-        return ;
-    
-     InviteClient(_tabUser, _pfds, y); 
+    InviteClient(_tabUser, _pfds, y); 
 }

@@ -37,19 +37,20 @@
 
 #define IRChub = "IRChub"
 
-/*
-    =================CODE COULEUR====================
-
-    - CUIRSIVE --> buffer
-*/
-
-#define RPL_JOIN(source)                       ":" + source //+ " JOIN :" + channel
 
 /*INVITE*/
 
-#define ERR_NEEDMOREPARAMS(source, command)    "461 " + source + " " + command + " :Not enough paramters"
-#define ERR_NOSUCHCHANNEL(source, channel)     "403 " + source + " " + channel + " :No such channel"
+#define ERR_NEEDMOREPARAMS(source, command)    ": 461 " + source + " " + command + " :Not enough paramters"
+#define ERR_NOSUCHCHANNEL(source, channel)     ": 403 " + source + " " + channel + " :No such channel"
 #define ERR_USERONCHANNEL(source, channel)     ": 443 " + source + " " + channel + " :is already on channel"
+#define ERR_NOTONCHANNEL(source, channel)      ": 442 " + source + " " + channel + " :You're not on that channel"
+/*-----------------*/
+
+/*JOIN*/
+// #define RPL_JOIN(source)                       ":" + source //+ " JOIN :" + channel
+#define RPL_JOIN(source, channel)                       ":" + source + " JOIN :" + channel
+#define ERR_INVITEONLYCHAN(source, channel)    ": 473 " + source + " " + channel + " :Cannot join channel (+i)"
+/*-------------*/
 
 #define RPL_TOPIC(nick, channel, topic)      ":IRChub 332 " + nick + " " + channel + " :" + topic + "\r\n"
 // #define RPL_TOPIC(network, nick, channel, topic)      ":" + network + " 332 " + nick + " " + channel + " :" + topic + "\r\n"

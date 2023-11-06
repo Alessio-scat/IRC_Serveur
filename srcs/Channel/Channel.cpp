@@ -31,5 +31,6 @@ int isInChannel(std::string channelFind, std::string nick, Channel &channel)
                 return (0);
         }
     }
+    std::cout << "salut"<< std::endl;
     return (1);
 }

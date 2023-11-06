@@ -96,12 +96,14 @@ class Join: public Command
 {
     private:
         std::string _channelJoin;
+        std::string _cmd;
     public:
         std::string nameChannel;
         Join(void);
         ~Join(void);
 
         void execute_cmd(std::string str);
+        void ParseJoinCmd(std::string &str);
         void execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
 };
 

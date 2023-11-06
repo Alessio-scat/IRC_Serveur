@@ -70,25 +70,19 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
         if (pos !=  std::string::npos)
         {
             std::string list;
-            // std::cout << "JOIN BY: " << _tabUser[i].getUsername() << std::endl;
             Join join;
             join.execute_cmd(str, _tabUser, i, _pfds);
-            // std::cout << "nameChannel" << "|" << join.nameChannel << "|" << std::endl;
             channel.channel[join.nameChannel].push_back(_tabUser[i].getUsername());
             list = printMap(channel.channel, _tabUser, join.nameChannel);
             std::string message = ":IRChub 353 " + _tabUser[i].getNickname() + " = " + join.nameChannel + " :" + list + "\r\n";
-            // std::cout << CURSIVE << list << "|" << RESET << std::endl;
-            // std::cout << CURSIVE << "message : |" << message << "|" << RESET << std::endl;
             std::istringstream ss(list);
             std::string word;
             while (ss >> word)
             {
-                // std::cout << CURSIVE << word << RESET << std::endl;
                 for (int j = 1;j <= MAXCLIENT; j++)
                 {
                     if (word == _tabUser[j].getNickname() || word == "@" + _tabUser[j].getNickname())
                         send(_pfds[j].fd, message.c_str(), message.size(), 0);
-                        // write(_pfds[j].fd, message.c_str(), message.size());
                 }
             }
         }
