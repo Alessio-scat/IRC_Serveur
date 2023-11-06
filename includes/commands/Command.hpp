@@ -63,11 +63,15 @@ class Mode: public Command
         ~Mode(void);
         void execute_cmd(std::string str);
         void execute_cmd(std::string str, Channel &channel);
-        void changeMode(Channel &channel);
+        void changeMode(Channel &channel, User *_tabUser, int i);
         void addMode(char mode, Channel &channel);
         void removeMode(char mode, Channel &channel);
         void printListMode(Channel &channel);
         std::string getChannelMode(void);
+        void addModeO(Channel &channel, User *_tabUser, int index);
+        void removeModeO(Channel &channel, User *_tabUser, int index);
+        void addRemoveChanOperator(User *_tabUser, int index, bool isAdd);
+        void printListChanOperator(User *_tabUser, int index);
 };
 
 class Topic: public Command

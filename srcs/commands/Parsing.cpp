@@ -97,7 +97,7 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
         {
             Mode mode;
             mode.execute_cmd(str, channel);
-            mode.changeMode(channel);
+            mode.changeMode(channel, _tabUser, i);
             mode.printListMode(channel);
         }
         pos = str.find("PRIVMSG");

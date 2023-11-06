@@ -53,7 +53,7 @@ void Mode::execute_cmd(std::string str, Channel &channel)
 
 Mode::~Mode(){}
 
-void Mode::changeMode(Channel &channel)
+void Mode::changeMode(Channel &channel, User *_tabUser, int index)
 {
     if (this->_opt.size() <= 2)
         return ;
@@ -83,9 +83,13 @@ void Mode::changeMode(Channel &channel)
         else if (this->_opt[i] == 'o')
         {
             if (this->_opt[0] == '+')
-                addMode('o', channel);
+                addModeO(channel, _tabUser, index);
             else
+            {
+                _tabUser[index].setOperateur(false);
+                std::cout << "\x1B[31m" << _tabUser[index].getNickname() << " not OPERATOR" << "\x1B[0m" << std::endl;
                 removeMode('o', channel);
+            }
         }
         else if (this->_opt[i] == 'l')
         {
@@ -142,3 +146,59 @@ std::string Mode::getChannelMode(void)
 {
     return (this->_channelMode);
 }
+
+void Mode::addModeO(Channel &channel, User *_tabUser, int index)
+{
+    _tabUser[index].setOperateur(true);
+    addRemoveChanOperator(_tabUser, index, 1);
+    std::cout << "\x1B[32m" << _tabUser[index].getNickname() << " is now OPERATOR" << "\x1B[0m" << std::endl;
+    addMode('o', channel);
+    printListChanOperator(_tabUser, index);
+}
+
+void Mode::removeModeO(Channel &channel, User *_tabUser, int index)
+{
+    _tabUser[index].setOperateur(false);
+    addRemoveChanOperator(_tabUser, index, 0);
+    std::cout << "\x1B[31m" << _tabUser[index].getNickname() << " not OPERATOR" << "\x1B[0m" << std::endl;
+    removeMode('o', channel);
+    printListChanOperator(_tabUser, index);
+}
+
+void Mode::addRemoveChanOperator(User *_tabUser, int index, bool isAdd)
+{
+    if (std::find(_tabUser[index]._chanOperator.begin(), _tabUser[index]._chanOperator.end(), this->_channelMode) == _tabUser[index]._chanOperator.end())
+    {
+        if (isAdd == 1)
+        {
+            _tabUser[index]._chanOperator.push_back(this->_channelMode);
+            std::cout << "ChannelOperator ajouté : " << this->_channelMode << std::endl;
+        }
+        else
+            std::cout << "ChannelOperator non présent : " << this->_channelMode << std::endl;
+    }
+    else
+    {
+        if (isAdd == 1)
+            std::cout << "ChannelOperator déjà présent : " << this->_channelMode << std::endl;
+        else
+        {
+            _tabUser[index]._chanOperator.erase(std::remove(_tabUser[index]._chanOperator.begin(), _tabUser[index]._chanOperator.end(), this->_channelMode), _tabUser[index]._chanOperator.end());
+            std::cout << "ChannelOperator supprimé : " << this->_channelMode << std::endl;
+        }
+    }
+}
+
+void Mode::printListChanOperator(User *_tabUser, int index)
+{
+    std::list<std::string>::iterator iterator = _tabUser[index]._chanOperator.begin();
+
+    std::cout << "List of channel operator : [";
+    while (iterator != _tabUser[index]._chanOperator.end())
+    {
+        std::cout << *iterator << " ";
+        iterator++;
+    }
+    std::cout << "]" << std::endl;
+}
+
