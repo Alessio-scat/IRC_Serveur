@@ -110,10 +110,11 @@ class Join: public Command
 // private:
 // public:
 //     Message(void);
+//     Message(std::string str, User &user);
 //     Message(Message const &src);
 //     ~Message();
-//     Message operator=(Message const &rhs);
-//     void execute_cmd(std::string str, User *_tabUser, std::deque<struct pollfd> _pfds);
+//     // Message operator=(Message const &rhs);
+//     // void execute_cmd(std::string str, User *_tabUser, std::deque<struct pollfd> _pfds);
 // };
 
 #endif
