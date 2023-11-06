@@ -100,11 +100,6 @@ int Invite::User_on_channel(const std::map<std::string, std::list<std::string> >
              ERR_CHANOPRIVSNEEDED (482)
 */
 
-// int Invite::Noton_channel()
-// {
-//     return 0;
-// }
-
 void Invite::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser, int y, Channel &channel)
 {
     ParseInviteCmd(str);
