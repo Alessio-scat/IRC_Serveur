@@ -72,6 +72,39 @@ void Invite::InviteClient(User *_tabUser, std::deque<struct pollfd> _pfds, int y
     write(_pfds[y].fd, message.c_str(), message.size());
 }
 
+int Invite::User_on_channel(const std::map<std::string, std::list<std::string> >& channel, User *_tabUser)
+{
+    int y;
+    for (y = 0; y < MAX_USERS; y++)
+    {
+        if (_tabUser[y].getNickname() == _nickInvite)
+            break ;
+    }
+
+    for (std::map<std::string, std::list<std::string> >::const_iterator it = channel.begin(); it != channel.end(); ++it) {
+        if (it->first == this->_channelInvite)
+        {
+            for (std::list<std::string>::const_iterator subIt = it->second.begin(); subIt != it->second.end(); ++subIt)
+            {
+                if (*subIt == _tabUser[y].getNickname()){
+                    return 1;
+                }
+            }
+        }
+    }
+    return 0;
+}
+
+/* 
+    Make a : ERR_NOTONCHANNEL (442)
+             ERR_CHANOPRIVSNEEDED (482)
+*/
+
+// int Invite::Noton_channel()
+// {
+//     return 0;
+// }
+
 void Invite::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser, int y, Channel &channel)
 {
     ParseInviteCmd(str);
@@ -80,6 +113,11 @@ void Invite::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User 
     {
         std::cout << "COUCOU" << std::endl;
         writeInfd(ERR_NEEDMOREPARAMS(_tabUser[y].getNickname(), _cmd), y, _pfds);
+        return ;
+    }
+
+    if (User_on_channel(channel.channel, _tabUser) == 1){
+        writeInfd(ERR_USERONCHANNEL(_tabUser[y].getNickname(), _cmd), y, _pfds);
         return ;
     }
 
