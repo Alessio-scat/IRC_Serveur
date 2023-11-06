@@ -19,6 +19,25 @@ bool isOnlySpace(std::string str)
     return (1);
 }
 
+int Topic::isInChannel(std::string channelFind, std::string nick, Channel &channel)
+{
+    std::map<std::string, std::list<std::string> >::iterator it = channel.channel.begin();
+    for (; it != channel.channel.end(); ++it)
+    {
+        if (it->first == channelFind)
+            break ;
+    }
+    if (it != channel.channel.end())
+    {
+        for (std::list<std::string>::iterator it2 = it->second.begin(); it2 != it->second.end(); ++it2)
+        {
+            if (*it2 == nick)
+                return (0);
+        }
+    }
+    return (1);
+}
+
 void Topic::execute_cmd(std::string str)
 {
     (void)str;
@@ -39,6 +58,11 @@ void Topic::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struc
     }
     tmpChannel = str.substr(6, endChannel - 6);
 
+    if (isInChannel(tmpChannel, _tabUser[i].getNickname(), channel))
+    {
+        std::cout << "ERROR: Client not in channel" << std::endl;
+        return ;
+    }
     if (str.find(":") == std::string::npos)
     {
         std::cout << "CHECK" << std::endl;
@@ -49,7 +73,7 @@ void Topic::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struc
         printTopic(this->getChannelTopic(), channel.mapTopic);
         printMapTopic(channel.mapTopic);
         this->_msgTopic = channel.mapTopic[this->getChannelTopic()];
-        this->rplTopic(str, _tabUser, i, _pfds);
+        this->rplTopic(_tabUser, i, _pfds);
         return ;
     }
     this->_channelTopic = tmpChannel;
@@ -60,22 +84,24 @@ void Topic::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struc
     {
         std::cout << "CLEAR" << std::endl;
         //Clearing the topic on channel
+        this->_msgTopic = "";
+        channel.mapTopic[this->getChannelTopic()] = this->getMsgTopic();
+        this->rplTopic(_tabUser, i, _pfds);
         return ;
     }
     this->_msgTopic = tmpTopic.substr(1, tmpTopic.size() - 2);
     std::cout << "msgTopic : " << "|" << this->_msgTopic << "|" << std::endl;
-    this->rplTopicWhoTime(str, _tabUser, i, _pfds);
-    this->rplTopic(str, _tabUser, i, _pfds);
+    this->rplTopicWhoTime(_tabUser, i, _pfds);
+    this->rplTopic(_tabUser, i, _pfds);
     channel.mapTopic[this->getChannelTopic()] = this->getMsgTopic();
     printMapTopic(channel.mapTopic);
 }
 
-void Topic::rplTopic(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds)
+void Topic::rplTopic(User *_tabUser, int i, std::deque<struct pollfd> _pfds)
 {
-    (void)str;
     // std::cout << "MSGTOPIC: " << this->_msgTopic << std::endl;
-    std::string message = ":IRChub 332 " + _tabUser[i].getNickname() + " " + this->_channelTopic + " :" + this->_msgTopic + "\r\n";
-    // std::string message = RPL_TOPIC(_tabUser[i].getNickname(), this->_channelTopic, this->_msgTopic);
+    // std::string message = ":IRChub 332 " + _tabUser[i].getNickname() + " " + this->_channelTopic + " :" + this->_msgTopic + "\r\n";
+    std::string message = RPL_TOPIC(_tabUser[i].getNickname(), this->_channelTopic, this->_msgTopic);
     std::cout << "message : |" << message << "|" << std::endl;
     size_t size = send(_pfds[i].fd, message.c_str(), message.size(), 0);
     if (size < 0)
@@ -84,13 +110,14 @@ void Topic::rplTopic(std::string str, User *_tabUser, int i, std::deque<struct p
         std::cout << "good\n";
 }
 
-void Topic::rplTopicWhoTime(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds)
+void Topic::rplTopicWhoTime(User *_tabUser, int i, std::deque<struct pollfd> _pfds)
 {
     struct timeval currentTime;
     getCurrentTime(currentTime);
 
-    (void)str;
-    std::string message = ":IRChub 333 " + _tabUser[i].getNickname() + " " + this->_channelTopic + " " + _tabUser[i].getNickname() + " " + intToString(currentTime.tv_sec) + "\r\n";
+    //Change WHO pour le mec qui avait changer le topic
+    // std::string message = ":IRChub 333 " + _tabUser[i].getNickname() + " " + this->_channelTopic + " " + _tabUser[i].getNickname() + " " + intToString(currentTime.tv_sec) + "\r\n";
+    std::string message = RPL_TOPICWHOTIME(_tabUser[i].getNickname(), this->_channelTopic, _tabUser[i].getNickname(), intToString(currentTime.tv_sec));
     std::cout << "message : |" << message << "|" << std::endl;
     size_t size = send(_pfds[i].fd, message.c_str(), message.size(), 0);
     if (size < 0)

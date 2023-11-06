@@ -79,14 +79,15 @@ class Topic: public Command
         ~Topic(void);
         void execute_cmd(std::string str);
         void execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds, Channel &channel);
-        void rplTopic(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
-        void rplTopicWhoTime(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
+        void rplTopic(User *_tabUser, int i, std::deque<struct pollfd> _pfds);
+        void rplTopicWhoTime(User *_tabUser, int i, std::deque<struct pollfd> _pfds);
         void printTopic(std::string channelTopic, std::map<std::string, std::string>& mapTopic);
         void printMapTopic(const std::map<std::string, std::string>& mapTopic);
         std::string getChannelTopic(void);
         std::string getMsgTopic(void);
         void getCurrentTime(struct timeval& tv);
         std::string intToString(int value);
+        int isInChannel(std::string channelFind, std::string nick, Channel &channel);
 
 };
 

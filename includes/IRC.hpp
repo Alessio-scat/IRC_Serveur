@@ -52,7 +52,7 @@
 
 #define RPL_TOPIC(nick, channel, topic)      ":IRChub 332 " + nick + " " + channel + " :" + topic + "\r\n"
 // #define RPL_TOPIC(network, nick, channel, topic)      ":" + network + " 332 " + nick + " " + channel + " :" + topic + "\r\n"
-#define RPL_TOPICWHOTIME(network, nick, channel, who, time)      ":" + network + " 333 " + nick + " " + channel + " " + who + " " + time + "\r\n"
+#define RPL_TOPICWHOTIME(nick, channel, who, time)      ":IRChub 333 " + nick + " " + channel + " " + who + " " + time + "\r\n"
 
 #define RPL_UMODEIS(network, nick, mode)      ":" + network + " 221 " + nick + " " + mode + "\r\n"
 #define RPL_CREATIONTIME(network, nick, channel, time)      ":" + network + " 329 " + nick + " " + channel + " " + time + "\r\n"
