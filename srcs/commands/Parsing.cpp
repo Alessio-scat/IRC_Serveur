@@ -69,22 +69,10 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
         pos = str.find("JOIN");
         if (pos !=  std::string::npos)
         {
-            std::string list;
             Join join;
-            join.execute_cmd(str, _tabUser, i, _pfds);
-            channel.channel[join.nameChannel].push_back(_tabUser[i].getUsername());
-            list = printMap(channel.channel, _tabUser, join.nameChannel);
-            std::string message = ":IRChub 353 " + _tabUser[i].getNickname() + " = " + join.nameChannel + " :" + list + "\r\n";
-            std::istringstream ss(list);
-            std::string word;
-            while (ss >> word)
-            {
-                for (int j = 1;j <= MAXCLIENT; j++)
-                {
-                    if (word == _tabUser[j].getNickname() || word == "@" + _tabUser[j].getNickname())
-                        send(_pfds[j].fd, message.c_str(), message.size(), 0);
-                }
-            }
+            join.execute_cmd(str, _tabUser, i, _pfds, channel, join);
+            // join.add_user_inChannel(channel, _tabUser, join, i, _pfds);
+            // join.verifModeChannel(channel, _tabUser, i);
         }
         pos = str.find("MODE");
         if (pos !=  std::string::npos)

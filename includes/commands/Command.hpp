@@ -103,8 +103,10 @@ class Join: public Command
         ~Join(void);
 
         void execute_cmd(std::string str);
+        int verifModeChannel(Channel &channel, User *_tabUser, int y);
+        void add_user_inChannel(Channel &channel, User *_tabUser, Join &join, int i, std::deque<struct pollfd> _pfds);
         void ParseJoinCmd(std::string &str);
-        void execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
+        void execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds, Channel &channel, Join &join);
 };
 
 // class Message: public Command

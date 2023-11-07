@@ -12,6 +12,7 @@ private:
     std::list<std::string> _chanOperator;
 
 public:
+    std::map<bool, std::list<std::string> > _mapModeUser;
     User();
     User(User const &src);
     ~User();

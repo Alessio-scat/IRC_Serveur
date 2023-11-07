@@ -40,21 +40,22 @@
 
 /*INVITE*/
 
-#define ERR_NEEDMOREPARAMS(source, command)    ": 461 " + source + " " + command + " :Not enough paramters"
+#define ERR_NEEDMOREPARAMS(source, command)    ": 461 " + source + " " + command + " :Not enough parameters"
 #define ERR_NOSUCHCHANNEL(source, channel)     ": 403 " + source + " " + channel + " :No such channel"
 #define ERR_USERONCHANNEL(source, channel)     ": 443 " + source + " " + channel + " :is already on channel"
 #define ERR_NOTONCHANNEL(source, channel)      ": 442 " + source + " " + channel + " :You're not on that channel"
 /*-----------------*/
 
 /*JOIN*/
-// #define RPL_JOIN(source)                       ":" + source //+ " JOIN :" + channel
+#define RPL_NAMREPLY(source, channel, users)            ":IRChub 353 " + source + " = " + channel + " :" + users
 #define RPL_JOIN(source, channel)                       ":" + source + " JOIN :" + channel
 #define ERR_INVITEONLYCHAN(source, channel)    ": 473 " + source + " " + channel + " :Cannot join channel (+i)"
 /*-------------*/
 
-#define RPL_TOPIC(nick, channel, topic)      ":IRChub 332 " + nick + " " + channel + " :" + topic + "\r\n"
-// #define RPL_TOPIC(network, nick, channel, topic)      ":" + network + " 332 " + nick + " " + channel + " :" + topic + "\r\n"
 
+
+
+#define RPL_TOPIC(nick, channel, topic)      ":IRChub 332 " + nick + " " + channel + " :" + topic + "\r\n"
 #define RPL_TOPICWHOTIME(nick, channel, who, time)      ":IRChub 333 " + nick + " " + channel + " " + who + " " + time + "\r\n"
 
 #define RPL_UMODEIS(network, nick, mode)      ":" + network + " 221 " + nick + " " + mode + "\r\n"

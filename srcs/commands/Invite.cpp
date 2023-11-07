@@ -71,6 +71,8 @@ void Invite::InviteClient(User *_tabUser, std::deque<struct pollfd> _pfds, int y
     std::string message = ":" + _tabUser[y].getUsername() + " INVITE " + _nickInvite + " " + _channelInvite + "\r\n";
     write(_pfds[i].fd, message.c_str(), message.size());
     write(_pfds[y].fd, message.c_str(), message.size());
+    std::cout << GREEN << "IN INVIteeeeeee : " << _tabUser[y].getNickname() << RESET << std::endl;
+    _tabUser[i]._mapModeUser[true].push_back(this->_channelInvite);
 }
 
 int Invite::User_on_channel(const std::map<std::string, std::list<std::string> >& channel, User *_tabUser)
