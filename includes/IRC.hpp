@@ -61,3 +61,6 @@
 #define RPL_CREATIONTIME(network, nick, channel, time)      ":" + network + " 329 " + nick + " " + channel + " " + time + "\r\n"
 #define ERR_UNKNOWNMODE(network, nick, mode)      ":" + network + " 472 " + nick + " " + mode + " :is unknown mode char to me\r\n"
 #define RPL_CHANNELMODEIS(network, nick, channel, mode)      ":" + network + " 324 " + nick + " " + channel + " " + mode + "\r\n"
+
+#define ERR_NOSUCHNICK(client, nick)     ": 401 " + client + nick + " :No such nick/channel"
+#define ERR_NOTEXTTOSEND(client)     ": 412 " + client + " :No text to send"

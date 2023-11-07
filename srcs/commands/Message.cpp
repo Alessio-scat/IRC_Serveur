@@ -18,6 +18,12 @@ void Message::execute_cmd(std::string str, User *_tabUser, int i, std::deque<str
     pos = str.find("#");
     if (pos != std::string::npos)
     {
+        pos = str.find(":");
+        if (str[pos + 1] <= 32)
+        {
+            writeInfd(ERR_NOTEXTTOSEND(_tabUser[i].getNickname()), i, _pfds);
+            return;
+        }
         std::cout << str[pos] << std::endl;
         if(str[pos - 1] == '%' && (str[pos - 2] == '@' || str[pos - 2] == ' '))
         {
@@ -30,6 +36,12 @@ void Message::execute_cmd(std::string str, User *_tabUser, int i, std::deque<str
     }
     else
     {
+        pos = str.find(":");
+        if (str[pos + 1] <= 32)
+        {
+            writeInfd(ERR_NOTEXTTOSEND(_tabUser[i].getNickname()), i, _pfds);
+            return;
+        }
         pos = str.find(" ");
         if (pos != std::string::npos)
             this->messageToSomeone(str, _tabUser, i, _pfds, pos);
@@ -78,8 +90,12 @@ void Message::messageToSomeone(std::string str, User *_tabUser, int i, std::dequ
     for (int j = 1; j <= MAX_USERS; j++)
     {
         if (destName == _tabUser[j].getNickname())
+        {
             send(_pfds[j].fd, str.c_str(), str.size(), 0);
+            return;
+        }
     }
+    writeInfd(ERR_NOSUCHNICK(_tabUser[i].getNickname(), destName), i, _pfds);
 }
 
 void   Message::messageToChannelOp(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds, Channel &channel, int pos)
@@ -94,11 +110,13 @@ void   Message::messageToChannelOp(std::string str, User *_tabUser, int i, std::
         size++;
     }
     std::string channelName = str.substr(pos, size);
-    std::cout << "|" << channelName << "|" << std::endl;
+    std::cout << "channName|" << channelName << "|" << std::endl;
     list = listUserChannel(channel.mapChannel, _tabUser, channelName);
     str = str.substr(pos, str.size() - pos - 1);
     std::cout << "|" << str << "|\n";
     str = ":" + _tabUser[i].getNickname() + " PRIVMSG " + str + "\r\n";
+    // if (list.empty())
+    //     std::cout << GREEN << "ici" << RESET << std::endl;
     std::istringstream ss(list);
     std::string word;
     while (ss >> word)
@@ -109,6 +127,7 @@ void   Message::messageToChannelOp(std::string str, User *_tabUser, int i, std::
                 send(_pfds[j].fd, str.c_str(), str.size(), 0);
         }
     }
+    // writeInfd(ERR_NOSUCHNICK(_tabUser[i].getNickname(), destName), i, _pfds);
 }
 
 // Message Message::operator=(Message const &rhs)
