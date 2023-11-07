@@ -57,20 +57,22 @@ class Mode: public Command
     private:
         std::string _channelMode;
         std::string _opt;
+        std::string _who;
 
     public:
         Mode(void);
         ~Mode(void);
         void execute_cmd(std::string str);
         void execute_cmd(std::string str, Channel &channel);
-        void changeMode(Channel &channel, User *_tabUser, int i);
+        void changeMode(Channel &channel, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
         void addMode(char mode, Channel &channel);
         void removeMode(char mode, Channel &channel);
         void printListMode(Channel &channel);
         std::string getChannelMode(void);
-        void addModeO(Channel &channel, User *_tabUser, int index);
-        void removeModeO(Channel &channel, User *_tabUser, int index);
-        void addRemoveChanOperator(User *_tabUser, int index, bool isAdd);
+        std::string getWho(void);
+        void addModeO(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds);
+        void removeModeO(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds);
+        void addRemoveChanOperator(User *_tabUser, int index, bool isAdd, std::deque<struct pollfd> _pfds);
         void printListChanOperator(User *_tabUser, int index);
 };
 

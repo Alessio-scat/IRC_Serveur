@@ -11,8 +11,11 @@ void Mode::execute_cmd(std::string str, Channel &channel)
 {
     size_t endChannel = str.find(" ", 6);
     size_t startOpt;
+    size_t endOpt;
+    size_t startWho;
     std::string tmpChannel;
     std::string tmpOpt;
+    std::string tmpWho;
 
     if (str.find('#') == std::string::npos)
     {
@@ -39,25 +42,36 @@ void Mode::execute_cmd(std::string str, Channel &channel)
         startOpt = str.find("+");
     else
         startOpt = str.find("-");
-    tmpOpt = str.substr(startOpt);
-    // if (tmpOpt.size() != 3 || (tmpOpt[1] != 'i' && tmpOpt[1] != 't'
-    //     && tmpOpt[1] != 'k' && tmpOpt[1] != 'o' && tmpOpt[1] != 'l'))
-    // {
-    //     std::cout << "ERROR: Opt incorrect" << std::endl;
-    //     return ;
-    // }
+
+    for (int i = startOpt; i < (int)str.size(); i++)
+    {
+        if (str[i] == ' ')
+        {
+            endOpt = i;
+            break ;
+        }
+        else if (i == (int)str.size() - 1)
+            endOpt = i + 1;
+    }
+    tmpOpt = str.substr(startOpt, endOpt - startOpt);
     this->_opt = tmpOpt;
     std::cout << "option Mode : " << this->_opt << std::endl;
+    while (str[endOpt] == ' ')
+        endOpt++;
+    startWho = endOpt;
+    tmpWho = str.substr(startWho, str.size() - (startWho) - 1);
+    this->_who = tmpWho;
+    std::cout << "who : |" << this->_who << "|" << std::endl;
     channel.mapTopic[this->getChannelMode()];
 }
 
 Mode::~Mode(){}
 
-void Mode::changeMode(Channel &channel, User *_tabUser, int index)
+void Mode::changeMode(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds)
 {
-    if (this->_opt.size() <= 2)
+    if (this->_opt.size() < 2)
         return ;
-    for (size_t i = 1; i < this->_opt.size() - 1; i++)
+    for (size_t i = 1; i < this->_opt.size(); i++)
     {
         if (this->_opt[i] == 'i')
         {
@@ -82,14 +96,12 @@ void Mode::changeMode(Channel &channel, User *_tabUser, int index)
         }
         else if (this->_opt[i] == 'o')
         {
-            if (this->_opt[0] == '+')
-                addModeO(channel, _tabUser, index);
-            else
-            {
-                _tabUser[index].setOperateur(false);
-                std::cout << "\x1B[31m" << _tabUser[index].getNickname() << " not OPERATOR" << "\x1B[0m" << std::endl;
-                removeMode('o', channel);
-            }
+            if (this->_who == "")
+                std::cout << "ERROR: MODE need who" << std::endl;
+            else if (this->_opt[0] == '+')
+                addModeO(channel, _tabUser, index, _pfds);
+            else if (this->_opt[0] == '-')
+                removeModeO(channel, _tabUser, index, _pfds);
         }
         else if (this->_opt[i] == 'l')
         {
@@ -147,25 +159,28 @@ std::string Mode::getChannelMode(void)
     return (this->_channelMode);
 }
 
-void Mode::addModeO(Channel &channel, User *_tabUser, int index)
+std::string Mode::getWho(void)
+{
+    return (this->_who);
+}
+
+void Mode::addModeO(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds)
 {
     _tabUser[index].setOperateur(true);
-    addRemoveChanOperator(_tabUser, index, 1);
-    std::cout << "\x1B[32m" << _tabUser[index].getNickname() << " is now OPERATOR" << "\x1B[0m" << std::endl;
+    addRemoveChanOperator(_tabUser, index, 1, _pfds);
     addMode('o', channel);
     printListChanOperator(_tabUser, index);
 }
 
-void Mode::removeModeO(Channel &channel, User *_tabUser, int index)
+void Mode::removeModeO(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds)
 {
     _tabUser[index].setOperateur(false);
-    addRemoveChanOperator(_tabUser, index, 0);
-    std::cout << "\x1B[31m" << _tabUser[index].getNickname() << " not OPERATOR" << "\x1B[0m" << std::endl;
+    addRemoveChanOperator(_tabUser, index, 0, _pfds);
     removeMode('o', channel);
     printListChanOperator(_tabUser, index);
 }
 
-void Mode::addRemoveChanOperator(User *_tabUser, int index, bool isAdd)
+void Mode::addRemoveChanOperator(User *_tabUser, int index, bool isAdd, std::deque<struct pollfd> _pfds)
 {
     if (std::find(_tabUser[index]._chanOperator.begin(), _tabUser[index]._chanOperator.end(), this->_channelMode) == _tabUser[index]._chanOperator.end())
     {
@@ -173,6 +188,12 @@ void Mode::addRemoveChanOperator(User *_tabUser, int index, bool isAdd)
         {
             _tabUser[index]._chanOperator.push_back(this->_channelMode);
             std::cout << "ChannelOperator ajouté : " << this->_channelMode << std::endl;
+            std::cout << "\x1B[32m" << _tabUser[index].getNickname() << " is now OPERATOR" << "\x1B[0m" << std::endl;
+            std::cout << "WHO " << this->_who << std::endl;
+            std::string message = RPL_MODEADDO(_tabUser[index].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()), this->getWho());
+            // std::string message = RPL_MODEADDO(_tabUser[index].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()), _tabUser[index].getNickname());
+            std::cout << "message : |" << message << "|" << std::endl;
+            send(_pfds[index].fd, message.c_str(), message.size(), 0);
         }
         else
             std::cout << "ChannelOperator non présent : " << this->_channelMode << std::endl;
@@ -185,6 +206,11 @@ void Mode::addRemoveChanOperator(User *_tabUser, int index, bool isAdd)
         {
             _tabUser[index]._chanOperator.erase(std::remove(_tabUser[index]._chanOperator.begin(), _tabUser[index]._chanOperator.end(), this->_channelMode), _tabUser[index]._chanOperator.end());
             std::cout << "ChannelOperator supprimé : " << this->_channelMode << std::endl;
+            std::cout << "\x1B[31m" << _tabUser[index].getNickname() << " not OPERATOR" << "\x1B[0m" << std::endl;
+            std::string message = RPL_MODEREMOVEO(_tabUser[index].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()), this->getWho());
+            // std::string message = RPL_MODEREMOVEO(_tabUser[index].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()), _tabUser[index].getNickname());
+            std::cout << "message : |" << message << "|" << std::endl;
+            send(_pfds[index].fd, message.c_str(), message.size(), 0);
         }
     }
 }
@@ -201,4 +227,3 @@ void Mode::printListChanOperator(User *_tabUser, int index)
     }
     std::cout << "]" << std::endl;
 }
-
