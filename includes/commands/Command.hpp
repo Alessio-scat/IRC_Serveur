@@ -109,6 +109,7 @@ class Message: public Command
 {
 private:
     void   messageToChannel(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds, Channel &channel, int pos);
+    void   messageToChannelOp(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds, Channel &channel, int pos);
     void   messageToSomeone(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds, int pos);
 public:
     Message(void);
