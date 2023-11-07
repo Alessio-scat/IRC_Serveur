@@ -167,7 +167,7 @@ std::string Mode::getWho(void)
 void Mode::addModeO(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds)
 {
     _tabUser[index].setOperateur(true);
-    addRemoveChanOperator(_tabUser, index, 1, _pfds);
+    addRemoveChanOperator(channel, _tabUser, index, 1, _pfds);
     addMode('o', channel);
     printListChanOperator(_tabUser, index);
 }
@@ -175,13 +175,34 @@ void Mode::addModeO(Channel &channel, User *_tabUser, int index, std::deque<stru
 void Mode::removeModeO(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds)
 {
     _tabUser[index].setOperateur(false);
-    addRemoveChanOperator(_tabUser, index, 0, _pfds);
+    addRemoveChanOperator(channel, _tabUser, index, 0, _pfds);
     removeMode('o', channel);
     printListChanOperator(_tabUser, index);
 }
 
-void Mode::addRemoveChanOperator(User *_tabUser, int index, bool isAdd, std::deque<struct pollfd> _pfds)
+int Mode::isWhoInChannel(Channel &channel)
 {
+    std::list<std::string>::iterator iterator = channel.channel[this->_channelMode].begin();
+
+    while (iterator != channel.channel[this->_channelMode].end())
+    {
+        // std::cout << "iterator : |" << *iterator << "|" << std::endl;
+        if (*iterator == this->_who)
+            return (0);
+        iterator++;
+    }
+    return (1);
+}
+
+void Mode::addRemoveChanOperator(Channel &channel, User *_tabUser, int index, bool isAdd, std::deque<struct pollfd> _pfds)
+{
+    if (isWhoInChannel(channel))
+    {
+        std::string message = ERR_USERNOTINCHANNEL(_tabUser[index].getNickname(), this->_who, this->_channelMode);
+        std::cout << "message : |" << message << "|" << std::endl;
+        send(_pfds[index].fd, message.c_str(), message.size(), 0);
+        return ;
+    }
     if (std::find(_tabUser[index]._chanOperator.begin(), _tabUser[index]._chanOperator.end(), this->_channelMode) == _tabUser[index]._chanOperator.end())
     {
         if (isAdd == 1)
@@ -191,8 +212,7 @@ void Mode::addRemoveChanOperator(User *_tabUser, int index, bool isAdd, std::deq
             std::cout << "\x1B[32m" << _tabUser[index].getNickname() << " is now OPERATOR" << "\x1B[0m" << std::endl;
             std::cout << "WHO " << this->_who << std::endl;
             std::string message = RPL_MODEADDO(_tabUser[index].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()), this->getWho());
-            // std::string message = RPL_MODEADDO(_tabUser[index].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()), _tabUser[index].getNickname());
-            std::cout << "message : |" << message << "|" << std::endl;
+            // std::cout << "message : |" << message << "|" << std::endl;
             send(_pfds[index].fd, message.c_str(), message.size(), 0);
         }
         else
