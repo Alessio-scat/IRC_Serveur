@@ -194,9 +194,25 @@ int Mode::isWhoInChannel(Channel &channel)
     return (1);
 }
 
+int Mode::isUserChannelOperatorInChannel(User *_tabUser)
+{
+    // _tabUser->_chanOperator.push_back(this->_channelMode);
+    std::list<std::string>::iterator iterator = _tabUser->_chanOperator.begin();
+
+    while (iterator != _tabUser->_chanOperator.end())
+    {
+        std::cout << "A trouver: " << this->_channelMode << std::endl;
+        std::cout << "iterator : |" << *iterator << "|" << std::endl;
+        if (*iterator == this->_channelMode)
+            return (0);
+        iterator++;
+    }
+    return (1);
+}
+
 void Mode::addRemoveChanOperator(Channel &channel, User *_tabUser, int index, bool isAdd, std::deque<struct pollfd> _pfds)
 {
-    if (isWhoInChannel(channel))
+    if (isWhoInChannel(channel) || isUserChannelOperatorInChannel(_tabUser))
     {
         std::string message = ERR_USERNOTINCHANNEL(_tabUser[index].getNickname(), this->_who, this->_channelMode);
         std::cout << "message : |" << message << "|" << std::endl;
