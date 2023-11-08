@@ -216,8 +216,8 @@ int Mode::isUserChannelOperatorInChannel(User *_tabUser, int index)
     ///////////////////////////
     while (iterator != _tabUser[index]._chanOperator.end())
     {
-        std::cout << "A trouver: " << this->_channelMode << std::endl;
-        std::cout << "iterator : |" << *iterator << "|" << std::endl;
+        // std::cout << "A trouver: " << this->_channelMode << std::endl;
+        // std::cout << "iterator : |" << *iterator << "|" << std::endl;
         if (*iterator == this->_channelMode)
             return (0);
         iterator++;
@@ -256,8 +256,8 @@ void Mode::addRemoveChanOperator(Channel &channel, User *_tabUser, int index, bo
             _tabUser[who]._chanOperator.push_back(this->_channelMode);
             std::cout << "ChannelOperator ajouté : " << this->_channelMode << std::endl;
             std::cout << "\x1B[32m" << _tabUser[who].getNickname() << " is now OPERATOR" << "\x1B[0m" << std::endl;
-            std::cout << "WHO " << this->_who << std::endl;
-            std::string message = RPL_MODEADDO(_tabUser[who].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()), this->getWho());
+            // std::cout << "WHO " << this->_who << std::endl;
+            std::string message = RPL_MODEADDO(_tabUser[index].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()), this->getWho());
             // std::cout << "message : |" << message << "|" << std::endl;
             send(_pfds[index].fd, message.c_str(), message.size(), 0);
         }
@@ -273,7 +273,7 @@ void Mode::addRemoveChanOperator(Channel &channel, User *_tabUser, int index, bo
             _tabUser[who]._chanOperator.erase(std::remove(_tabUser[who]._chanOperator.begin(), _tabUser[who]._chanOperator.end(), this->_channelMode), _tabUser[who]._chanOperator.end());
             std::cout << "ChannelOperator supprimé : " << this->_channelMode << std::endl;
             std::cout << "\x1B[31m" << _tabUser[who].getNickname() << " not OPERATOR" << "\x1B[0m" << std::endl;
-            std::string message = RPL_MODEREMOVEO(_tabUser[who].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()), this->getWho());
+            std::string message = RPL_MODEREMOVEO(_tabUser[index].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()), this->getWho());
             // std::string message = RPL_MODEREMOVEO(_tabUser[who].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()), _tabUser[who].getNickname());
             std::cout << "message : |" << message << "|" << std::endl;
             send(_pfds[index].fd, message.c_str(), message.size(), 0);
