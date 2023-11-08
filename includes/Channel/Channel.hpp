@@ -16,6 +16,8 @@ class Channel
         std::map<std::string, std::list<std::string> > channel;
         std::map<std::string, std::string> mapTopic;
         std::map<std::string, std::vector<char> > mapMode;
+
+        std::map<std::string, std::string > _mapChannelKey;
     
 };
 

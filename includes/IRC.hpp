@@ -50,6 +50,8 @@
 #define RPL_NAMREPLY(source, channel, users)            ":IRChub 353 " + source + " = " + channel + " :" + users
 #define RPL_JOIN(source, channel)                       ":" + source + " JOIN :" + channel
 #define ERR_INVITEONLYCHAN(source, channel)    ": 473 " + source + " " + channel + " :Cannot join channel (+i)"
+#define ERR_BADCHANNELKEY(source, channel)     ": 475 " + source + " " + channel + " :Cannot join channel (+k)"
+#define ERR_BADCHANMASK(channel)               ": 476 " + channel + " :Bad Channel Mask" 
 /*-------------*/
 
 
