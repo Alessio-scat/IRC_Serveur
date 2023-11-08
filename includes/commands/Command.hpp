@@ -73,8 +73,8 @@ class Mode: public Command
         void addModeO(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds);
         void removeModeO(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds);
         void addRemoveChanOperator(Channel &channel, User *_tabUser, int index, bool isAdd, std::deque<struct pollfd> _pfds);
-        void addModeT(Channel &channel);
-        void removeModeT(Channel &channel);
+        void addModeT(Channel &channel, User *_tabUser, int index);
+        void removeModeT(Channel &channel, User *_tabUser, int index);
         
         void printListChanOperator(User *_tabUser, int index);
         int isWhoInChannel(Channel &channel);

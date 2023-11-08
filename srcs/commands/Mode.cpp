@@ -88,9 +88,9 @@ void Mode::changeMode(Channel &channel, User *_tabUser, int index, std::deque<st
         else if (this->_opt[i] == 't')
         {
             if (this->_opt[0] == '+')
-                addModeT(channel);
+                addModeT(channel, _tabUser, index);
             else if (this->_opt[0] == '-')
-                removeModeT(channel);
+                removeModeT(channel, _tabUser, index);
         }
         else if (this->_opt[i] == 'k')
         {
@@ -273,6 +273,11 @@ void Mode::addRemoveChanOperator(Channel &channel, User *_tabUser, int index, bo
             std::cout << "ChannelOperator déjà présent : " << this->_channelMode << std::endl;
         else
         {
+            if (_tabUser[who].getNickname() == _tabUser[index].getNickname())
+            {
+                std::cout << "ERROR: You can't remove yourself from channel operator" << std::endl;
+                return ;
+            }
             _tabUser[who]._chanOperator.erase(std::remove(_tabUser[who]._chanOperator.begin(), _tabUser[who]._chanOperator.end(), this->_channelMode), _tabUser[who]._chanOperator.end());
             std::cout << "ChannelOperator supprimé : " << this->_channelMode << std::endl;
             std::cout << "\x1B[31m" << _tabUser[who].getNickname() << " not OPERATOR" << "\x1B[0m" << std::endl;
@@ -284,14 +289,24 @@ void Mode::addRemoveChanOperator(Channel &channel, User *_tabUser, int index, bo
     }
 }
 
-void Mode::addModeT(Channel &channel)
+void Mode::addModeT(Channel &channel, User *_tabUser, int index)
 {
+    if (isUserChannelOperatorInChannel(_tabUser, index))
+    {
+        std::cout << "ERROR: Client not channel operator" << std::endl;
+        return ;
+    }
     addMode('t', channel);
     printListMode(channel);
 }
 
-void Mode::removeModeT(Channel &channel)
+void Mode::removeModeT(Channel &channel, User *_tabUser, int index)
 {
+    if (isUserChannelOperatorInChannel(_tabUser, index))
+    {
+        std::cout << "ERROR: Client not channel operator" << std::endl;
+        return ;
+    }
     removeMode('t', channel);
     printListMode(channel);
 }
