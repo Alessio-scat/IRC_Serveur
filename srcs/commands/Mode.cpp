@@ -87,9 +87,7 @@ void Mode::changeMode(Channel &channel, User *_tabUser, int index, std::deque<st
         }
         else if (this->_opt[i] == 't')
         {
-            if (this->_who != "")
-                std::cout << "ERROR: MODE t doesn't need who" << std::endl;
-            else if (this->_opt[0] == '+')
+            if (this->_opt[0] == '+')
                 addModeT(channel);
             else if (this->_opt[0] == '-')
                 removeModeT(channel);

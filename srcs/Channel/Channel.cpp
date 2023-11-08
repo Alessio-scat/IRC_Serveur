@@ -50,8 +50,6 @@ int isModePresentInChannel(Channel &channel, std::string channelFind, char mode)
     {
         if (channelFind == it->first)
         {
-            std::cout << "YOUPIII" << std::endl;
-
             ////////////////////// Print list of mode
             std::vector<char>::iterator iterator = channel.mapMode[channelFind].begin();
             std::cout << "List of mode : [";

@@ -79,10 +79,12 @@ void Topic::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struc
         return ;
     }
     this->_channelTopic = tmpChannel;
-    std::cout << "channelTopic : " << this->_channelTopic << std::endl;
+    // std::cout << "channelTopic : " << this->_channelTopic << std::endl;
     startTopic = str.find(":");
     tmpTopic = str.substr(startTopic);
-    if ((tmpTopic.size() == 3 && (tmpTopic[0] == ':' && tmpTopic[1] != ':')) || isOnlySpace(tmpTopic))
+    ft_trim(tmpTopic);
+    // std::cout << "TMPTOPIC " << tmpTopic << " " << tmpTopic.size() << std::endl;
+    if ((tmpTopic.size() == 1 && (tmpTopic[0] == ':' && tmpTopic[1] != ':')) || isOnlySpace(tmpTopic))
     {
         std::cout << "CLEAR" << std::endl;
         //Clearing the topic on channel
@@ -91,7 +93,8 @@ void Topic::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struc
         this->rplTopic(_tabUser, i, _pfds);
         return ;
     }
-    this->_msgTopic = tmpTopic.substr(1, tmpTopic.size() - 2);
+    // this->_msgTopic = tmpTopic;
+    this->_msgTopic = tmpTopic.substr(1);
     std::cout << "msgTopic : " << "|" << this->_msgTopic << "|" << std::endl;
     this->rplTopicWhoTime(_tabUser, i, _pfds);
     this->rplTopic(_tabUser, i, _pfds);
