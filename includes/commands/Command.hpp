@@ -50,6 +50,7 @@ class Kick: public Command
         Kick(void);
         ~Kick(void);
         void execute_cmd(std::string str);
+        void execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser, int y, Channel &channel);
 };
 
 class Mode: public Command

@@ -4,6 +4,11 @@ Kick::Kick(void){}
 
 void Kick::execute_cmd(std::string str)
 {
+    (void)str;
+}
+
+void Kick::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser, int y, Channel &channel)
+{
     size_t pos;
     size_t pos2 = 0;
 
@@ -33,6 +38,24 @@ void Kick::execute_cmd(std::string str)
     std::cout << this->_reason << std::endl;
     std::cout << pos << std::endl;
     std::cout << pos2 << std::endl;
+    str = ":" + _tabUser[y].getNickname() + " " + str + "\r\n";
+    channel.mapChannel[this->_channel].erase(std::remove( channel.mapChannel[this->_channel].begin(), channel.mapChannel[this->_channel].end(), this->_user), channel.mapChannel[this->_channel].end());
+    std::string list = listUserChannel(channel.mapChannel, _tabUser, this->_channel, y);
+    std::istringstream ss(list);
+    std::string word;
+    while (ss >> word)
+    {
+        for (int j = 1; j <= MAX_USERS; j++)
+        {
+            if (word == _tabUser[j].getNickname() || word == "@" + _tabUser[j].getNickname())
+                send(_pfds[j].fd, str.c_str(), str.size(), 0);
+        }
+    }
+    //  for (std::map<std::string, std::list<std::string> >::const_iterator it = channel.mapChannel.begin(); it != channel.mapChannel.end(); ++it) {
+    //     if (it->first == this->_channel)
+    //     {
+    //     }
+    //  }
 }
 
 Kick::~Kick(){}
