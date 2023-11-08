@@ -39,7 +39,7 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
             join.execute_cmd(str, _tabUser, i, _pfds);
             // std::cout << "nameChannel" << "|" << join.nameChannel << "|" << std::endl;
             channel.mapChannel[join.nameChannel].push_back(_tabUser[i].getUsername());
-            list = listUserChannel(channel.mapChannel, _tabUser, join.nameChannel);
+            list = listUserChannel(channel.mapChannel, _tabUser, join.nameChannel, i);
             std::string message = ":IRChub 353 " + _tabUser[i].getNickname() + " = " + join.nameChannel + " :" + list + "\r\n";
             // std::cout << CURSIVE << list << "|" << RESET << std::endl;
             // std::cout << CURSIVE << "message : |" << message << "|" << RESET << std::endl;

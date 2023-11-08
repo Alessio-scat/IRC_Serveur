@@ -15,24 +15,26 @@ void Message::execute_cmd(std::string str)
 void Message::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds, Channel &channel)
 {
     size_t pos;
+    int pos2;
     pos = str.find("#");
     if (pos != std::string::npos)
     {
+        pos2 = pos;
         pos = str.find(":");
         if (str[pos + 1] <= 32)
         {
             writeInfd(ERR_NOTEXTTOSEND(_tabUser[i].getNickname()), i, _pfds);
             return;
         }
-        std::cout << str[pos] << std::endl;
-        if(str[pos - 1] == '%' && (str[pos - 2] == '@' || str[pos - 2] == ' '))
+        std::cout << str[pos2] << std::endl;
+        if(str[pos2 - 1] == '%' && (str[pos2 - 2] == '@' || str[pos2 - 2] == ' '))
         {
-            if (str[pos - 2] == '@' && str[pos - 3] != ' ')
+            if (str[pos2 - 2] == '@' && str[pos2 - 3] != ' ')
                 return;
-            this->messageToChannelOp(str, _tabUser, i, _pfds, channel, pos);
+            this->messageToChannelOp(str, _tabUser, i, _pfds, channel, pos2);
             return;
         }
-        this->messageToChannel(str, _tabUser, i, _pfds, channel, pos);
+        this->messageToChannel(str, _tabUser, i, _pfds, channel, pos2);
     }
     else
     {
@@ -62,7 +64,7 @@ void Message::messageToChannel(std::string str, User *_tabUser, int i, std::dequ
         }
         std::string channelName = str.substr(pos, size);
         std::cout << "|" << channelName << "|" << std::endl;
-        list = listUserChannel(channel.mapChannel, _tabUser, channelName);
+        list = listUserChannel(channel.mapChannel, _tabUser, channelName, i);
         str = ":" + _tabUser[i].getNickname() + " " + str + "\r\n";
         std::istringstream ss(list);
         std::string word;
@@ -111,12 +113,15 @@ void   Message::messageToChannelOp(std::string str, User *_tabUser, int i, std::
     }
     std::string channelName = str.substr(pos, size);
     std::cout << "channName|" << channelName << "|" << std::endl;
-    list = listUserChannel(channel.mapChannel, _tabUser, channelName);
+    list = listUserChannel(channel.mapChannel, _tabUser, channelName, i);
     str = str.substr(pos, str.size() - pos - 1);
     std::cout << "|" << str << "|\n";
     str = ":" + _tabUser[i].getNickname() + " PRIVMSG " + str + "\r\n";
-    // if (list.empty())
-    //     std::cout << GREEN << "ici" << RESET << std::endl;
+    if (list.empty())
+    {
+        writeInfd(ERR_NOSUCHSERVER(_tabUser[i].getNickname(), channelName), i, _pfds);
+        return;
+    }
     std::istringstream ss(list);
     std::string word;
     while (ss >> word)
@@ -127,7 +132,6 @@ void   Message::messageToChannelOp(std::string str, User *_tabUser, int i, std::
                 send(_pfds[j].fd, str.c_str(), str.size(), 0);
         }
     }
-    // writeInfd(ERR_NOSUCHNICK(_tabUser[i].getNickname(), destName), i, _pfds);
 }
 
 // Message Message::operator=(Message const &rhs)

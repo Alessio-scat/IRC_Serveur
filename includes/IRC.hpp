@@ -64,3 +64,4 @@
 
 #define ERR_NOSUCHNICK(client, nick)     ": 401 " + client + nick + " :No such nick/channel"
 #define ERR_NOTEXTTOSEND(client)     ": 412 " + client + " :No text to send"
+#define ERR_NOSUCHSERVER(client, channel)     ": 402 " + client + " " + channel + " :No such server"

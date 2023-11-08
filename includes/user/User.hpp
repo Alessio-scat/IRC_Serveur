@@ -9,9 +9,9 @@ private:
     std::string _username;
     std::string _nickname;
     bool _operator;
-    std::list<std::string> _chanOperator;
 
 public:
+    std::list<std::string> _chanOperator;
     User();
     User(User const &src);
     ~User();
