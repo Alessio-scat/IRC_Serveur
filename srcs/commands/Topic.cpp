@@ -39,6 +39,11 @@ void Topic::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struc
     }
     tmpChannel = str.substr(6, endChannel - 6);
 
+    if (isModePresentInChannel(channel, tmpChannel.substr(0, tmpChannel.size() - 1), 't'))
+    {
+        std::cout << "VERIFIER SI IL EST CHANNEL OPERATOR" << std::endl;
+        return ;
+    }
     // if (isInChannel(tmpChannel, _tabUser[i].getNickname(), channel))
     // {
     //     std::cout << "ERROR: Client not in channel" << std::endl;

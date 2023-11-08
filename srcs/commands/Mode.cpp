@@ -143,6 +143,7 @@ void Mode::removeMode(char mode, Channel &channel)
 
 void Mode::printListMode(Channel &channel)
 {
+    std::cout << "CHANNELMODE : |" << this->_channelMode << "|" << std::endl;
     std::vector<char>::iterator iterator = channel.mapMode[this->_channelMode].begin();
 
     std::cout << "List of mode : [";
@@ -174,7 +175,7 @@ void Mode::addModeO(Channel &channel, User *_tabUser, int index, std::deque<stru
 
 void Mode::removeModeO(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds)
 {
-    _tabUser[index].setOperateur(false);
+    // _tabUser[index].setOperateur(false);
     addRemoveChanOperator(channel, _tabUser, index, 0, _pfds);
     removeMode('o', channel);
     printListChanOperator(_tabUser, index);

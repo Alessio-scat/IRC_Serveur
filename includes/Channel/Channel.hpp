@@ -20,5 +20,6 @@ class Channel
 };
 
 int isInChannel(std::string channelFind, std::string nick, Channel &channel);
+int isModePresentInChannel(Channel &channel, std::string channelFind, char mode);
 
 # endif 
