@@ -68,6 +68,7 @@
 #define RPL_MODEADDK(nick, channel, password)            ":" + nick + " MODE #" + channel + " +k " + password + "\r\n"
 
 #define ERR_USERNOTINCHANNEL(nick, who, channel)   ":IRChub 441 " + nick + " " + who + " " + channel + " :They aren't on that channel\r\n"
+#define ERR_CHANOPRIVSNEEDED(nick, channel)   ":IRChub 482 " + nick + " " + channel + " :You're not channel operator\r\n"
 
 #define ERR_NOSUCHNICK(client, nick)     ": 401 " + client + nick + " :No such nick/channel"
 #define ERR_NOTEXTTOSEND(client)     ": 412 " + client + " :No text to send"

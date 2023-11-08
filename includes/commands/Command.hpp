@@ -78,7 +78,7 @@ class Mode: public Command
         
         void printListChanOperator(User *_tabUser, int index);
         int isWhoInChannel(Channel &channel);
-        int isUserChannelOperatorInChannel(User *_tabUser);
+        int isUserChannelOperatorInChannel(User *_tabUser, int index);
 };
 
 class Topic: public Command
