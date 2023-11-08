@@ -13,6 +13,7 @@ void Mode::execute_cmd(std::string str, Channel &channel)
     size_t startOpt;
     size_t endOpt;
     size_t startWho;
+    size_t endWho;
     std::string tmpChannel;
     std::string tmpOpt;
     std::string tmpWho;
@@ -59,7 +60,11 @@ void Mode::execute_cmd(std::string str, Channel &channel)
     while (str[endOpt] == ' ')
         endOpt++;
     startWho = endOpt;
-    tmpWho = str.substr(startWho, str.size() - (startWho) - 1);
+    endWho = endOpt;
+    while (str[endWho] != ' ' && endWho <= str.size())
+        endWho++;
+    tmpWho = str.substr(startWho, endWho - startWho);
+    ft_trim(tmpWho);
     this->_who = tmpWho;
     std::cout << "who : |" << this->_who << "|" << std::endl;
     channel.mapTopic[this->getChannelMode()];
