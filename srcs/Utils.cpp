@@ -36,13 +36,34 @@ std::string listUserChannel(const std::map<std::string, std::list<std::string> >
                         if (*subIt == _tabUser[j].getNickname() && *subIt == _tabUser[userCmd].getNickname())
                             _tabUser[j]._chanOperator.push_back(join);
                     }
-
-                    list += "@" + *subIt;
+                    // list += "@" + *subIt;
                 }
-                else if (i == 0)
-                    list += *subIt;
+                if (i == 0)
+                {
+                    for (int j = 1; j <= MAX_USERS; j++)
+                    {
+                        if (*subIt == _tabUser[j].getNickname())
+                        {
+                            if (std::find(_tabUser[j]._chanOperator.begin(), _tabUser[j]._chanOperator.end(), join) != _tabUser[j]._chanOperator.end())
+                                list += "@" + *subIt;
+                            else
+                                list += *subIt;
+                        }
+                    }
+                }
                 else
-                    list += " " + *subIt;
+                {
+                    for (int j = 1; j <= MAX_USERS; j++)
+                    {
+                        if (*subIt == _tabUser[j].getNickname())
+                        {
+                            if (std::find(_tabUser[j]._chanOperator.begin(), _tabUser[j]._chanOperator.end(), join) != _tabUser[j]._chanOperator.end())
+                                list += " @" + *subIt;
+                            else
+                                list += " " + *subIt;
+                        }
+                    } 
+                }
                 i++;
             }
         }

@@ -126,6 +126,7 @@ void   Message::messageToChannelOp(std::string str, User *_tabUser, int i, std::
     std::string word;
     while (ss >> word)
     {
+        std::cout << GREEN << word << RESET << std::endl;
         for (int j = 1; j <= MAX_USERS; j++)
         {
             if (word == "@" + _tabUser[j].getNickname() && word != "@" + _tabUser[i].getNickname())
