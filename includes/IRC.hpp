@@ -24,6 +24,7 @@
 #define MAX_USERS 10
 
 #include "user/User.hpp"
+#include "Utils.hpp"
 // #include "user/AllClient.hpp"
 
 #define GREEN2 "\033[1;32m"
@@ -67,3 +68,7 @@
 #define RPL_MODEADDK(nick, channel, password)            ":" + nick + " MODE #" + channel + " +k " + password + "\r\n"
 
 #define ERR_USERNOTINCHANNEL(nick, who, channel)   ":IRChub 441 " + nick + " " + who + " " + channel + " :They aren't on that channel\r\n"
+
+#define ERR_NOSUCHNICK(client, nick)     ": 401 " + client + nick + " :No such nick/channel"
+#define ERR_NOTEXTTOSEND(client)     ": 412 " + client + " :No text to send"
+#define ERR_NOSUCHSERVER(client, channel)     ": 402 " + client + " " + channel + " :No such server"
