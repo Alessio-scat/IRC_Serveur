@@ -95,6 +95,9 @@ class Topic: public Command
 class Join: public Command
 {
     private:
+        std::vector<std::string> _tokensChannel;
+        std::vector<std::string> _tokensKey;
+        std::map<std::string, std::string > _mapChannelKey;
         std::string _channelJoin;
         std::string _cmd;
     public:
@@ -102,9 +105,10 @@ class Join: public Command
         Join(void);
         ~Join(void);
 
+        void connectChannelKey();
         void execute_cmd(std::string str);
-        int verifModeChannel(Channel &channel, User *_tabUser, int y);
-        void add_user_inChannel(Channel &channel, User *_tabUser, Join &join, int i, std::deque<struct pollfd> _pfds);
+        int verifModeChannel(Channel &channel, User *_tabUser, int y, std::string &tokenChannel);
+        void add_user_inChannel(Channel &channel, User *_tabUser, Join &join, int i, std::deque<struct pollfd> _pfds, std::string tokenChannel);
         void ParseJoinCmd(std::string &str);
         void execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds, Channel &channel, Join &join);
 };
