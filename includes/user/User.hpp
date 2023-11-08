@@ -11,7 +11,7 @@ private:
     bool _operator;
 
 public:
-    std::list<std::string> _chanOperator;  //list des channel ou l'user est channelOperator
+    std::list<std::string> _chanOperator;
     
     User();
     User(User const &src);

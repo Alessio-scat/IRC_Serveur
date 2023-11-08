@@ -83,9 +83,9 @@ void Mode::changeMode(Channel &channel, User *_tabUser, int index, std::deque<st
         else if (this->_opt[i] == 't')
         {
             if (this->_opt[0] == '+')
-                addMode('t', channel);
-            else
-                removeMode('t', channel);
+                addModeT(channel);
+            else 
+                removeModeT(channel);
         }
         else if (this->_opt[i] == 'k')
         {
@@ -180,36 +180,6 @@ void Mode::removeModeO(Channel &channel, User *_tabUser, int index, std::deque<s
     printListChanOperator(_tabUser, index);
 }
 
-int Mode::isWhoInChannel(Channel &channel)
-{
-    std::list<std::string>::iterator iterator = channel.channel[this->_channelMode].begin();
-
-    while (iterator != channel.channel[this->_channelMode].end())
-    {
-        // std::cout << "iterator : |" << *iterator << "|" << std::endl;
-        if (*iterator == this->_who)
-            return (0);
-        iterator++;
-    }
-    return (1);
-}
-
-int Mode::isUserChannelOperatorInChannel(User *_tabUser)
-{
-    // _tabUser->_chanOperator.push_back(this->_channelMode);
-    std::list<std::string>::iterator iterator = _tabUser->_chanOperator.begin();
-
-    while (iterator != _tabUser->_chanOperator.end())
-    {
-        std::cout << "A trouver: " << this->_channelMode << std::endl;
-        std::cout << "iterator : |" << *iterator << "|" << std::endl;
-        if (*iterator == this->_channelMode)
-            return (0);
-        iterator++;
-    }
-    return (1);
-}
-
 void Mode::addRemoveChanOperator(Channel &channel, User *_tabUser, int index, bool isAdd, std::deque<struct pollfd> _pfds)
 {
     if (isWhoInChannel(channel) || isUserChannelOperatorInChannel(_tabUser))
@@ -250,6 +220,49 @@ void Mode::addRemoveChanOperator(Channel &channel, User *_tabUser, int index, bo
         }
     }
 }
+
+void Mode::addModeT(Channel &channel)
+{
+    addMode('t', channel);
+    printListMode(channel);
+}
+
+void Mode::removeModeT(Channel &channel)
+{
+    removeMode('t', channel);
+    printListMode(channel);
+}
+
+int Mode::isWhoInChannel(Channel &channel)
+{
+    std::list<std::string>::iterator iterator = channel.channel[this->_channelMode].begin();
+
+    while (iterator != channel.channel[this->_channelMode].end())
+    {
+        // std::cout << "iterator : |" << *iterator << "|" << std::endl;
+        if (*iterator == this->_who)
+            return (0);
+        iterator++;
+    }
+    return (1);
+}
+
+int Mode::isUserChannelOperatorInChannel(User *_tabUser)
+{
+    // _tabUser->_chanOperator.push_back(this->_channelMode);
+    std::list<std::string>::iterator iterator = _tabUser->_chanOperator.begin();
+
+    while (iterator != _tabUser->_chanOperator.end())
+    {
+        // std::cout << "A trouver: " << this->_channelMode << std::endl;
+        // std::cout << "iterator : |" << *iterator << "|" << std::endl;
+        if (*iterator == this->_channelMode)
+            return (0);
+        iterator++;
+    }
+    return (1);
+}
+
 
 void Mode::printListChanOperator(User *_tabUser, int index)
 {
