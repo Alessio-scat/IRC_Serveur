@@ -34,7 +34,7 @@ void Join::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct
     std::cout << "JOIN command : " << str << std::endl;
     std::string message = ":" + _tabUser[i].getNickname() + " " + str + "\r\n";
     std::cout << "message : " << message << std::endl;
-    writeInfd(RPL_JOIN(_tabUser[i].getUsername() + " " + str), i, _pfds);
+    writeInfd(RPL_JOIN(_tabUser[i].getUsername() + " " + str + " #b"), i, _pfds);
 }
 
 Join::~Join(){}

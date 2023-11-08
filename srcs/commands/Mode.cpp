@@ -182,9 +182,9 @@ void Mode::removeModeO(Channel &channel, User *_tabUser, int index, std::deque<s
 
 int Mode::isWhoInChannel(Channel &channel)
 {
-    std::list<std::string>::iterator iterator = channel.channel[this->_channelMode].begin();
+    std::list<std::string>::iterator iterator = channel.mapChannel[this->_channelMode].begin();
 
-    while (iterator != channel.channel[this->_channelMode].end())
+    while (iterator != channel.mapChannel[this->_channelMode].end())
     {
         // std::cout << "iterator : |" << *iterator << "|" << std::endl;
         if (*iterator == this->_who)

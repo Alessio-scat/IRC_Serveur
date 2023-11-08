@@ -18,9 +18,9 @@ Channel::~Channel(void){}
 int isInChannel(std::string channelFind, std::string nick, Channel &channel)
 {
     int channelExist = 0;
-
-    std::map<std::string, std::list<std::string> >::iterator it = channel.channel.begin();
-    for (; it != channel.channel.end(); ++it)
+    
+    std::map<std::string, std::list<std::string> >::iterator it = channel.mapChannel.begin();
+    for (; it != channel.mapChannel.end(); ++it)
     {
         std::cout << "iterator : |" << it->first << "|" << std::endl;
         std::cout << "channelFind : |" << channelFind << "|" << std::endl;

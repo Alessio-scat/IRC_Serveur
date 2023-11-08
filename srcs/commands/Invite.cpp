@@ -119,12 +119,12 @@ void Invite::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User 
         return ;
     }
 
-    if (User_on_channel(channel.channel, _tabUser) == 1){
+    if (User_on_channel(channel.mapChannel, _tabUser) == 1){
         writeInfd(ERR_USERONCHANNEL(_tabUser[y].getNickname(), _cmd), y, _pfds);
         return ;
     }
 
-    if (ExistChannel(channel.channel, _pfds, y, _nickInvite) == 1)
+    if (ExistChannel(channel.mapChannel, _pfds, y, _nickInvite) == 1)
         return ;
     
      InviteClient(_tabUser, _pfds, y); 
