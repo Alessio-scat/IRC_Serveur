@@ -28,9 +28,9 @@ void Join::connectChannelKey(Channel &channel)
         channel._mapChannelKey[_tokensChannel[i]] = _tokensKey[i];
     }
 
-    for (std::map<std::string, std::string>::iterator it = channel._mapChannelKey.begin(); it != channel._mapChannelKey.end(); ++it) {
-        std::cout << "Clé : " << it->first << ", Valeur : " << it->second << std::endl;
-    }
+    // for (std::map<std::string, std::string>::iterator it = channel._mapChannelKey.begin(); it != channel._mapChannelKey.end(); ++it) {
+    //     std::cout << "Clé : " << it->first << ", Valeur : " << it->second << std::endl;
+    // }
 }
 
 void Join::ParseJoinCmd(std::string &str, Channel &channel)
@@ -59,10 +59,7 @@ void Join::ParseJoinCmd(std::string &str, Channel &channel)
     }
 
     for (size_t i = 0; i < _tokensKey.size(); i++)
-    {
-        std::cout << "55555555555" << std::endl;
         channel.mapMode[_tokensChannel[i]].push_back('k');
-    }
 
 }
 
@@ -99,7 +96,6 @@ int Join::verifModeChannel(Channel &channel, User *_tabUser, int y, std::string 
         {
             for (std::vector<char>::iterator vecIt = it->second.begin(); vecIt != it->second.end(); ++vecIt)
             {
-                std::cout << "ZZZZZZZZZZZZ" << std::endl;
                 if (*vecIt == 'i')
                 {
                     isMode = 1;
@@ -124,8 +120,6 @@ int Join::verifModeChannel(Channel &channel, User *_tabUser, int y, std::string 
                         return 2;
                     for (size_t i = 0; i < _tokensKey.size(); i++)
                     {
-                        std::cout << "11111111111111111| " << i << std::endl;
-                        // std::string list = printMap(channel.mapChannel, _tabUser, tokenChannel);
                         std::string list = listUserChannel(channel.mapChannel, _tabUser, tokenChannel, y);
                         if (list.empty())
                             connectChannelKey(channel);
@@ -133,7 +127,6 @@ int Join::verifModeChannel(Channel &channel, User *_tabUser, int y, std::string 
                         {
                             for (std::map<std::string, std::string>::iterator it = channel._mapChannelKey.begin(); it != channel._mapChannelKey.end(); ++it)
                             {
-                                // std::cout << GREEN << "it->first: " << it->first << " && tokenChannel" << _tokensChannel[i] << RESET << std::endl;
                                 if (it->first == _tokensChannel[i])
                                 {
                                     if (it->second != _tokensKey[i])
