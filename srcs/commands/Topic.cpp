@@ -42,7 +42,7 @@ void Topic::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struc
     ft_trim(tmpChannel);
     if (isModePresentInChannel(channel, tmpChannel, 't'))
     {
-        if (clientIsChannelOperator(tmpChannel, _tabUser, i))
+        if (clientIsChannelOperator(tmpChannel, _tabUser, i, _pfds))
             return ;
     }
     if (str.find(":") == std::string::npos)
@@ -73,15 +73,8 @@ void Topic::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struc
 
 void Topic::rplTopic(User *_tabUser, int i, std::deque<struct pollfd> _pfds)
 {
-    // std::cout << "MSGTOPIC: " << this->_msgTopic << std::endl;
-    // std::string message = ":IRChub 332 " + _tabUser[i].getNickname() + " " + this->_channelTopic + " :" + this->_msgTopic + "\r\n";
     std::string message = RPL_TOPIC(_tabUser[i].getNickname(), this->_channelTopic, this->_msgTopic);
-    std::cout << "message : |" << message << "|" << std::endl;
-    size_t size = send(_pfds[i].fd, message.c_str(), message.size(), 0);
-    if (size < 0)
-        std::cout << "null\n";
-    else
-        std::cout << "good\n";
+    writeInfd(message, i, _pfds);
 }
 
 void Topic::rplTopicWhoTime(User *_tabUser, int i, std::deque<struct pollfd> _pfds)
@@ -89,15 +82,8 @@ void Topic::rplTopicWhoTime(User *_tabUser, int i, std::deque<struct pollfd> _pf
     struct timeval currentTime;
     getCurrentTime(currentTime);
 
-    //Change WHO pour le mec qui avait changer le topic
-    // std::string message = ":IRChub 333 " + _tabUser[i].getNickname() + " " + this->_channelTopic + " " + _tabUser[i].getNickname() + " " + intToString(currentTime.tv_sec) + "\r\n";
     std::string message = RPL_TOPICWHOTIME(_tabUser[i].getNickname(), this->_channelTopic, _tabUser[i].getNickname(), intToString(currentTime.tv_sec));
-    std::cout << "message : |" << message << "|" << std::endl;
-    size_t size = send(_pfds[i].fd, message.c_str(), message.size(), 0);
-    if (size < 0)
-        std::cout << "null\n";
-    else
-        std::cout << "good\n";
+    writeInfd(message, i, _pfds);
 }
 
 void Topic::printTopic(std::string channelTopic, std::map<std::string, std::string> &mapTopic)

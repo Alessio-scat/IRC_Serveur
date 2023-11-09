@@ -56,13 +56,11 @@
 /*-------------*/
 
 /*TOPIC*/
-
-
-
 #define RPL_TOPIC(nick, channel, topic)      ":IRChub 332 " + nick + " " + channel + " :" + topic + "\r\n"
 #define RPL_TOPICWHOTIME(nick, channel, who, time)      ":IRChub 333 " + nick + " " + channel + " " + who + " " + time + "\r\n"
 
 /*MODE*/
+#define c(nick, who)     ":IRChub 401 " + nick + " " + who + " :No such nick/channel\r\n"
 #define RPL_UMODEIS(network, nick, mode)      ":" + network + " 221 " + nick + " " + mode + "\r\n"
 #define RPL_CREATIONTIME(network, nick, channel, time)      ":" + network + " 329 " + nick + " " + channel + " " + time + "\r\n"
 #define ERR_UNKNOWNMODE(network, nick, mode)      ":" + network + " 472 " + nick + " " + mode + " :is unknown mode char to me\r\n"
@@ -79,6 +77,3 @@
 #define ERR_NOSUCHNICK(client, nick)     ": 401 " + client + nick + " :No such nick/channel"
 #define ERR_NOTEXTTOSEND(client)     ": 412 " + client + " :No text to send"
 #define ERR_NOSUCHSERVER(client, channel)     ": 402 " + client + " " + channel + " :No such server"
-
-// #define ERR_CHANOPRIVSNEEDED(client, channel)     ": 482 " + client + " " + channel + " :You're not channel operator"
-// #define ERR_USERNOTINCHANNEL(client, nick, channel)     ": 482 " + client + " " + nick + " " + channel + " :They aren't on that channel"

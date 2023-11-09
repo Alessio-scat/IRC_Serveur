@@ -85,7 +85,7 @@ void printListMode(std::string channelFind, Channel &channel)
     std::cout << "]" << std::endl;
 }
 
-int clientIsChannelOperator(std::string channelFind, User *_tabUser, int i)
+int clientIsChannelOperator(std::string channelFind, User *_tabUser, int i, std::deque<struct pollfd> _pfds)
 {
     std::list<std::string>::iterator it = _tabUser[i]._chanOperator.begin();
     while (it != _tabUser[i]._chanOperator.end())
@@ -97,6 +97,8 @@ int clientIsChannelOperator(std::string channelFind, User *_tabUser, int i)
     if (it == _tabUser[i]._chanOperator.end())
     {
         std::cout << "ERROR: Client not channel operator" << std::endl;
+        std::string message = ERR_CHANOPRIVSNEEDED(_tabUser[i].getNickname(), channelFind);
+        writeInfd(message, i, _pfds);
         return (1);
     }
     return (0);

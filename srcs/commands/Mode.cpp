@@ -90,9 +90,9 @@ void Mode::changeMode(Channel &channel, User *_tabUser, int index, std::deque<st
         else if (this->_opt[i] == 't')
         {
             if (this->_opt[0] == '+')
-                addModeT(channel, _tabUser, index);
+                addModeT(channel, _tabUser, index, _pfds);
             else if (this->_opt[0] == '-')
-                removeModeT(channel, _tabUser, index);
+                removeModeT(channel, _tabUser, index, _pfds);
         }
         else if (this->_opt[i] == 'k')
         {
@@ -236,15 +236,13 @@ void Mode::addRemoveChanOperator(Channel &channel, User *_tabUser, int index, bo
     if (isWhoInChannel(channel))
     {
         std::string message = ERR_USERNOTINCHANNEL(_tabUser[index].getNickname(), this->_who, this->_channelMode);
-        std::cout << "message : |" << message << "|" << std::endl;
-        send(_pfds[index].fd, message.c_str(), message.size(), 0);
+        writeInfd(message, index, _pfds);
         return ;
     }
     if (isUserChannelOperatorInChannel(_tabUser, index))
     {
         std::string message = ERR_CHANOPRIVSNEEDED(_tabUser[index].getNickname(), this->_channelMode);
-        std::cout << "message : |" << message << "|" << std::endl;
-        send(_pfds[index].fd, message.c_str(), message.size(), 0);
+        writeInfd(message, index, _pfds);
         return ;
     }
     int who = 0;
@@ -302,22 +300,26 @@ void Mode::addRemoveChanOperator(Channel &channel, User *_tabUser, int index, bo
     }
 }
 
-void Mode::addModeT(Channel &channel, User *_tabUser, int index)
+void Mode::addModeT(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds)
 {
     if (isUserChannelOperatorInChannel(_tabUser, index))
     {
         std::cout << "ERROR: Client not channel operator" << std::endl;
+        std::string message = ERR_CHANOPRIVSNEEDED(_tabUser[index].getNickname(), this->_channelMode);
+        writeInfd(message, index, _pfds);
         return ;
     }
     addMode('t', channel);
     printListMode(channel);
 }
 
-void Mode::removeModeT(Channel &channel, User *_tabUser, int index)
+void Mode::removeModeT(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds)
 {
     if (isUserChannelOperatorInChannel(_tabUser, index))
     {
         std::cout << "ERROR: Client not channel operator" << std::endl;
+        std::string message = ERR_CHANOPRIVSNEEDED(_tabUser[index].getNickname(), this->_channelMode);
+        writeInfd(message, index, _pfds);
         return ;
     }
     removeMode('t', channel);
