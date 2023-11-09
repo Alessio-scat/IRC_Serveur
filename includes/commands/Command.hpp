@@ -58,6 +58,7 @@ class Mode: public Command
         std::string _channelMode;
         std::string _opt;
         std::string _who;
+        int        _limit;
 
     public:
         Mode(void);
@@ -79,6 +80,9 @@ class Mode: public Command
         void printListChanOperator(User *_tabUser, int index);
         int isWhoInChannel(Channel &channel);
         int isUserChannelOperatorInChannel(User *_tabUser, int index);
+
+        void addModeL(Channel &channel);
+        void removeModeL(Channel &channel);
 };
 
 class Topic: public Command

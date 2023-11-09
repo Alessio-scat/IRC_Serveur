@@ -137,6 +137,27 @@ int Join::verifModeChannel(Channel &channel, User *_tabUser, int y, std::string 
                         }
                     }
                 }
+                else if (*vecIt == 'l')
+                {
+                    std::string list = listUserChannel(channel.mapChannel, _tabUser, tokenChannel, y);
+                    std::istringstream iss(list);
+                    std::string token;
+                    int number = 0;
+                    while (iss >> token)
+                        number++;
+                    for (std::map<std::string, int>::iterator it = channel._mapChannelLimit.begin(); it != channel._mapChannelLimit.end(); ++it)
+                    {
+                        if (it->first == tokenChannel)
+                        {
+                            if (it->second <= number)
+                            {
+                                std::cout << "Faileddddd" << std::endl;
+                                return 3;
+                            }
+
+                        }
+                    }
+                }
             }
         }
     }
@@ -157,16 +178,32 @@ void Join::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct
 
     for (size_t k = 0; k < _tokensChannel.size(); k++)
     {
-        if (verifModeChannel(channel, _tabUser, i, _tokensChannel[k]) == 1)
+        int result = verifModeChannel(channel, _tabUser, i, _tokensChannel[k]);
+        if (result == 1)
         {
             writeInfd(ERR_INVITEONLYCHAN(_tabUser[i].getUsername(), _tokensChannel[k]), i, _pfds);
             return ;
         }
-        else if (verifModeChannel(channel, _tabUser, i, _tokensChannel[k]) == 2)
+        else if (result == 2)
         {
             writeInfd(ERR_BADCHANNELKEY(_tabUser[i].getUsername(), _tokensChannel[k]), i, _pfds);
             return ;
         }
+        else if (result == 3)
+        {
+            writeInfd(ERR_CHANNELISFULL(_tabUser[i].getUsername(), _tokensChannel[k]), i, _pfds);
+            return ;
+        }
+        // if (verifModeChannel(channel, _tabUser, i, _tokensChannel[k]) == 1)
+        // {
+        //     writeInfd(ERR_INVITEONLYCHAN(_tabUser[i].getUsername(), _tokensChannel[k]), i, _pfds);
+        //     return ;
+        // }
+        // else if (verifModeChannel(channel, _tabUser, i, _tokensChannel[k]) == 2)
+        // {
+        //     writeInfd(ERR_BADCHANNELKEY(_tabUser[i].getUsername(), _tokensChannel[k]), i, _pfds);
+        //     return ;
+        // }
     }
 
     for (size_t j = 0; j < _tokensChannel.size() ; j++)

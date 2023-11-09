@@ -113,13 +113,29 @@ void Mode::changeMode(Channel &channel, User *_tabUser, int index, std::deque<st
         else if (this->_opt[i] == 'l')
         {
             if (this->_opt[0] == '+')
-                addMode('l', channel);
+                addModeL(channel);
+                // addMode('l', channel);
             else
-                removeMode('l', channel);
+                removeModeL(channel);
+                // removeMode('l', channel);
         }
         else
             std::cout << this->_opt[i] << " :is not a recognised channel mode." << std::endl;
     }
+}
+
+
+void Mode::addModeL(Channel &channel)
+{
+    _limit = std::atoi(_who.c_str());
+    channel._mapChannelLimit[_channelMode] = _limit;
+    addMode('l', channel);
+}
+
+void Mode::removeModeL(Channel &channel)
+{
+    channel._mapChannelLimit[_channelMode] = MAX_USERS;
+    removeMode('l', channel);
 }
 
 void Mode::addMode(char mode, Channel &channel)
@@ -131,7 +147,6 @@ void Mode::addMode(char mode, Channel &channel)
             return ;
         iterator++;
     }
-    std::cout << "COUCOU" << std::endl;
     channel.mapMode[this->_channelMode].push_back(mode);
 }
 
