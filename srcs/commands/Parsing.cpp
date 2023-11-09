@@ -52,5 +52,11 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
             Message message;
             message.execute_cmd(str, _tabUser, i, _pfds, channel);
         }
+        pos = str.find("PART");
+        if (pos !=  std::string::npos)
+        {
+            Part part;
+            part.execute_cmd(str, _pfds, _tabUser, i, channel);
+        }
     }
 }
