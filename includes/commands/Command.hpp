@@ -49,8 +49,10 @@ class Kick: public Command
     public:
         Kick(void);
         ~Kick(void);
+        void parse_cmd(std::string str);
         void execute_cmd(std::string str);
         void execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser, int y, Channel &channel);
+        int verif_is_on_channel(std::string list);
 };
 
 class Mode: public Command
