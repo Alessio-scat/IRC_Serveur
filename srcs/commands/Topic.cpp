@@ -53,8 +53,10 @@ void Topic::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struc
     }
     std::cout << "]" << std::endl;
     //////////////////////////////
-
-    if (isModePresentInChannel(channel, tmpChannel.substr(0, tmpChannel.size() - 1), 't'))
+    std::cout << "AAAAAAAAAAAAAAAAAA" << std::endl;
+    ft_trim(tmpChannel);
+    // if (isModePresentInChannel(channel, tmpChannel.substr(0, tmpChannel.size() - 1), 't'))
+    if (isModePresentInChannel(channel, tmpChannel, 't'))
     {
         std::cout << "VERIFIER SI IL EST CHANNEL OPERATOR" << std::endl;
 
@@ -62,7 +64,7 @@ void Topic::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struc
         while (it != _tabUser[i]._chanOperator.end())
         {
             std::cout << "channelOperator: " << *it << std::endl;
-            if (*it == tmpChannel.substr(0, tmpChannel.size() - 1))
+            if (*it == tmpChannel)
             {
                 std::cout << "OK" << std::endl;
                 break;
@@ -75,6 +77,7 @@ void Topic::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struc
             return ;
         }
     }
+    std::cout << "BBBBBBBBBBBBBB" << std::endl;
     // if (isInChannel(tmpChannel, _tabUser[i].getNickname(), channel))
     // {
     //     std::cout << "ERROR: Client not in channel" << std::endl;
@@ -84,7 +87,7 @@ void Topic::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struc
     {
         std::cout << "CHECK" << std::endl;
         // Checking the topic for the channel
-        this->_channelTopic = tmpChannel.substr(0, tmpChannel.size() - 1);
+        this->_channelTopic = tmpChannel;
         std::cout << "channelTopic : " << this->_channelTopic << std::endl;
         std::cout << "channelTopic : " << "|" << this->_channelTopic << "|" << std::endl;
         printTopic(this->getChannelTopic(), channel.mapTopic);
