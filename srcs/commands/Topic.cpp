@@ -38,51 +38,17 @@ void Topic::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struc
         return ;
     }
     tmpChannel = str.substr(6, endChannel - 6);
-    //////////////////////////////
-    std::cout << "CHANNELMODE : |" << tmpChannel << "|" << std::endl;
-    std::vector<char>::iterator iterator = channel.mapMode[tmpChannel].begin();
-
-    std::cout << "List of mode : [";
-    while (iterator != channel.mapMode[tmpChannel].end())
-    {
-        std::cout << *iterator << " ";
-        iterator++;
-    }
-    std::cout << "]" << std::endl;
-    //////////////////////////////
+    printListMode(tmpChannel, channel);
     ft_trim(tmpChannel);
     if (isModePresentInChannel(channel, tmpChannel, 't'))
     {
-        std::list<std::string>::iterator it = _tabUser[i]._chanOperator.begin();
-        while (it != _tabUser[i]._chanOperator.end())
-        {
-            if (*it == tmpChannel)
-            {
-                break;
-            }
-            it++;
-        }
-        if (it == _tabUser[i]._chanOperator.end())
-        {
-            std::cout << "ERROR: Client not channel operator" << std::endl;
+        if (clientIsChannelOperator(tmpChannel, _tabUser, i))
             return ;
-        }
     }
-    // if (isInChannel(tmpChannel, _tabUser[i].getNickname(), channel))
-    // {
-    //     std::cout << "ERROR: Client not in channel" << std::endl;
-    //     return ;
-    // }
     if (str.find(":") == std::string::npos)
     {
         std::cout << "CHECK" << std::endl;
-        this->_channelTopic = tmpChannel;
-        std::cout << "channelTopic : " << this->_channelTopic << std::endl;
-        std::cout << "channelTopic : " << "|" << this->_channelTopic << "|" << std::endl;
-        printTopic(this->getChannelTopic(), channel.mapTopic);
-        printMapTopic(channel.mapTopic);
-        this->_msgTopic = channel.mapTopic[this->getChannelTopic()];
-        this->rplTopic(_tabUser, i, _pfds);
+        checkTopic(tmpChannel, channel, _tabUser, i, _pfds);
         return ;
     }
     this->_channelTopic = tmpChannel;
@@ -153,6 +119,17 @@ void Topic::printMapTopic(const std::map<std::string, std::string>& mapTopic)
         std::cout << "\033[34m" << "MAPTOPIC: |" << it->first << "| |" << it->second << "| \033[0m" << std::endl;
         std::cout << std::endl;
     }
+}
+
+void Topic::checkTopic(std::string tmpChannel, Channel &channel, User *_tabUser, int i, std::deque<struct pollfd> _pfds)
+{
+    this->_channelTopic = tmpChannel;
+    std::cout << "channelTopic : " << this->_channelTopic << std::endl;
+    std::cout << "channelTopic : " << "|" << this->_channelTopic << "|" << std::endl;
+    printTopic(this->getChannelTopic(), channel.mapTopic);
+    printMapTopic(channel.mapTopic);
+    this->_msgTopic = channel.mapTopic[this->getChannelTopic()];
+    this->rplTopic(_tabUser, i, _pfds);
 }
 
 std::string Topic::getChannelTopic(void)

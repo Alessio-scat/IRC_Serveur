@@ -92,6 +92,7 @@ class Topic: public Command
         ~Topic(void);
         void execute_cmd(std::string str);
         void execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds, Channel &channel);
+        void checkTopic(std::string tmpChannel, Channel &channel, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
         void rplTopic(User *_tabUser, int i, std::deque<struct pollfd> _pfds);
         void rplTopicWhoTime(User *_tabUser, int i, std::deque<struct pollfd> _pfds);
         void printTopic(std::string channelTopic, std::map<std::string, std::string>& mapTopic);
