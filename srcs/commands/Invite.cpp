@@ -47,8 +47,6 @@ void Invite::ParseInviteCmd(std::string &str)
             break;
         }
     }
-
-
 }
 
 int Invite::ExistChannel(const std::map<std::string, std::list<std::string> >& channel, std::deque<struct pollfd> _pfds, int i, std::string &client)
@@ -73,6 +71,8 @@ void Invite::InviteClient(User *_tabUser, std::deque<struct pollfd> _pfds, int y
     std::string message = ":" + _tabUser[y].getUsername() + " INVITE " + _nickInvite + " " + _channelInvite + "\r\n";
     write(_pfds[i].fd, message.c_str(), message.size());
     write(_pfds[y].fd, message.c_str(), message.size());
+    std::cout << GREEN << "IN INVIteeeeeee : " << _tabUser[y].getNickname() << RESET << std::endl;
+    _tabUser[i]._mapModeUser[true].push_back(this->_channelInvite);
 }
 
 int Invite::User_on_channel(const std::map<std::string, std::list<std::string> >& channel, User *_tabUser)
@@ -99,14 +99,8 @@ int Invite::User_on_channel(const std::map<std::string, std::list<std::string> >
 }
 
 /* 
-    Make a : ERR_NOTONCHANNEL (442)
-             ERR_CHANOPRIVSNEEDED (482)
+    Make a : ERR_CHANOPRIVSNEEDED (482)
 */
-
-// int Invite::Noton_channel()
-// {
-//     return 0;
-// }
 
 void Invite::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser, int y, Channel &channel)
 {
@@ -119,13 +113,18 @@ void Invite::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User 
         return ;
     }
 
+    if (ExistChannel(channel.mapChannel, _pfds, y, _nickInvite) == 1)
+        return ;
+
+    if (isInChannel(_channelInvite, _tabUser[y].getNickname(), channel) == 1){
+        writeInfd(ERR_NOTONCHANNEL(_tabUser[y].getNickname(), _cmd), y, _pfds);
+        return ;
+    }
+
     if (User_on_channel(channel.mapChannel, _tabUser) == 1){
         writeInfd(ERR_USERONCHANNEL(_tabUser[y].getNickname(), _cmd), y, _pfds);
         return ;
     }
 
-    if (ExistChannel(channel.mapChannel, _pfds, y, _nickInvite) == 1)
-        return ;
-    
-     InviteClient(_tabUser, _pfds, y); 
+    InviteClient(_tabUser, _pfds, y); 
 }

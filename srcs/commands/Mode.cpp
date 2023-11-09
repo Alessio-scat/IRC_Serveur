@@ -129,6 +129,7 @@ void Mode::addMode(char mode, Channel &channel)
             return ;
         iterator++;
     }
+    std::cout << "COUCOU" << std::endl;
     channel.mapMode[this->_channelMode].push_back(mode);
 }
 

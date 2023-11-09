@@ -33,28 +33,10 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
         pos = str.find("JOIN");
         if (pos !=  std::string::npos)
         {
-            std::string list;
-            // std::cout << "JOIN BY: " << _tabUser[i].getUsername() << std::endl;
             Join join;
-            join.execute_cmd(str, _tabUser, i, _pfds);
-            // std::cout << "nameChannel" << "|" << join.nameChannel << "|" << std::endl;
-            channel.mapChannel[join.nameChannel].push_back(_tabUser[i].getUsername());
-            list = listUserChannel(channel.mapChannel, _tabUser, join.nameChannel, i);
-            std::string message = ":IRChub 353 " + _tabUser[i].getNickname() + " = " + join.nameChannel + " :" + list + "\r\n";
-            // std::cout << CURSIVE << list << "|" << RESET << std::endl;
-            // std::cout << CURSIVE << "message : |" << message << "|" << RESET << std::endl;
-            std::istringstream ss(list);
-            std::string word;
-            while (ss >> word)
-            {
-                // std::cout << CURSIVE << word << RESET << std::endl;
-                for (int j = 1;j <= MAX_USERS; j++)
-                {
-                    if (word == _tabUser[j].getNickname() || word == "@" + _tabUser[j].getNickname())
-                        send(_pfds[j].fd, message.c_str(), message.size(), 0);
-                        // write(_pfds[j].fd, message.c_str(), message.size());
-                }
-            }
+            join.execute_cmd(str, _tabUser, i, _pfds, channel, join);
+            // join.add_user_inChannel(channel, _tabUser, join, i, _pfds);
+            // join.verifModeChannel(channel, _tabUser, i);
         }
         pos = str.find("MODE");
         if (pos !=  std::string::npos)
