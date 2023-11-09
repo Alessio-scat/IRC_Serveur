@@ -17,7 +17,7 @@ void Join::execute_cmd(std::string str)
     ERR_BANNEDFROMCHAN (474)
     ERR_CHANNELISFULL (471)
     OK! -- ERR_INVITEONLYCHAN (473)
-    ERR_BADCHANMASK (476)
+    OK! -- ERR_BADCHANMASK (476)
     OK! -- RPL_NAMREPLY (353)  
 */
 
@@ -148,7 +148,7 @@ void Join::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct
 {
     if (str.find('#') == std::string::npos && str.find('&') == std::string::npos)
     {
-        std::string test = "caca";
+        std::string test = "channel";
         writeInfd(ERR_BADCHANMASK(test), i, _pfds);
         // writeInfd(ERR_NEEDMOREPARAMS(_tabUser[i].getUsername(), _channelJoin), i, _pfds);
         return ;
