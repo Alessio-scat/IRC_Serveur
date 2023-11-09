@@ -12,8 +12,8 @@ void Mode::execute_cmd(std::string str, Channel &channel)
     size_t endChannel = str.find(" ", 6);
     size_t startOpt;
     size_t endOpt;
-    size_t startWho;
-    size_t endWho;
+    // size_t startWho;
+    // size_t endWho;
     std::string tmpChannel;
     std::string tmpOpt;
     std::string tmpWho;
@@ -57,13 +57,15 @@ void Mode::execute_cmd(std::string str, Channel &channel)
     tmpOpt = str.substr(startOpt, endOpt - startOpt);
     this->_opt = tmpOpt;
     std::cout << "option Mode : " << this->_opt << std::endl;
-    while (str[endOpt] == ' ')
-        endOpt++;
-    startWho = endOpt;
-    endWho = endOpt;
-    while (str[endWho] != ' ' && endWho <= str.size())
-        endWho++;
-    tmpWho = str.substr(startWho, endWho - startWho);
+    // while (str[endOpt] == ' ')
+    //     endOpt++;
+    // startWho = endOpt;
+    // endWho = endOpt;
+    // while (str[endWho] != ' ' && endWho <= str.size())
+    //     endWho++;
+    // tmpWho = str.substr(startWho, endWho - startWho);
+    // ft_trim(tmpWho);
+    tmpWho = str.substr(endOpt, str.size() - endOpt);
     ft_trim(tmpWho);
     this->_who = tmpWho;
     std::cout << "who : |" << this->_who << "|" << std::endl;
