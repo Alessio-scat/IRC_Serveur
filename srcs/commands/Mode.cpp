@@ -97,9 +97,9 @@ void Mode::changeMode(Channel &channel, User *_tabUser, int index, std::deque<st
         else if (this->_opt[i] == 'k')
         {
             if (this->_opt[0] == '+')
-                addMode('k', channel);
-            else
-                removeMode('k', channel);
+                addModeK(channel, _tabUser, index, _pfds);
+            else if (this->_opt[0] == '-')
+                removeModeK(channel, _tabUser, index, _pfds);
         }
         else if (this->_opt[i] == 'o')
         {
@@ -131,7 +131,6 @@ void Mode::addMode(char mode, Channel &channel)
             return ;
         iterator++;
     }
-    std::cout << "COUCOU" << std::endl;
     channel.mapMode[this->_channelMode].push_back(mode);
 }
 
@@ -323,6 +322,56 @@ void Mode::removeModeT(Channel &channel, User *_tabUser, int index, std::deque<s
         return ;
     }
     removeMode('t', channel);
+    printListMode(channel);
+}
+
+void Mode::addModeK(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds)
+{
+    (void)_tabUser;
+    (void)index;
+    (void)_pfds;
+    if (isUserChannelOperatorInChannel(_tabUser, index))
+    {
+        std::cout << "ERROR: Client not channel operator" << std::endl;
+        std::string message = ERR_CHANOPRIVSNEEDED(_tabUser[index].getNickname(), this->_channelMode);
+        writeInfd(message, index, _pfds);
+        return ;
+    }
+    if (!this->_who.size())
+    {
+        std::cout << "ERROR: MODE k need key" << std::endl;
+        return ;
+    }
+    channel._mapChannelKey[this->_channelMode] = this->_who;
+    std::cout << "Key activate in channel " << this->_channelMode << " with key : |" << channel._mapChannelKey[this->_channelMode] << "|" << std::endl;
+    addMode('k', channel);
+    printListMode(channel);
+}
+
+void Mode::removeModeK(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds)
+{
+    (void)_tabUser;
+    (void)index;
+    (void)_pfds;
+    
+    if (isUserChannelOperatorInChannel(_tabUser, index))
+    {
+        std::cout << "ERROR: Client not channel operator" << std::endl;
+        std::string message = ERR_CHANOPRIVSNEEDED(_tabUser[index].getNickname(), this->_channelMode);
+        writeInfd(message, index, _pfds);
+        return ;
+    }
+
+    std::map<std::string, std::string>::iterator iterator = channel._mapChannelKey.find(this->_channelMode);
+    
+    if (iterator == channel._mapChannelKey.end())
+    {
+        std::cout << "MODE k doesn't exist" << std::endl;
+        return ;
+    }
+    channel._mapChannelKey.erase(iterator);
+    std::cout << "Key deleted in channel " << this->_channelMode << std::endl;
+    removeMode('k', channel);
     printListMode(channel);
 }
 

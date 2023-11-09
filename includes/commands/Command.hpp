@@ -78,7 +78,9 @@ class Mode: public Command
         void addRemoveChanOperator(Channel &channel, User *_tabUser, int index, bool isAdd, std::deque<struct pollfd> _pfds);
         void addModeT(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds);
         void removeModeT(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds);
-        
+        void addModeK(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds);
+        void removeModeK(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds);
+
         void printListChanOperator(User *_tabUser, int index);
         int isWhoInChannel(Channel &channel);
         int isUserChannelOperatorInChannel(User *_tabUser, int index);
