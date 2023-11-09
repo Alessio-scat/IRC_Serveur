@@ -10,6 +10,7 @@ void Kick::execute_cmd(std::string str)
 void Kick::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser, int y, Channel &channel)
 {
     parse_cmd(str);
+    std::cout << GREEN << "|" << this->_user << "|" << RESET << std::endl;
     if (this->_channel.empty() || this->_user.empty())
     {
         writeInfd(ERR_NEEDMOREPARAMS(_tabUser[y].getNickname(), "KICK"), y, _pfds);
@@ -57,7 +58,7 @@ void Kick::parse_cmd(std::string str)
     }
     pos = str.find(" ", pos2 + 1);
     if (pos != std::string::npos)
-        this->_user = str.substr(pos2 + 1, pos - pos2);
+        this->_user = str.substr(pos2 + 1, pos - pos2 - 1);
     else
         this->_user = str.substr(pos2 + 1, str.size() - pos2);
     pos = str.find(":");
@@ -71,7 +72,7 @@ int Kick::verif_is_on_channel(std::string list)
     std::string word;
     while (ss >> word)
     {
-        if (word == this->_user)
+        if (word == this->_user || word == "@" + this->_user)
             return 0;
     }
     return 1;
