@@ -81,7 +81,7 @@ class Mode: public Command
         int isWhoInChannel(Channel &channel);
         int isUserChannelOperatorInChannel(User *_tabUser, int index);
 
-        void addModeL(Channel &channel);
+        void addModeL(Channel &channel, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
         void removeModeL(Channel &channel);
 };
 
@@ -115,10 +115,16 @@ class Join: public Command
         // std::map<std::string, std::string > _mapChannelKey;
         std::string _channelJoin;
         std::string _cmd;
+        int _isMode;
+        int _isInvitation;
     public:
         std::string nameChannel;
         Join(void);
         ~Join(void);
+
+        int verifModeI(User *_tabUser, int y, std::string &tokenChannel);
+        int verifModeK(Channel &channel, User *_tabUser, int y, std::string &tokenChannel);
+        int verifModeL(Channel &channel, User *_tabUser, int y, std::string &tokenChannel);
 
         void connectChannelKey(Channel &channel);
         void execute_cmd(std::string str);

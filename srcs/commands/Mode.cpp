@@ -1,4 +1,5 @@
 #include "../../includes/commands/Command.hpp"
+#include "../../includes/IRC.hpp"
 
 Mode::Mode(void){}
 
@@ -113,7 +114,7 @@ void Mode::changeMode(Channel &channel, User *_tabUser, int index, std::deque<st
         else if (this->_opt[i] == 'l')
         {
             if (this->_opt[0] == '+')
-                addModeL(channel);
+                addModeL(channel, _tabUser, index, _pfds);
                 // addMode('l', channel);
             else
                 removeModeL(channel);
@@ -125,9 +126,21 @@ void Mode::changeMode(Channel &channel, User *_tabUser, int index, std::deque<st
 }
 
 
-void Mode::addModeL(Channel &channel)
+void Mode::addModeL(Channel &channel, User *_tabUser, int i, std::deque<struct pollfd> _pfds)
 {
+    if (!_who.size())
+    {
+        writeInfd(ERR_NEEDMOREPARAMS(_tabUser[i].getUsername(), "Usage /mode (+l)"), i, _pfds);
+        return ;
+    }
+    
     _limit = std::atoi(_who.c_str());
+    
+    if (_limit == 0 || _limit == -1)
+    {
+        writeInfd(ERR_INVALIDINPUT(_tabUser[i].getUsername(), "Usage /mode (+l)"), i, _pfds);
+        return ;
+    }
     channel._mapChannelLimit[_channelMode] = _limit;
     addMode('l', channel);
 }

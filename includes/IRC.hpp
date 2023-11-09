@@ -41,6 +41,7 @@
 
 /*INVITE*/
 
+#define ERR_INVALIDINPUT(source, command)    ": 461 " + source + " " + command + " :Invalid input"
 #define ERR_NEEDMOREPARAMS(source, command)    ": 461 " + source + " " + command + " :Not enough parameters"
 #define ERR_NOSUCHCHANNEL(source, channel)     ": 403 " + source + " " + channel + " :No such channel"
 #define ERR_USERONCHANNEL(source, channel)     ": 443 " + source + " " + channel + " :is already on channel"
