@@ -144,4 +144,20 @@ public:
     void execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds, Channel &channel);
 };
 
+class Part: public Command
+{
+    private:
+        // std::string _channel;
+        std::string _reason;
+        std::vector<std::string> channel;
+
+    public:
+        Part(void);
+        ~Part(void);
+        void parse_cmd(std::string str);
+        void execute_cmd(std::string str);
+        void execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser, int y, Channel &channel);
+        int verif_is_on_channel(std::string list, User *_tabUser, int y);
+};
+
 #endif

@@ -80,5 +80,6 @@
 #define ERR_NOTEXTTOSEND(client)     ": 412 " + client + " :No text to send"
 #define ERR_NOSUCHSERVER(client, channel)     ": 402 " + client + " " + channel + " :No such server"
 
+// #define ERR_NOTONCHANNEL(client, channel)     ": 442 " + client + " " + channel + " :You're not on that channel"
 // #define ERR_CHANOPRIVSNEEDED(client, channel)     ": 482 " + client + " " + channel + " :You're not channel operator"
 // #define ERR_USERNOTINCHANNEL(client, nick, channel)     ": 482 " + client + " " + nick + " " + channel + " :They aren't on that channel"

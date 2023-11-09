@@ -30,6 +30,7 @@ SRCS_FILE				=	main \
 							commands/Parsing \
 							commands/Join \
 							commands/Message \
+							commands/Part \
 							Channel/Channel \
 							Utils
 SRCS					=  	$(addsuffix .cpp, $(addprefix $(SRCS_DIR)/, $(SRCS_FILE)))
