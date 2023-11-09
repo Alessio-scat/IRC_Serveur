@@ -265,7 +265,17 @@ void Mode::addRemoveChanOperator(Channel &channel, User *_tabUser, int index, bo
             // std::cout << "WHO " << this->_who << std::endl;
             std::string message = RPL_MODEADDO(_tabUser[index].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()), this->getWho());
             // std::cout << "message : |" << message << "|" << std::endl;
-            send(_pfds[index].fd, message.c_str(), message.size(), 0);
+            std::string list = listUserChannel(channel.mapChannel, _tabUser, this->_channelMode, index);
+            std::istringstream ss(list);
+            std::string word;
+            while (ss >> word)
+            {
+                for (int j = 1;j <= MAX_USERS; j++)
+                {
+                    if (word == _tabUser[j].getNickname() || word == "@" + _tabUser[j].getNickname())
+                        send(_pfds[j].fd, message.c_str(), message.size(), 0);
+                }
+            }
         }
         else
             std::cout << "ChannelOperator non présent : " << this->_channelMode << std::endl;

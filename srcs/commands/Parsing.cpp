@@ -14,7 +14,7 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
         if (pos !=  std::string::npos)
         {
             Kick kick;
-            kick.execute_cmd(str);
+            kick.execute_cmd(str, _pfds, _tabUser, i, channel);
         }
         pos = str.find("INVITE");
         if (pos !=  std::string::npos)
