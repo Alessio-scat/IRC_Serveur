@@ -97,9 +97,9 @@ void Mode::changeMode(Channel &channel, User *_tabUser, int index, std::deque<st
         else if (this->_opt[i] == 'k')
         {
             if (this->_opt[0] == '+')
-                addMode('k', channel);
-            else
-                removeMode('k', channel);
+                addModeK(channel, _tabUser, index, _pfds);
+            else if (this->_opt[0] == '-')
+                removeModeK(channel, _tabUser, index, _pfds);
         }
         else if (this->_opt[i] == 'o')
         {
@@ -131,7 +131,6 @@ void Mode::addMode(char mode, Channel &channel)
             return ;
         iterator++;
     }
-    std::cout << "COUCOU" << std::endl;
     channel.mapMode[this->_channelMode].push_back(mode);
 }
 
@@ -323,6 +322,24 @@ void Mode::removeModeT(Channel &channel, User *_tabUser, int index, std::deque<s
         return ;
     }
     removeMode('t', channel);
+    printListMode(channel);
+}
+
+void Mode::addModeK(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds)
+{
+    (void)_tabUser;
+    (void)index;
+    (void)_pfds;
+    addMode('k', channel);
+    printListMode(channel);
+}
+
+void Mode::removeModeK(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds)
+{
+    (void)_tabUser;
+    (void)index;
+    (void)_pfds;
+    removeMode('k', channel);
     printListMode(channel);
 }
 
