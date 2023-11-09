@@ -38,9 +38,6 @@ void Topic::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struc
         return ;
     }
     tmpChannel = str.substr(6, endChannel - 6);
-    // ft_trim(tmpChannel);
-    //Si Mode T est active, si "/Topic" bon parsing de tmpChannel mais si il y
-    //a un topic derriere mauvais parsing
     //////////////////////////////
     std::cout << "CHANNELMODE : |" << tmpChannel << "|" << std::endl;
     std::vector<char>::iterator iterator = channel.mapMode[tmpChannel].begin();
@@ -53,20 +50,14 @@ void Topic::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struc
     }
     std::cout << "]" << std::endl;
     //////////////////////////////
-    std::cout << "AAAAAAAAAAAAAAAAAA" << std::endl;
     ft_trim(tmpChannel);
-    // if (isModePresentInChannel(channel, tmpChannel.substr(0, tmpChannel.size() - 1), 't'))
     if (isModePresentInChannel(channel, tmpChannel, 't'))
     {
-        std::cout << "VERIFIER SI IL EST CHANNEL OPERATOR" << std::endl;
-
         std::list<std::string>::iterator it = _tabUser[i]._chanOperator.begin();
         while (it != _tabUser[i]._chanOperator.end())
         {
-            std::cout << "channelOperator: " << *it << std::endl;
             if (*it == tmpChannel)
             {
-                std::cout << "OK" << std::endl;
                 break;
             }
             it++;
@@ -77,7 +68,6 @@ void Topic::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struc
             return ;
         }
     }
-    std::cout << "BBBBBBBBBBBBBB" << std::endl;
     // if (isInChannel(tmpChannel, _tabUser[i].getNickname(), channel))
     // {
     //     std::cout << "ERROR: Client not in channel" << std::endl;
@@ -86,7 +76,6 @@ void Topic::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struc
     if (str.find(":") == std::string::npos)
     {
         std::cout << "CHECK" << std::endl;
-        // Checking the topic for the channel
         this->_channelTopic = tmpChannel;
         std::cout << "channelTopic : " << this->_channelTopic << std::endl;
         std::cout << "channelTopic : " << "|" << this->_channelTopic << "|" << std::endl;
@@ -96,24 +85,18 @@ void Topic::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struc
         this->rplTopic(_tabUser, i, _pfds);
         return ;
     }
-    std::cout << "IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII" << std::endl;
-    std::cout << "Meme si il n'est pas channelOperator il peut topic des msg" << std::endl;
     this->_channelTopic = tmpChannel;
-    // std::cout << "channelTopic : " << this->_channelTopic << std::endl;
     startTopic = str.find(":");
     tmpTopic = str.substr(startTopic);
     ft_trim(tmpTopic);
-    // std::cout << "TMPTOPIC " << tmpTopic << " " << tmpTopic.size() << std::endl;
     if ((tmpTopic.size() == 1 && (tmpTopic[0] == ':' && tmpTopic[1] != ':')) || isOnlySpace(tmpTopic))
     {
         std::cout << "CLEAR" << std::endl;
-        //Clearing the topic on channel
         this->_msgTopic = "";
         channel.mapTopic[this->getChannelTopic()] = this->getMsgTopic();
         this->rplTopic(_tabUser, i, _pfds);
         return ;
     }
-    // this->_msgTopic = tmpTopic;
     this->_msgTopic = tmpTopic.substr(1);
     std::cout << "msgTopic : " << "|" << this->_msgTopic << "|" << std::endl;
     this->rplTopicWhoTime(_tabUser, i, _pfds);
