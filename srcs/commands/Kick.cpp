@@ -12,6 +12,7 @@ void Kick::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_
     size_t pos;
     size_t pos2 = 0;
 
+    ft_trim(str);
     pos = str.find(" ") + 1;
     if (pos != std::string::npos)
     {
@@ -34,13 +35,29 @@ void Kick::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_
         // throw(ERR_NEEDMOREPARAMS);
     }
     std::cout << this->_channel << std::endl;
-    std::cout << this->_user << std::endl;
+    std::cout  << "|" << this->_user << "|" << std::endl;
     std::cout << this->_reason << std::endl;
     std::cout << pos << std::endl;
     std::cout << pos2 << std::endl;
     str = ":" + _tabUser[y].getNickname() + " " + str + "\r\n";
-    channel.mapChannel[this->_channel].erase(std::remove( channel.mapChannel[this->_channel].begin(), channel.mapChannel[this->_channel].end(), this->_user), channel.mapChannel[this->_channel].end());
+    // for (std::map<std::string, std::list<std::string> >::iterator it = channel.mapChannel.begin(); it != channel.mapChannel.end(); ++it)
+    // {
+    //     if (it->first == this->_channel)
+    //     {
+    //         for (std::list<std::string>::iterator subIt = it->second.begin(); subIt != it->second.end(); ++subIt)
+    //         {
+    //             std::cout << GREEN << "erase1" << RESET << std::endl;
+    //             if (*subIt == this->_user)
+    //             {
+    //                 std::cout << GREEN << "erase" << RESET << std::endl;
+    //                 channel.mapChannel[this->_channel].erase(subIt);
+    //                 break;
+    //             }
+    //         }
+    //     }
+    // }
     std::string list = listUserChannel(channel.mapChannel, _tabUser, this->_channel, y);
+    std::cout << GREEN << list << RESET << std::endl;
     std::istringstream ss(list);
     std::string word;
     while (ss >> word)
@@ -51,11 +68,7 @@ void Kick::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_
                 send(_pfds[j].fd, str.c_str(), str.size(), 0);
         }
     }
-    //  for (std::map<std::string, std::list<std::string> >::const_iterator it = channel.mapChannel.begin(); it != channel.mapChannel.end(); ++it) {
-    //     if (it->first == this->_channel)
-    //     {
-    //     }
-    //  }
+    channel.mapChannel[this->_channel].erase(std::remove( channel.mapChannel[this->_channel].begin(), channel.mapChannel[this->_channel].end(), this->_user), channel.mapChannel[this->_channel].end());
 }
 
 Kick::~Kick(){}
