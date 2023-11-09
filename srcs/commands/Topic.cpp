@@ -38,6 +38,21 @@ void Topic::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struc
         return ;
     }
     tmpChannel = str.substr(6, endChannel - 6);
+    // ft_trim(tmpChannel);
+    //Si Mode T est active, si "/Topic" bon parsing de tmpChannel mais si il y
+    //a un topic derriere mauvais parsing
+    //////////////////////////////
+    std::cout << "CHANNELMODE : |" << tmpChannel << "|" << std::endl;
+    std::vector<char>::iterator iterator = channel.mapMode[tmpChannel].begin();
+
+    std::cout << "List of mode : [";
+    while (iterator != channel.mapMode[tmpChannel].end())
+    {
+        std::cout << *iterator << " ";
+        iterator++;
+    }
+    std::cout << "]" << std::endl;
+    //////////////////////////////
 
     if (isModePresentInChannel(channel, tmpChannel.substr(0, tmpChannel.size() - 1), 't'))
     {
@@ -78,6 +93,8 @@ void Topic::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struc
         this->rplTopic(_tabUser, i, _pfds);
         return ;
     }
+    std::cout << "IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII" << std::endl;
+    std::cout << "Meme si il n'est pas channelOperator il peut topic des msg" << std::endl;
     this->_channelTopic = tmpChannel;
     // std::cout << "channelTopic : " << this->_channelTopic << std::endl;
     startTopic = str.find(":");

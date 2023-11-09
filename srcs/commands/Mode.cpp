@@ -12,8 +12,8 @@ void Mode::execute_cmd(std::string str, Channel &channel)
     size_t endChannel = str.find(" ", 6);
     size_t startOpt;
     size_t endOpt;
-    size_t startWho;
-    size_t endWho;
+    // size_t startWho;
+    // size_t endWho;
     std::string tmpChannel;
     std::string tmpOpt;
     std::string tmpWho;
@@ -57,13 +57,15 @@ void Mode::execute_cmd(std::string str, Channel &channel)
     tmpOpt = str.substr(startOpt, endOpt - startOpt);
     this->_opt = tmpOpt;
     std::cout << "option Mode : " << this->_opt << std::endl;
-    while (str[endOpt] == ' ')
-        endOpt++;
-    startWho = endOpt;
-    endWho = endOpt;
-    while (str[endWho] != ' ' && endWho <= str.size())
-        endWho++;
-    tmpWho = str.substr(startWho, endWho - startWho);
+    // while (str[endOpt] == ' ')
+    //     endOpt++;
+    // startWho = endOpt;
+    // endWho = endOpt;
+    // while (str[endWho] != ' ' && endWho <= str.size())
+    //     endWho++;
+    // tmpWho = str.substr(startWho, endWho - startWho);
+    // ft_trim(tmpWho);
+    tmpWho = str.substr(endOpt, str.size() - endOpt);
     ft_trim(tmpWho);
     this->_who = tmpWho;
     std::cout << "who : |" << this->_who << "|" << std::endl;
@@ -88,9 +90,9 @@ void Mode::changeMode(Channel &channel, User *_tabUser, int index, std::deque<st
         else if (this->_opt[i] == 't')
         {
             if (this->_opt[0] == '+')
-                addModeT(channel);
+                addModeT(channel, _tabUser, index);
             else if (this->_opt[0] == '-')
-                removeModeT(channel);
+                removeModeT(channel, _tabUser, index);
         }
         else if (this->_opt[i] == 'k')
         {
@@ -274,6 +276,11 @@ void Mode::addRemoveChanOperator(Channel &channel, User *_tabUser, int index, bo
             std::cout << "ChannelOperator déjà présent : " << this->_channelMode << std::endl;
         else
         {
+            if (_tabUser[who].getNickname() == _tabUser[index].getNickname())
+            {
+                std::cout << "ERROR: You can't remove yourself from channel operator" << std::endl;
+                return ;
+            }
             _tabUser[who]._chanOperator.erase(std::remove(_tabUser[who]._chanOperator.begin(), _tabUser[who]._chanOperator.end(), this->_channelMode), _tabUser[who]._chanOperator.end());
             std::cout << "ChannelOperator supprimé : " << this->_channelMode << std::endl;
             std::cout << "\x1B[31m" << _tabUser[who].getNickname() << " not OPERATOR" << "\x1B[0m" << std::endl;
@@ -285,14 +292,24 @@ void Mode::addRemoveChanOperator(Channel &channel, User *_tabUser, int index, bo
     }
 }
 
-void Mode::addModeT(Channel &channel)
+void Mode::addModeT(Channel &channel, User *_tabUser, int index)
 {
+    if (isUserChannelOperatorInChannel(_tabUser, index))
+    {
+        std::cout << "ERROR: Client not channel operator" << std::endl;
+        return ;
+    }
     addMode('t', channel);
     printListMode(channel);
 }
 
-void Mode::removeModeT(Channel &channel)
+void Mode::removeModeT(Channel &channel, User *_tabUser, int index)
 {
+    if (isUserChannelOperatorInChannel(_tabUser, index))
+    {
+        std::cout << "ERROR: Client not channel operator" << std::endl;
+        return ;
+    }
     removeMode('t', channel);
     printListMode(channel);
 }
