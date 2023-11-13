@@ -139,21 +139,11 @@ void Server::fillUser(User *_tabUser, int i)
 //     int sizeUser = 0;
 //     if (indexNick != std::string::npos && indexUser != std::string::npos)
 //     {
-//         std::cout << "NONNNNNNNNNNNNN" << std::endl;
 //         sizeNick = (indexUser - 2) - (indexNick + 4) - 1;
 //         sizeUser = bufferStr.find(" 0 *") - (indexUser + 4) - 1;
 //     }
-//     else
-//     {
-//         sizeUser = bufferStr.size() - 5;
-//         std::cout << "SIZEUSER: " << sizeUser << std::endl;
-//     }
 //     nickname = bufferStr.substr(indexNick + 5, sizeNick + 1);
-//     std::cout << GREEN << "bufferStr :" << "|" << bufferStr << "|" << RESET << std::endl;
-//     if (bufferStr.find("USER") != std::string::npos)
-//         username = bufferStr.substr(indexUser + 5, sizeUser);
-//     else
-//         username = "";
+//     username = bufferStr.substr(indexUser + 5, sizeUser + 1);
 //     std::cout << "USERNAME :" << "|" << _tabUser[i].getUsername() << "|" << std::endl;
 //     ft_trim(nickname);
 //     ft_trim(username);
