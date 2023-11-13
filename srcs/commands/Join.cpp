@@ -109,7 +109,6 @@ void Join::ParseJoinCmd(std::string &str, Channel &channel)
     {
         std::istringstream iss2(token);
         std::string subtoken;
-        // std::cout << "11111111111111111111111111111" << std::endl;
 
         while (std::getline(iss2, subtoken, ','))
         {
@@ -126,6 +125,7 @@ void Join::ParseJoinCmd(std::string &str, Channel &channel)
 
     for (size_t i = 0; i < _tokensKey.size(); i++)
         channel.mapMode[_tokensChannel[i]].push_back('k');
+
 
 }
 
@@ -264,7 +264,6 @@ void Join::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct
             return ;
         }
     }
-
     for (size_t j = 0; j < _tokensChannel.size() ; j++)
     {
         writeInfd(RPL_JOIN(_tabUser[i].getUsername(), _tokensChannel[j]), i, _pfds);

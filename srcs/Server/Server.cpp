@@ -105,20 +105,67 @@ void Server::fillUser(User *_tabUser, int i)
 
     int sizeNick = 0;
     int sizeUser = 0;
-    if (indexNick != std::string::npos && indexUser != std::string::npos)
-    {
-        sizeNick = (indexUser - 2) - (indexNick + 4) - 1;
-        sizeUser = bufferStr.find(" 0 *") - (indexUser + 4) - 1;
+
+    if (indexNick != std::string::npos) {
+        sizeNick = bufferStr.find(" ", indexNick + 5) - (indexNick + 5);
+        nickname = bufferStr.substr(indexNick + 5, sizeNick);
     }
-    nickname = bufferStr.substr(indexNick + 5, sizeNick);
-    username = bufferStr.substr(indexUser + 5, sizeUser);
-    if (nickname == "")
-        return ;
-    _tabUser[i].setNickname(nickname);
-    _tabUser[i].setUsername(username);
-    std::cout << "Nickname :" << "|" << _tabUser[i].getNickname() << "|" << std::endl;
-    std::cout << "Username :" << "|" << _tabUser[i].getUsername() << "|" << std::endl;
+
+    if (indexUser != std::string::npos) {
+        sizeUser = bufferStr.find(" ", indexUser + 5) - (indexUser + 5);
+        username = bufferStr.substr(indexUser + 5, sizeUser);
+    }
+
+    if (!nickname.empty()) {
+        _tabUser[i].setNickname(nickname);
+        std::cout << "Nickname :" << "|" << _tabUser[i].getNickname() << "|" << std::endl;
+    }
+
+    if (!username.empty()) {
+        _tabUser[i].setUsername(username);
+        std::cout << "Username :" << "|" << _tabUser[i].getUsername() << "|" << std::endl;
+    }
 }
+
+// void Server::fillUser(User *_tabUser, int i)
+// {
+//     std::string bufferStr(this->buffer);
+//     std::string nickname, username;
+
+//     size_t indexNick = bufferStr.find("NICK");
+//     size_t indexUser = bufferStr.find("USER");
+
+//     int sizeNick = 0;
+//     int sizeUser = 0;
+//     if (indexNick != std::string::npos && indexUser != std::string::npos)
+//     {
+//         std::cout << "NONNNNNNNNNNNNN" << std::endl;
+//         sizeNick = (indexUser - 2) - (indexNick + 4) - 1;
+//         sizeUser = bufferStr.find(" 0 *") - (indexUser + 4) - 1;
+//     }
+//     else
+//     {
+//         sizeUser = bufferStr.size() - 5;
+//         std::cout << "SIZEUSER: " << sizeUser << std::endl;
+//     }
+//     nickname = bufferStr.substr(indexNick + 5, sizeNick + 1);
+//     std::cout << GREEN << "bufferStr :" << "|" << bufferStr << "|" << RESET << std::endl;
+//     if (bufferStr.find("USER") != std::string::npos)
+//         username = bufferStr.substr(indexUser + 5, sizeUser);
+//     else
+//         username = "";
+//     std::cout << "USERNAME :" << "|" << _tabUser[i].getUsername() << "|" << std::endl;
+//     ft_trim(nickname);
+//     ft_trim(username);
+//     std::cout << "Nickname :" << "|" << _tabUser[i].getNickname() << "|" << std::endl;
+//     std::cout << "Username :" << "|" << _tabUser[i].getUsername() << "|" << std::endl;
+//     if (nickname == "")
+//         return ;
+//     _tabUser[i].setNickname(nickname);
+//     _tabUser[i].setUsername(username);
+//     std::cout << "Nickname :" << "|" << _tabUser[i].getNickname() << "|" << std::endl;
+//     std::cout << "Username :" << "|" << _tabUser[i].getUsername() << "|" << std::endl;
+// }
 
 void Server::Run_Server(void)
 {
