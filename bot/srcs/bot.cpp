@@ -96,7 +96,7 @@ int Bot::Bot_Run()
         if (searchWordInBot(buffer, "MONSTRE")) 
         {
             std::cout << "1111111111111111" << std::endl;
-            std::string monstre_cmd = "PRIVMSG #bot :DOUBLE MONSTRE\r\n";
+            std::string monstre_cmd = ":bot PRIVMSG #bot :DOUBLE MONSTRE\r\n";
             send(_BotSocket, monstre_cmd.c_str(), monstre_cmd.length(), 0);
         } 
 
