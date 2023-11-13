@@ -12,6 +12,14 @@ void Message::execute_cmd(std::string str)
     (void)str;
 }
 
+Message::Message(Message const &src):Command(src){}
+
+Message &Message::operator=(Message const &rhs)
+{
+    Command::operator=(rhs);
+    return (*this);
+}
+
 void Message::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds, Channel &channel)
 {
     size_t pos;

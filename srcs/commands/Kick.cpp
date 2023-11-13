@@ -7,6 +7,22 @@ void Kick::execute_cmd(std::string str)
     (void)str;
 }
 
+Kick::Kick(Kick const &src):Command(src)
+{
+    this->_user = src._user;
+    this->_reason = src._reason;
+    this->_channel = src._channel;
+}
+
+Kick &Kick::operator=(Kick const &rhs)
+{
+    Command::operator=(rhs);
+    this->_user = rhs._user;
+    this->_reason = rhs._reason;
+    this->_channel = rhs._channel;
+    return (*this);
+}
+
 void Kick::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser, int y, Channel &channel)
 {
     parse_cmd(str);

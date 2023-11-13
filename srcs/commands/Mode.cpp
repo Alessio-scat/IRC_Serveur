@@ -8,6 +8,22 @@ void Mode::execute_cmd(std::string str)
     (void)str;
 }
 
+Mode::Mode(Mode const &src):Command(src)
+{
+    this->_channelMode = src._channelMode;
+    this->_who = src._who;
+    this->_opt = src._opt;
+}
+
+Mode &Mode::operator=(Mode const &rhs)
+{
+    Command::operator=(rhs);
+    this->_channelMode = rhs._channelMode;
+    this->_who = rhs._who;
+    this->_opt = rhs._opt;
+    return (*this);
+}
+
 void Mode::execute_cmd(std::string str, Channel &channel)
 {
     size_t endChannel = str.find(" ", 6);

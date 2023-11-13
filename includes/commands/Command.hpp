@@ -30,7 +30,9 @@ class Invite: public Command
 
     public:
         Invite(void);
+        Invite(Invite const &src);
         ~Invite(void);
+        Invite &operator=(Invite const &rhs);
         int User_on_channel(const std::map<std::string, std::list<std::string> >& channel, User *_tabUser);
         int InviteClient(User *_tabUser, std::deque<struct pollfd> _pfds, int y);
         int ExistChannel(const std::map<std::string, std::list<std::string> >& channel, std::deque<struct pollfd> _pfds, int i, std::string &client);
@@ -49,6 +51,8 @@ class Kick: public Command
     public:
         Kick(void);
         ~Kick(void);
+        Kick(Kick const &src);
+        Kick &operator=(Kick const &rhs);
         void parse_cmd(std::string str);
         void execute_cmd(std::string str);
         void execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser, int y, Channel &channel);
@@ -66,6 +70,8 @@ class Mode: public Command
     public:
         Mode(void);
         ~Mode(void);
+        Mode(Mode const &src);
+        Mode &operator=(Mode const &rhs);
         void execute_cmd(std::string str);
         void execute_cmd(std::string str, Channel &channel);
         void changeMode(Channel &channel, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
@@ -99,6 +105,8 @@ class Topic: public Command
     public:
         Topic(void);
         ~Topic(void);
+        Topic(Topic const &src);
+        Topic &operator=(Topic const &rhs);
         void execute_cmd(std::string str);
         void execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds, Channel &channel);
         void checkTopic(std::string tmpChannel, Channel &channel, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
@@ -127,6 +135,8 @@ class Join: public Command
         std::string nameChannel;
         Join(void);
         ~Join(void);
+        Join(Join const &src);
+        Join &operator=(Join const &rhs);
 
         int verifModeI(User *_tabUser, int y, std::string &tokenChannel);
         int verifModeK(Channel &channel, User *_tabUser, int y, std::string &tokenChannel);
@@ -151,6 +161,8 @@ public:
     // Message(std::string str, User &user);
     // Message(Message const &src);
     ~Message();
+    Message(Message const &src);
+    Message &operator=(Message const &rhs);
     // Message operator=(Message const &rhs);
     void execute_cmd(std::string str);
     void execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds, Channel &channel);
@@ -166,6 +178,8 @@ class Part: public Command
     public:
         Part(void);
         ~Part(void);
+        Part(Part const &src);
+        Part &operator=(Part const &rhs);
         void parse_cmd(std::string str);
         void execute_cmd(std::string str);
         void execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser, int y, Channel &channel);

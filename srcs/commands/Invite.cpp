@@ -13,6 +13,24 @@ void Invite::execute_cmd(std::string str)
     (void)str;
 }
 
+Invite::Invite(Invite const &src):Command(src)
+{
+    this->_isActive = src._isActive;
+    this->_channelInvite = src._channelInvite;
+    this->_cmd = src._cmd;
+    this->_nickInvite = src._nickInvite;
+}
+
+Invite & Invite::operator=(Invite const &rhs)
+{
+    Command::operator=(rhs);
+    this->_isActive = rhs._isActive;
+    this->_channelInvite = rhs._channelInvite;
+    this->_cmd = rhs._cmd;
+    this->_nickInvite = rhs._nickInvite;
+    return (*this);
+}
+
 void Invite::ParseInviteCmd(std::string &str)
 {
     std::istringstream ss(str);
