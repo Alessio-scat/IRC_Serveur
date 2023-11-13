@@ -101,5 +101,6 @@ int clientIsChannelOperator(std::string channelFind, User *_tabUser, int i, std:
         writeInfd(message, i, _pfds);
         return (1);
     }
+    
     return (0);
 }
