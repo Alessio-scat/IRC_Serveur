@@ -109,6 +109,7 @@ void Join::ParseJoinCmd(std::string &str, Channel &channel)
     {
         std::istringstream iss2(token);
         std::string subtoken;
+        // std::cout << "11111111111111111111111111111" << std::endl;
 
         while (std::getline(iss2, subtoken, ','))
         {
