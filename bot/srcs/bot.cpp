@@ -70,6 +70,7 @@ int Bot::Bot_Start()
 
 bool searchWordInBot(const std::string& input, const std::string &target)
 {
+    std::cout << "inputBOT   |" << input << "|" << std::endl;
     std::string::size_type pos = input.find(target);
     // return pos != std::string::npos;
     if (pos != std::string::npos)
@@ -80,33 +81,35 @@ bool searchWordInBot(const std::string& input, const std::string &target)
 
 int Bot::Bot_Run()
 {
-    std::cout << "Je rentre" << std::endl;
     while (1) 
     {
+        std::cout << "testtttt" << std::endl;
         char buffer[1024];
-        int bytes_received = recv(_BotSocket, buffer, 1024 - 1, 0);
+        // int bytes_received = recv(_BotSocket, buffer, 1024 - 1, 0);
+        int bytes_received = recv(_BotSocket, buffer, 1024, 0);
         if (bytes_received <= 0) 
         {
             break;
         }
 
-        buffer[bytes_received - 1] = '\0';
-        std::string response(buffer);
+        // buffer[bytes_received - 1] = '\0';
+        buffer[bytes_received] = '\0';
+        // std::string response(buffer);
 
-        if (searchWordInBot(buffer, "MONSTRE")) 
+        if (searchWordInBot(buffer, "MONSTRE") == 0) 
         {
             std::cout << "1111111111111111" << std::endl;
             std::string monstre_cmd = ":bot PRIVMSG #bot :DOUBLE MONSTRE\r\n";
             send(_BotSocket, monstre_cmd.c_str(), monstre_cmd.length(), 0);
         } 
 
-        if (searchWordInBot(buffer, "NAH"))
+        if (searchWordInBot(buffer, "NAH") == 0)
         {
             std::string nah_cmd = "PRIVMSG #bot :DOUBLE NAH\r\n";
             send(_BotSocket, nah_cmd.c_str(), nah_cmd.length(), 0);
         } 
 
-        if (searchWordInBot(buffer, "COUCOU"))
+        if (searchWordInBot(buffer, "COUCOU") == 0)
         {
             std::string coucou_cmd = "PRIVMSG #bot :DOUBLE COUCOU\r\n";
             send(_BotSocket, coucou_cmd.c_str(), coucou_cmd.length(), 0);
