@@ -59,20 +59,28 @@ int Invite::ExistChannel(const std::map<std::string, std::list<std::string> >& c
     return 1;
 }
 
-void Invite::InviteClient(User *_tabUser, std::deque<struct pollfd> _pfds, int y)
+int Invite::InviteClient(User *_tabUser, std::deque<struct pollfd> _pfds, int y)
 {
     int i;
+    int verif = 0;
     for (i = 0; i < MAX_USERS; i++)
     {
         std::cout << "|" <<_tabUser[i].getNickname() << "|" << std::endl;
         if (_tabUser[i].getNickname() == _nickInvite)
+        {
+            std::cout << "YOUHOUUUUUUUUUUU" << std::endl;
+            verif = 1;
             break ;
+        }
     }
+    if (verif == 0)
+        return 1;
     std::string message = ":" + _tabUser[y].getUsername() + " INVITE " + _nickInvite + " " + _channelInvite + "\r\n";
     write(_pfds[i].fd, message.c_str(), message.size());
     write(_pfds[y].fd, message.c_str(), message.size());
     std::cout << GREEN << "IN INVIteeeeeee : " << _tabUser[y].getNickname() << RESET << std::endl;
     _tabUser[i]._mapModeUser[true].push_back(this->_channelInvite);
+    return 0;
 }
 
 int Invite::User_on_channel(const std::map<std::string, std::list<std::string> >& channel, User *_tabUser)
@@ -126,5 +134,9 @@ void Invite::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User 
         return ;
     }
 
-    InviteClient(_tabUser, _pfds, y); 
+    if (InviteClient(_tabUser, _pfds, y) == 1)
+    {
+        writeInfd(ERR_INVALIDINPUT(_tabUser[y].getNickname(), _cmd), y, _pfds);
+        return ;
+    }
 }

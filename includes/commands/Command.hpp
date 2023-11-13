@@ -32,7 +32,7 @@ class Invite: public Command
         Invite(void);
         ~Invite(void);
         int User_on_channel(const std::map<std::string, std::list<std::string> >& channel, User *_tabUser);
-        void InviteClient(User *_tabUser, std::deque<struct pollfd> _pfds, int y);
+        int InviteClient(User *_tabUser, std::deque<struct pollfd> _pfds, int y);
         int ExistChannel(const std::map<std::string, std::list<std::string> >& channel, std::deque<struct pollfd> _pfds, int i, std::string &client);
         void ParseInviteCmd(std::string &str);
         void execute_cmd(std::string str);
@@ -61,6 +61,7 @@ class Mode: public Command
         std::string _channelMode;
         std::string _opt;
         std::string _who;
+        int        _limit;
 
     public:
         Mode(void);
@@ -84,6 +85,9 @@ class Mode: public Command
         void printListChanOperator(User *_tabUser, int index);
         int isWhoInChannel(Channel &channel);
         int isUserChannelOperatorInChannel(User *_tabUser, int index);
+
+        void addModeL(Channel &channel, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
+        void removeModeL(Channel &channel);
 };
 
 class Topic: public Command
@@ -117,10 +121,16 @@ class Join: public Command
         // std::map<std::string, std::string > _mapChannelKey;
         std::string _channelJoin;
         std::string _cmd;
+        int _isMode;
+        int _isInvitation;
     public:
         std::string nameChannel;
         Join(void);
         ~Join(void);
+
+        int verifModeI(User *_tabUser, int y, std::string &tokenChannel);
+        int verifModeK(Channel &channel, User *_tabUser, int y, std::string &tokenChannel);
+        int verifModeL(Channel &channel, User *_tabUser, int y, std::string &tokenChannel);
 
         void connectChannelKey(Channel &channel);
         void execute_cmd(std::string str);
