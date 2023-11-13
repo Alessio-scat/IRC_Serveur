@@ -267,7 +267,7 @@ void Join::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct
 
     for (size_t j = 0; j < _tokensChannel.size() ; j++)
     {
-        writeInfd(RPL_JOIN(_tabUser[i].getUsername(), _tokensChannel[j]), i, _pfds);
+        writeInfd(RPL_JOIN(_tabUser[i].getNickname(), _tokensChannel[j]), i, _pfds);
         add_user_inChannel(channel, _tabUser, join, i, _pfds, _tokensChannel[j]);
     }
 }
