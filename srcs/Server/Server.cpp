@@ -82,8 +82,9 @@ int Server::password(void)
         pos = str.find("PASS");
         if (pos !=  std::string::npos)
         {
-            mdp = str.substr(pos + 5, sizeStr - (pos + 5));
-            // std::cout << "|" << mdp << "|" << std::endl;
+            mdp = str.substr(pos + 5, sizeStr + 1 - (pos + 5));
+            ft_trim(mdp);
+            // std::cout << "MDP: |" << mdp << "|" << std::endl;
             if (mdp != this->_mdp)
             {
                 std::cout << "<client> :Password incorrect\n";
@@ -151,6 +152,7 @@ void Server::Run_Server(void)
                 }
                 else
                 {
+                    std::cout << "bytesRead : " << bytesRead << std::endl;
                     if (password())
                     {
                         close(_pfds[i].fd);
