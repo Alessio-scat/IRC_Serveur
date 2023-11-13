@@ -21,6 +21,26 @@ void Join::execute_cmd(std::string str)
     OK! -- RPL_NAMREPLY (353)  
 */
 
+Join::Join(Join const &src):Command(src)
+{
+    this->_channelJoin = src._channelJoin;
+    this->_cmd = src._cmd;
+    this->nameChannel = src.nameChannel;
+    this->_tokensChannel = src._tokensChannel;
+    this->_tokensKey = src._tokensKey;
+}
+
+Join &Join::operator=(Join const &rhs)
+{
+    Command::operator=(rhs);
+    this->_channelJoin = rhs._channelJoin;
+    this->_cmd = rhs._cmd;
+    this->nameChannel = rhs.nameChannel;
+    this->_tokensChannel = rhs._tokensChannel;
+    this->_tokensKey = rhs._tokensKey;
+    return (*this);
+}
+
 void Join::connectChannelKey(Channel &channel)
 {
     for (size_t i = 0; i < _tokensKey.size(); i++)

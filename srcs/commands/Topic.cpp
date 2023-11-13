@@ -5,6 +5,20 @@ Topic::Topic(void){}
 
 Topic::~Topic(){}
 
+Topic::Topic(Topic const &src):Command(src)
+{
+    this->_channelTopic = src._channelTopic;
+    this->_msgTopic = src._msgTopic;
+}
+
+Topic &Topic::operator=(Topic const &rhs)
+{
+    Command::operator=(rhs);
+    this->_channelTopic = rhs._channelTopic;
+    this->_msgTopic = rhs._msgTopic;
+    return (*this);
+}
+
 bool isOnlySpace(std::string str)
 {
     if (str.size() < 3)

@@ -7,6 +7,20 @@ void Part::execute_cmd(std::string str)
     (void)str;
 }
 
+Part::Part(Part const &src):Command(src)
+{
+    this->channel = src.channel;
+    this->_reason = src._reason;
+}
+
+Part &Part::operator=(Part const &rhs)
+{
+    Command::operator=(rhs);
+    this->channel = rhs.channel;
+    this->_reason = rhs._reason;
+    return (*this);
+}
+
 void Part::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser, int y, Channel &channel)
 {
     parse_cmd(str);
