@@ -75,6 +75,8 @@ int Invite::InviteClient(User *_tabUser, std::deque<struct pollfd> _pfds, int y)
     }
     if (verif == 0)
         return 1;
+    if (clientIsChannelOperator(_channelInvite, _tabUser, y, _pfds) == 1)
+        return 2;
     std::string message = ":" + _tabUser[y].getUsername() + " INVITE " + _nickInvite + " " + _channelInvite + "\r\n";
     write(_pfds[i].fd, message.c_str(), message.size());
     write(_pfds[y].fd, message.c_str(), message.size());
@@ -134,9 +136,17 @@ void Invite::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User 
         return ;
     }
 
-    if (InviteClient(_tabUser, _pfds, y) == 1)
+    int verif = InviteClient(_tabUser, _pfds, y);
+    if (verif == 1)
     {
         writeInfd(ERR_INVALIDINPUT(_tabUser[y].getNickname(), _cmd), y, _pfds);
         return ;
     }
+    else if (verif == 2)
+        return ;
+    // if (InviteClient(_tabUser, _pfds, y) == 1)
+    // {
+    //     writeInfd(ERR_INVALIDINPUT(_tabUser[y].getNickname(), _cmd), y, _pfds);
+    //     return ;
+    // }
 }
