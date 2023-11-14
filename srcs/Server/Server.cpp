@@ -164,6 +164,7 @@ void Server::Run_Server(void)
                     std::cout << CURSIVE << UNDER << "buffer" << RESET << CURSIVE << ": " << "|" << this->buffer << "|" << RESET << std::endl;
                     command.whatCommand(this->buffer, _tabUser, i, _pfds, channel);
                 }
+                _pfds[i].revents |= POLLOUT;
             }
         }
     }
