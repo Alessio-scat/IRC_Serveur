@@ -127,60 +127,38 @@ int Bot::Bot_Run()
 {
     while (1) 
     {
-        // std::cout << "1111111111111111111" << std::endl;
         char buffer[1024];
-        // int bytes_received = recv(_BotSocket, buffer, 1024 - 1, MSG_DONTWAIT);
-        int bytes_received = recv(_BotSocket, buffer, 1024 - 1, 0);
-        // std::cout << "2222222222222222222" << std::endl;
-        // int bytes_received = recv(_BotSocket, buffer, sizeof(buffer), 0);
-        // if (bytes_received <= 0) 
-        // {
-        //     std::cout << "testtttt" << std::endl;
-        //     break;
-        // }
+        memset(buffer, 0, sizeof(buffer));  // Nettoyer le buffer avant chaque lecture
+        int bytes_received = recv(_BotSocket, buffer, sizeof(buffer) - 1, 0);
+
         if (bytes_received > 0)
         {
-            buffer[bytes_received - 1] = '\0';
+            buffer[bytes_received] = '\0';  // Assurer la null-termination du buffer
+            std::cout << "Message reçu: " << buffer << std::endl;  // Afficher le message reçu
+
             std::string strBuffer(buffer);
-            std::cout << "333333333333333333333" << std::endl;
+            // Traiter chaque ligne du message reçu
+            std::istringstream iss(strBuffer);
+            std::string line;
+            while (std::getline(iss, line, '\n')) {
+                if (line[line.size() - 1] == '\r') {
+                    line.erase(line.size());  // Enlever le caractère '\r' si présent
+                }
+                std::cout << "Traitement de la ligne: " << line << std::endl;
 
-            if (searchWordInBot(strBuffer, "MONSTRE") == true) 
-            {
-                std::cout << "ooooooooooooooooooo" << std::endl;
-                std::string monstre_cmd = ":bot PRIVMSG #bot :DOUBLE MONSTRE\r\n";
-                send(_BotSocket, monstre_cmd.c_str(), monstre_cmd.length(), 0);
-            } 
-
-            if (searchWordInBot(strBuffer, "NAH") == true)
-            {
-                std::string nah_cmd = "PRIVMSG #bot :DOUBLE NAH\r\n";
-                send(_BotSocket, nah_cmd.c_str(), nah_cmd.length(), 0);
-            } 
-
-            if (searchWordInBot(strBuffer, "COUCOU") == true)
-            {
-                std::string coucou_cmd = "PRIVMSG #bot :DOUBLE COUCOU\r\n";
-                send(_BotSocket, coucou_cmd.c_str(), coucou_cmd.length(), 0);
-            } 
-        }
-        else if (bytes_received < 0) 
-        {
-            // Gérer les erreurs spécifiques pour les sockets non bloquants
-            if (errno == EAGAIN || errno == EWOULDBLOCK) 
-            {
-                // Pas de données disponibles pour le moment, continuez la boucle
-                continue;
-            } 
-            else 
-            {
-                // Une autre erreur est survenue, affichez-la et quittez la boucle
-                std::cerr << "Erreur de reception: " << strerror(errno) << std::endl;
-                break;
+                // Vos conditions de recherche de mots ici
+                if (searchWordInBot(line, "MONSTRE")) {
+                    std::string monstre_cmd = ":bot PRIVMSG #bot :DOUBLE MONSTRE\r\n";
+                    send(_BotSocket, monstre_cmd.c_str(), monstre_cmd.length(), 0);
+                }
+                // Répéter pour les autres mots clés...
             }
         }
-        else 
-        {
-            // bytes_received == 0, le serveur a fermé la connexion
+        else if (bytes_received < 0) {
+            std::cerr << "Erreur de réception: " << strerror(errno) << std::endl;
+            break;
+        }
+        else {
             std::cout << "Le serveur a fermé la connexion." << std::endl;
             break;
         }
@@ -188,6 +166,73 @@ int Bot::Bot_Run()
 
     return 0;
 }
+
+
+// int Bot::Bot_Run()
+// {
+//     while (1) 
+//     {
+//         // std::cout << "1111111111111111111" << std::endl;
+//         char buffer[1024];
+//         // int bytes_received = recv(_BotSocket, buffer, 1024 - 1, MSG_DONTWAIT);
+//         // int bytes_received = recv(_BotSocket, buffer, 1024 - 1, 0);
+//         // std::cout << "2222222222222222222" << std::endl;
+//         int bytes_received = recv(_BotSocket, buffer, sizeof(buffer), 0);
+//         // if (bytes_received <= 0) 
+//         // {
+//         //     std::cout << "testtttt" << std::endl;
+//         //     break;
+//         // }
+//         if (bytes_received > 0)
+//         {
+//             buffer[bytes_received - 1] = '\0';
+//             std::string strBuffer(buffer);
+//             std::cout << "333333333333333333333" << std::endl;
+
+//             if (searchWordInBot(strBuffer, "MONSTRE") == true) 
+//             {
+//                 std::cout << "ooooooooooooooooooo" << std::endl;
+//                 std::string monstre_cmd = ":bot PRIVMSG #bot :DOUBLE MONSTRE\r\n";
+//                 send(_BotSocket, monstre_cmd.c_str(), monstre_cmd.length(), 0);
+//             } 
+
+//             if (searchWordInBot(strBuffer, "NAH") == true)
+//             {
+//                 std::string nah_cmd = "PRIVMSG #bot :DOUBLE NAH\r\n";
+//                 send(_BotSocket, nah_cmd.c_str(), nah_cmd.length(), 0);
+//             } 
+
+//             if (searchWordInBot(strBuffer, "COUCOU") == true)
+//             {
+//                 std::string coucou_cmd = "PRIVMSG #bot :DOUBLE COUCOU\r\n";
+//                 send(_BotSocket, coucou_cmd.c_str(), coucou_cmd.length(), 0);
+//             } 
+//         }
+//         else if (bytes_received < 0) 
+//         {
+//             // Gérer les erreurs spécifiques pour les sockets non bloquants
+//             if (errno == EAGAIN || errno == EWOULDBLOCK) 
+//             {
+//                 // Pas de données disponibles pour le moment, continuez la boucle
+//                 continue;
+//             } 
+//             else 
+//             {
+//                 // Une autre erreur est survenue, affichez-la et quittez la boucle
+//                 std::cerr << "Erreur de reception: " << strerror(errno) << std::endl;
+//                 break;
+//             }
+//         }
+//         else 
+//         {
+//             // bytes_received == 0, le serveur a fermé la connexion
+//             std::cout << "Le serveur a fermé la connexion." << std::endl;
+//             break;
+//         }
+//     }
+
+//     return 0;
+// }
 
 int Bot::Bot_Stop()
 {
