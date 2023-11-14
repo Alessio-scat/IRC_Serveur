@@ -271,7 +271,7 @@ void Join::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct
             writeInfd(ERR_USERONCHANNEL(_tabUser[i].getUsername(), _tokensChannel[j]), i, _pfds);
             return ;
         }
-        writeInfd(RPL_JOIN(_tabUser[i].getUsername(), _tokensChannel[j]), i, _pfds);
+        writeInfd(RPL_JOIN(_tabUser[i].getNickname(), _tokensChannel[j]), i, _pfds);
         add_user_inChannel(channel, _tabUser, join, i, _pfds, _tokensChannel[j]);
         std::cout << "Nick " << _tabUser[i].getNickname() << " and User " << _tabUser[i].getUsername() << " enter in " << _tokensChannel[j] << std::endl;
     }
