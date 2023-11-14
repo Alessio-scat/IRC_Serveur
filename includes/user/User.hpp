@@ -9,6 +9,7 @@ private:
     std::string _username;
     std::string _nickname;
     bool _operator;
+    std::string _bufferSignal;
 
 public:
     std::list<std::string> _chanOperator;
@@ -25,6 +26,8 @@ public:
     std::string getUsername(void)const;
     void setUsername(std::string username);
     void setOperateur(bool ope);
+    std::string getBufferSignal(void);
+    void setBufferSignal(std::string bufferSignal);
 };
 
 #endif

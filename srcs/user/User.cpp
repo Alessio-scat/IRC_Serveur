@@ -47,3 +47,13 @@ void User::setOperateur(bool ope)
 {
     this->_operator = ope;
 }
+
+std::string User::getBufferSignal(void)
+{
+    return (this->_bufferSignal);
+}
+
+void User::setBufferSignal(std::string bufferSignal)
+{
+    this->_bufferSignal = bufferSignal;
+}

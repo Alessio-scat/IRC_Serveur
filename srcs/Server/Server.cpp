@@ -224,8 +224,29 @@ void Server::Run_Server(void)
                     fillUser(_tabUser, i); 
                     this->buffer[bytesRead] = '\0';
                     std::cout << CURSIVE << UNDER << "buffer" << RESET << CURSIVE << ": " << "|" << this->buffer << "|" << RESET << std::endl;
-                    if (_tabUser[i].getNickname() != "" && _tabUser[i].getUsername() != "")
-                        command.whatCommand(this->buffer, _tabUser, i, _pfds, channel);
+                    if (static_cast<std::string>(this->buffer).find("\n") != std::string::npos)
+                    {
+                        // std::string convertString(this->buffer);
+                        // char *tmp = _tabUser[i].getBufferSignal().c_str();
+                        // this->buffer = std::strcat(tmp, this->buffer);
+
+                        //IL FAUT INVERSER L'ORDRE de la concaténation car cela donne (#a JOIN)
+                        std::strcat(this->buffer, _tabUser[i].getBufferSignal().c_str());
+                        // std::strncpy(this->buffer + strlen(this->buffer), _tabUser[i].getBufferSignal().c_str(), sizeof(this->buffer) - strlen(this->buffer) - 1);
+                        // this->buffer = std::strcat(_tabUser[i].getBufferSignal().c_str(), this->buffer);
+                        // this->buffer = static_cast<char *>(_tabUser[i].getBufferSignal() + convertString);
+                        // this->buffer = _tabUser[i].getBufferSignal() + this->buffer;
+                        _tabUser[i].setBufferSignal("");
+                        std::cout << GREEN << "BUFFER" << RESET << ": |" << this->buffer << "|" << std::endl;
+                        std::cout << GREEN << "SIGNAL" << RESET << ": |" << _tabUser[i].getBufferSignal() << "|" << std::endl;
+                        if (_tabUser[i].getNickname() != "" && _tabUser[i].getUsername() != "")
+                            command.whatCommand(this->buffer, _tabUser, i, _pfds, channel);
+                    }
+                    else
+                    {
+                        std::cout << "Ya eu un ctrl-D" << std::endl;
+                        _tabUser[i].setBufferSignal(this->buffer);
+                    }
                 }
             }
         }
