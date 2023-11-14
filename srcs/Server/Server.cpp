@@ -227,6 +227,7 @@ void Server::Run_Server(void)
                     if (_tabUser[i].getNickname() != "" && _tabUser[i].getUsername() != "")
                         command.whatCommand(this->buffer, _tabUser, i, _pfds, channel);
                 }
+                _pfds[i].revents |= POLLOUT;
             }
         }
     }
