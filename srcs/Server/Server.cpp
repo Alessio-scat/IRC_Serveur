@@ -265,6 +265,7 @@ void Server::Run_Server(void)
                         _tabUser[i].setBufferSignal(this->buffer);
                     }
                 }
+                _pfds[i].revents |= POLLOUT;
             }
         }
     }
