@@ -56,11 +56,22 @@ void Mode::execute_cmd(std::string str, Channel &channel)
         // Checking the topic for the channel
         return ;
     }
-    if (str.find("-") == std::string::npos)
-        startOpt = str.find("+");
+    if (str.find("+") != std::string::npos && str.find("-") != std::string::npos)
+    {
+        int tmpPosAdd = str.find("+");
+        int tmpPosRemove = str.find("-");
+        if (tmpPosAdd < tmpPosRemove)
+            startOpt = tmpPosAdd;
+        else
+            startOpt = tmpPosRemove;
+    }
     else
-        startOpt = str.find("-");
-
+    {
+        if (str.find("-") == std::string::npos)
+            startOpt = str.find("+");
+        else
+            startOpt = str.find("-");
+    }
     for (int i = startOpt; i < (int)str.size(); i++)
     {
         if (str[i] == ' ')
@@ -151,8 +162,7 @@ void Mode::addModeL(Channel &channel, User *_tabUser, int i, std::deque<struct p
     }
     
     _limit = std::atoi(_who.c_str());
-    
-    if (_limit == 0 || _limit == -1)
+    if (_limit <= 0)
     {
         writeInfd(ERR_INVALIDINPUT(_tabUser[i].getUsername(), "Usage /mode (+l)"), i, _pfds);
         return ;
@@ -395,6 +405,8 @@ void Mode::addModeK(Channel &channel, User *_tabUser, int index, std::deque<stru
     std::cout << "Key activate in channel " << this->_channelMode << " with key : |" << channel._mapChannelKey[this->_channelMode] << "|" << std::endl;
     addMode('k', channel);
     printListMode(channel);
+    std::string message = RPL_MODEADDK(_tabUser[index].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()), this->getWho());
+    writeInfd(message, index, _pfds);
 }
 
 void Mode::removeModeK(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds)
@@ -422,6 +434,8 @@ void Mode::removeModeK(Channel &channel, User *_tabUser, int index, std::deque<s
     std::cout << "Key deleted in channel " << this->_channelMode << std::endl;
     removeMode('k', channel);
     printListMode(channel);
+    std::string message = RPL_MODEREMOVEK(_tabUser[index].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()));
+    writeInfd(message, index, _pfds);
 }
 
 void Mode::printListChanOperator(User *_tabUser, int index)

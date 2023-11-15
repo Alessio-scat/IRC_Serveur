@@ -69,12 +69,14 @@
 #define RPL_CHANNELMODEIS(network, nick, channel, mode)      ":" + network + " 324 " + nick + " " + channel + " " + mode + "\r\n"
 #define RPL_MODEADDO(nick, channel, who)      ":" + nick + " MODE #" + channel + " +o " + who + "\r\n"
 #define RPL_MODEREMOVEO(nick, channel, who)      ":" + nick + " MODE #" + channel + " -o " + who + "\r\n"
-#define RPL_MODEADDL(nick, channel, who)      ":" + nick + " MODE #" + channel + " +l " + who + "\r\n"
+#define RPL_MODEADDL(nick, channel, nb)      ":" + nick + " MODE #" + channel + " +l " + nb + "\r\n"
 #define RPL_MODEREMOVEL(nick, channel)      ":" + nick + " MODE #" + channel + " -l \r\n"
+#define RPL_MODEADDK(nick, channel, nb)      ":" + nick + " MODE #" + channel + " +k " + nb + "\r\n"
+#define RPL_MODEREMOVEK(nick, channel)      ":" + nick + " MODE #" + channel + " -k \r\n"
 
 
 
-#define RPL_MODEADDK(nick, channel, password)            ":" + nick + " MODE #" + channel + " +k " + password + "\r\n"
+// #define RPL_MODEADDK(nick, channel, password)            ":" + nick + " MODE #" + channel + " +k " + password + "\r\n"
 
 #define ERR_USERNOTINCHANNEL(nick, who, channel)   ":IRChub 441 " + nick + " " + who + " " + channel + " :They aren't on that channel\r\n"
 #define ERR_CHANOPRIVSNEEDED(nick, channel)   ":IRChub 482 " + nick + " " + channel + " :You're not channel operator\r\n"
