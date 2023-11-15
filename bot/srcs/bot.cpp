@@ -17,7 +17,6 @@ Bot::Bot(const std::string &name, int host, std::string password, const std::str
 
 void Bot::identificationBotInServer()
 {
-    // std::string user_cmd = "USER " + _name + " 0 * :" + _name + "\r\n";
     std::string pass_cmd = "PASS " + _BotPassword + "\n";
     std::string user_cmd = "USER Bot\n";
     std::string nick_cmd = "NICK Bot\n";
@@ -77,10 +76,7 @@ void ft_trim(std::string &str)
 
 bool searchWordInBot(std::string& input, const std::string &target)
 {
-    // ft_trim(input);
-    // std::cout << "inputBOT   |" << input << "||||" << std::endl;
     std::string::size_type pos = input.find(target);
-    // return pos != std::string::npos;
     if (pos != std::string::npos)
         return true ;
     else
