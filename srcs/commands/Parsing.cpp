@@ -33,6 +33,7 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
         pos = str.find("JOIN");
         if (pos !=  std::string::npos)
         {
+            std::cout << GREEN << _tabUser[i].getNickname() << RESET << std::endl;
             Join join;
             join.execute_cmd(str, _tabUser, i, _pfds, channel, join);
             // join.add_user_inChannel(channel, _tabUser, join, i, _pfds);
