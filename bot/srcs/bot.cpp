@@ -58,10 +58,8 @@ int Bot::Bot_Start()
     std::cout << _BotHost << std::endl;
     std::cout << _BotPassword << std::endl;
     std::cout << _BotIp << std::endl;
-    // _BotSocket = socket(AF_INET, SOCK_STREAM, 0);
     _BotSocket = socket(AF_INET, SOCK_STREAM, 0);
     std::cout << "|" << _BotSocket << "|" << std::endl;  
-    // _Bot_Socket = socket(AF_INET6, SOCK_STREAM, 0);
     if (_BotSocket < 0)
     {
         std::cout << "Erreur lors de la création du socket serveur" << std::endl;
@@ -72,26 +70,7 @@ int Bot::Bot_Start()
     _BotServerAddr.sin_family = AF_INET;
     _BotServerAddr.sin_port = htons(_BotHost);
     _BotServerAddr.sin_addr.s_addr = INADDR_ANY;
-    // memset(&_BotServerAddr, 0, sizeof(_BotServerAddr));
-    // _BotServerAddr.sin6_family = AF_INET6;
-    // _BotServerAddr.sin6_addr = in6addr_any; 
-    // _BotServerAddr.sin6_port = htons(_BotHost);
-
-    // int opt = 1;
-    // if (setsockopt(_BotSocket, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(int)) < 0)
-    // {
-    //     std::cout << "Erreur lors de la configuration de SO_REUSEADDR" << std::endl;
-    //     perror("Erreur lors de la configuration de SO_REUSEADDR");
-    //     return 1;
-    // }
-
-    /*
-    connect() est utilisée par le client pour établir une connexion avec un serveur, 
-    la fonction bind() est utilisée par le serveur pour associer une adresse (IP et port) 
-    à un socket avant d'écouter les connexions entrantes.
-    */
-
-    if (connect(_BotSocket, (struct sockaddr*)&_BotServerAddr, sizeof(_BotServerAddr)) < 0)
+    if (connect(_BotSocket, (const struct sockaddr*)&_BotServerAddr, sizeof(_BotServerAddr)) < 0)
     {
         std::cout << "Error: connection in server" << std::endl;
         return 1;
@@ -153,7 +132,7 @@ int Bot::Bot_Run()
             if (searchWordInBot(strBuffer, "MONSTRE") == true) 
             {
                 std::cout << "ooooooooooooooooooo" << std::endl;
-                std::string monstre_cmd = ":bot PRIVMSG #bot :DOUBLE MONSTRE\r\n";
+                std::string monstre_cmd = "PRIVMSG #bot :DOUBLE MONSTRE\r\n";
                 send(_BotSocket, monstre_cmd.c_str(), monstre_cmd.length(), 0);
             } 
 
