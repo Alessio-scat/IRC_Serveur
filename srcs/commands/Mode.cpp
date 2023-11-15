@@ -133,7 +133,7 @@ void Mode::changeMode(Channel &channel, User *_tabUser, int index, std::deque<st
                 addModeL(channel, _tabUser, index, _pfds);
                 // addMode('l', channel);
             else
-                removeModeL(channel);
+                removeModeL(channel, _tabUser, index, _pfds);
                 // removeMode('l', channel);
         }
         else
@@ -159,12 +159,16 @@ void Mode::addModeL(Channel &channel, User *_tabUser, int i, std::deque<struct p
     }
     channel._mapChannelLimit[_channelMode] = _limit;
     addMode('l', channel);
+    std::string message = RPL_MODEADDL(_tabUser[i].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()), this->getWho());
+    writeInfd(message, i, _pfds);
 }
 
-void Mode::removeModeL(Channel &channel)
+void Mode::removeModeL(Channel &channel, User *_tabUser, int i, std::deque<struct pollfd> _pfds)
 {
     channel._mapChannelLimit[_channelMode] = MAX_USERS;
     removeMode('l', channel);
+    std::string message = RPL_MODEREMOVEL(_tabUser[i].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()));
+    writeInfd(message, i, _pfds);
 }
 
 void Mode::addMode(char mode, Channel &channel)

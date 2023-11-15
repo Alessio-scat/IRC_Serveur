@@ -93,7 +93,7 @@ class Mode: public Command
         int isUserChannelOperatorInChannel(User *_tabUser, int index);
 
         void addModeL(Channel &channel, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
-        void removeModeL(Channel &channel);
+        void removeModeL(Channel &channel, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
 };
 
 class Topic: public Command
