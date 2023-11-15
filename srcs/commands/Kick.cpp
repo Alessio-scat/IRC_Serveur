@@ -49,7 +49,7 @@ void Kick::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_
     std::string word;
     while (ss >> word)
     {
-        for (int j = 1; j <= MAX_USERS; j++)
+        for (int j = 1; j < MAX_USERS; j++)
         {
             if (word == _tabUser[j].getNickname() || word == "@" + _tabUser[j].getNickname())
                 send(_pfds[j].fd, str.c_str(), str.size(), 0);

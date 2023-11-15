@@ -32,7 +32,7 @@ std::string listUserChannel(const std::map<std::string, std::list<std::string> >
                 std::cout << CURSIVE << *subIt << " " << RESET;
                 if (i == 0 && it->second.size() == 1)
                 {
-                    for (int j = 1; j <= MAX_USERS; j++)
+                    for (int j = 1; j < MAX_USERS; j++)
                     {
                         // std::cout << "222222222222222222222222 : " << _tabUser[j].getNickname() << std::endl;
                         if (*subIt == _tabUser[j].getNickname() && *subIt == _tabUser[userCmd].getNickname())
@@ -45,7 +45,7 @@ std::string listUserChannel(const std::map<std::string, std::list<std::string> >
                 }
                 if (i == 0)
                 {
-                    for (int j = 1; j <= MAX_USERS; j++)
+                    for (int j = 1; j < MAX_USERS; j++)
                     {
                         if (*subIt == _tabUser[j].getNickname())
                         {
@@ -58,7 +58,7 @@ std::string listUserChannel(const std::map<std::string, std::list<std::string> >
                 }
                 else
                 {
-                    for (int j = 1; j <= MAX_USERS; j++)
+                    for (int j = 1; j < MAX_USERS; j++)
                     {
                         if (*subIt == _tabUser[j].getNickname())
                         {

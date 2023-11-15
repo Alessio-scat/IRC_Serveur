@@ -139,10 +139,10 @@ void Join::add_user_inChannel(Channel &channel, User *_tabUser, Join &join, int 
     // list = printMap(channel.mapChannel, _tabUser, tokenChannel);
     list = listUserChannel(channel.mapChannel, _tabUser, tokenChannel, i);
     std::istringstream ss(list);
-
+    std::cout << "coucou\n";
     while (ss >> word)
     {
-        for (int j = 1;j <= MAX_USERS; j++)
+        for (int j = 1;j < MAX_USERS; j++)
         {
             if (word == _tabUser[j].getNickname() || word == "@" + _tabUser[j].getNickname())
                 writeInfd(RPL_NAMREPLY(_tabUser[i].getNickname(), tokenChannel, list), j, _pfds);

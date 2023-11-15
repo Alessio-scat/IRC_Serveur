@@ -282,7 +282,7 @@ void Server::connect_client(void)
     std::cout << "Nouvelle connexion, socket FD : " << this->newSocket << std::endl;
 
     // Ajout du nouveau socket client à la liste des sockets à surveiller
-    for (int i = 1; i <= MAX_USERS; i++)
+    for (int i = 1; i < MAX_USERS; i++)
     {
         if (_pfds[i].fd == 0)
         {
