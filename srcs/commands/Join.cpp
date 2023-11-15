@@ -135,7 +135,7 @@ void Join::add_user_inChannel(Channel &channel, User *_tabUser, Join &join, int 
     std::string list;
     std::string word;
 
-    channel.mapChannel[tokenChannel].push_back(_tabUser[i].getUsername());
+    channel.mapChannel[tokenChannel].push_back(_tabUser[i].getNickname());
     // list = printMap(channel.mapChannel, _tabUser, tokenChannel);
     list = listUserChannel(channel.mapChannel, _tabUser, tokenChannel, i);
     std::istringstream ss(list);

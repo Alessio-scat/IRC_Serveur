@@ -193,7 +193,7 @@ void Server::Run_Server(void)
     _pfds[0].fd = this->serverSocket;
     _pfds[0].events = POLLIN;
     Channel channel;
-    for (int j = 1; j <= MAX_USERS - 1; j++)
+    for (int j = 1; j < MAX_USERS; j++)
         _tabUser[j].setBufferSignal("");
     while (true)
     {
@@ -235,23 +235,23 @@ void Server::Run_Server(void)
                     if (static_cast<std::string>(this->buffer).find("\n") != std::string::npos)
                     {
                         
-                        if (_tabUser[i].getBufferSignal() != "")
-                        {
-                            //BUFFER SIGNAL EST REMPLI IL FAUT CONCATENER
-                            std::string toAppend = _tabUser[i].getBufferSignal();
-                            size_t newSize = toAppend.size() + strlen(this->buffer) + 1;
-                            char* newBuffer = new char[newSize];
-                            std::strcpy(newBuffer, toAppend.c_str());
-                            std::strcat(newBuffer, this->buffer);
-                            std::cout << "newBuffer: " << newBuffer << std::endl;
+                        // if (_tabUser[i].getBufferSignal() != "")
+                        // {
+                        //     //BUFFER SIGNAL EST REMPLI IL FAUT CONCATENER
+                        //     std::string toAppend = _tabUser[i].getBufferSignal();
+                        //     size_t newSize = toAppend.size() + strlen(this->buffer) + 1;
+                        //     char* newBuffer = new char[newSize];
+                        //     std::strcpy(newBuffer, toAppend.c_str());
+                        //     std::strcat(newBuffer, this->buffer);
+                        //     std::cout << "newBuffer: " << newBuffer << std::endl;
 
-                            _tabUser[i].setBufferSignal("");
-                            std::cout << GREEN << "BUFFER" << RESET << ": |" << this->buffer << "|" << std::endl;
-                            std::cout << GREEN << "SIGNAL" << RESET << ": |" << _tabUser[i].getBufferSignal() << "|" << std::endl;
-                            if (_tabUser[i].getNickname() != "" && _tabUser[i].getUsername() != "")
-                            command.whatCommand(newBuffer, _tabUser, i, _pfds, channel);
+                        //     _tabUser[i].setBufferSignal("");
+                        //     std::cout << GREEN << "BUFFER" << RESET << ": |" << this->buffer << "|" << std::endl;
+                        //     std::cout << GREEN << "SIGNAL" << RESET << ": |" << _tabUser[i].getBufferSignal() << "|" << std::endl;
+                        //     if (_tabUser[i].getNickname() != "" && _tabUser[i].getUsername() != "")
+                        //     command.whatCommand(newBuffer, _tabUser, i, _pfds, channel);
 
-                        }
+                        // }
                         
                         _tabUser[i].setBufferSignal("");
                         std::cout << GREEN << "BUFFER" << RESET << ": |" << this->buffer << "|" << std::endl;
