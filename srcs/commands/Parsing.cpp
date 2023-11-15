@@ -14,13 +14,6 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
     size_t pos;
     while (std::getline(iss, str))
     {
-        pos= str.find("DDC SEND");
-        if (pos != std::string::npos)
-        {
-            DDCSend ddcsend;
-            std::string fileName;
-            ddcsend.execute_cmd(str, fileName, _pfds, _tabUser, i);
-        }
         pos = str.find("KICK");
         if (pos !=  std::string::npos)
         {

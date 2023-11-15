@@ -3,7 +3,7 @@
 NAME					=	ircserv
 
 CMP						=	c++
-FLG						=	-Wall -Wextra -Werror -std=c++98 -fsanitize=address
+FLG						=	-Wall -Wextra -Werror -std=c++98 #-fsanitize=address
 RM						=	rm -rf
 BUILD_DIR				= 	build/
 
@@ -31,7 +31,6 @@ SRCS_FILE				=	main \
 							commands/Join \
 							commands/Message \
 							commands/Part \
-							commands/DDCSend \
 							Channel/Channel \
 							Utils
 SRCS					=  	$(addsuffix .cpp, $(addprefix $(SRCS_DIR)/, $(SRCS_FILE)))

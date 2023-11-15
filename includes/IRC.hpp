@@ -20,6 +20,7 @@
 #include <map>
 #include <deque>
 # include <list>
+#include <csignal>
 
 #define MAX_USERS 10
 
@@ -37,6 +38,8 @@
 #define UNDER "\x1b[4m" //souligné
 
 #define IRChub = "IRChub"
+
+static int SignControlC;
 
 /*DDCSend*/
 #define DDCSEND(filename)                   "DCC SEND request for file: " + filename "\r\n"

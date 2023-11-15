@@ -10,6 +10,7 @@ class Server
 {
 
 private:
+
     std::string _mdp;
     unsigned int _host;
     int newSocket;                 // pour le nouveau socket client lorsqu'une connexion est acceptée

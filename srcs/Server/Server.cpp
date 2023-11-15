@@ -19,7 +19,9 @@ Server::Server(Server const &src)
     *this = src;
 }
 
-Server::~Server(){}
+Server::~Server()
+{
+}
 
 Server Server::operator=(Server const &assignment)
 {
@@ -187,14 +189,28 @@ void Server::Run_Server(void)
     _pfds[0].fd = this->serverSocket;
     _pfds[0].events = POLLIN;
     Channel channel;
-    while (true)
+    while (true )//&& SignControlC == 0)
     {
+        // if (SignControlC == 1)
+        // {
+        //     std::cout << "55555555555555555555" << std::endl;
+        //     // Fermer tous les sockets ouverts
+        //     for (size_t i = 0; i < _pfds.size(); ++i)
+        //     {
+        //         if (_pfds[i].fd > 0)
+        //             close(_pfds[i].fd);
+        //         break;
+        //     }
+        // }
         //en attente d'un event
-
         if (!_pfds.empty())
         {
             if (poll(&_pfds.front(), _pfds.size(), -1) < 0)
-                throw std::runtime_error("Error while polling from fd!");
+            {
+
+                return;
+            }
+                // throw std::runtime_error("Error while polling from fd!");
         }
 
         // event de connexion
@@ -231,6 +247,7 @@ void Server::Run_Server(void)
             }
         }
     }
+
 }
 
 void Server::connect_client(void)
@@ -240,6 +257,7 @@ void Server::connect_client(void)
     this->newSocket = accept(this->serverSocket, (struct sockaddr*)&this->newAddr, &this->addrSize);
     if (this->newSocket < 0)
         throw std::runtime_error("Error: failed accept()");
+        // return ;
 
     std::cout << "Nouvelle connexion, socket FD : " << this->newSocket << std::endl;
 
