@@ -9,9 +9,9 @@ private:
     std::string _username;
     std::string _nickname;
     bool _operator;
-    std::string _bufferSignal;
 
 public:
+    std::string _bufferSignal;
     std::list<std::string> _chanOperator;
     
     std::map<bool, std::list<std::string> > _mapModeUser;
