@@ -151,12 +151,12 @@ void Server::fillUser(User *_tabUser, int i)
         username = bufferStr.substr(indexUser + 5, sizeUser + 1);
         ft_trim(nickname);
         ft_trim(username);
-        std::cout << "Nickname :" << "|" << _tabUser[i].getNickname() << "|" << std::endl;
-        std::cout << "Username :" << "|" << _tabUser[i].getUsername() << "|" << std::endl;
         if (nickname == "")
             return ;
         _tabUser[i].setNickname(nickname);
         _tabUser[i].setUsername(username);
+        std::cout << "Nickname :" << "|" << _tabUser[i].getNickname() << "|" << std::endl;
+        std::cout << "Username :" << "|" << _tabUser[i].getUsername() << "|" << std::endl;
         return ;
     }
     if (indexNick != std::string::npos) {
@@ -220,7 +220,7 @@ void Server::Run_Server(void)
                         close(_pfds[i].fd);
                         _pfds[i].fd = 0;
                     }
-
+                    std::cout << GREEN << i << RESET << std::endl;
                     fillUser(_tabUser, i); 
                     this->buffer[bytesRead] = '\0';
                     std::cout << CURSIVE << UNDER << "buffer" << RESET << CURSIVE << ": " << "|" << this->buffer << "|" << RESET << std::endl;

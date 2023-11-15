@@ -18,39 +18,19 @@ Bot::Bot(const std::string &name, int host, std::string password, const std::str
 void Bot::identificationBotInServer()
 {
     // std::string user_cmd = "USER " + _name + " 0 * :" + _name + "\r\n";
-    std::string user_cmd = "USER " + _name + " \r\n";
-    std::string nick_cmd = "NICK " + _name + "\r\n";
-    std::string pass_cmd = "PASS " + _BotPassword + "\r\n";
+    std::string pass_cmd = "PASS " + _BotPassword + "\n";
+    std::string user_cmd = "USER Bot\n";
+    std::string nick_cmd = "NICK Bot\n";
 
+    send(_BotSocket, pass_cmd.c_str(), pass_cmd.length(), 0);
+    usleep(1000);
     send(_BotSocket, user_cmd.c_str(), user_cmd.length(), 0);
     usleep(1000);
     send(_BotSocket, nick_cmd.c_str(), nick_cmd.length(), 0);
     usleep(1000);
-    send(_BotSocket, pass_cmd.c_str(), pass_cmd.length(), 0);
-    usleep(1000);
-
     std::string join_cmd = "JOIN #bot\r\n";
     send(_BotSocket, join_cmd.c_str(), join_cmd.length(), 0);
 }
-
-// void    bindToSocket(int socketId, int port){
-//     sockaddr_in serverAddress;
-//     char *serverName = (char *)"127.0.0.1";
-//     serverAddress.sin_family = AF_INET;
-//     serverAddress.sin_port = htons(port);
-    
-//     struct hostent *host = gethostbyname(serverName);
-//         if (host == NULL) {
-//             std::cerr << "Error during the resolution of server address" << std::endl;
-//             _exit(-1);
-//         }
-//     memcpy(&serverAddress.sin_addr.s_addr, host->h_addr, host->h_length);
-//     if (connect(socketId, (sockaddr*)&serverAddress, sizeof(serverAddress)) == -1)
-//     {
-//         cerr << "Can't listen! Quitting" << endl;
-//         _exit(-1);
-//     }
-// }
 
 int Bot::Bot_Start()
 {
@@ -75,7 +55,7 @@ int Bot::Bot_Start()
         std::cout << "Error: connection in server" << std::endl;
         return 1;
     }
-
+    usleep(1000);
     identificationBotInServer();
     if (Bot_Run() == 1)
         return 1;
@@ -98,7 +78,7 @@ void ft_trim(std::string &str)
 bool searchWordInBot(std::string& input, const std::string &target)
 {
     // ft_trim(input);
-    std::cout << "inputBOT   |" << input << "||||" << std::endl;
+    // std::cout << "inputBOT   |" << input << "||||" << std::endl;
     std::string::size_type pos = input.find(target);
     // return pos != std::string::npos;
     if (pos != std::string::npos)
@@ -112,22 +92,12 @@ int Bot::Bot_Run()
     char buffer[1024];
     while (1) 
     {
-        // std::cout << "1111111111111111111" << std::endl;
-        // int bytes_received = recv(_BotSocket, buffer, 1024 - 1, MSG_DONTWAIT);
         int bytes_received = recv(_BotSocket, buffer, 1024 - 1, 0);
-        // std::cout << "2222222222222222222" << std::endl;
-        // int bytes_received = recv(_BotSocket, buffer, sizeof(buffer), 0);
-        // if (bytes_received <= 0) 
-        // {
-        //     std::cout << "testtttt" << std::endl;
-        //     break;
-        // }
         if (bytes_received > 0)
         {
-            usleep(1000);
             buffer[bytes_received] = '\0';
             std::string strBuffer(buffer);
-            std::cout << buffer << std::endl;
+            std::cout << "|" << buffer << "|" << std::endl;
 
             if (searchWordInBot(strBuffer, "MONSTRE") == true) 
             {
