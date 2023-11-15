@@ -38,6 +38,9 @@
 
 #define IRChub = "IRChub"
 
+/*DDCSend*/
+#define DDCSEND(filename)                   "DCC SEND request for file: " + filename "\r\n"
+
 
 /*INVITE*/
 

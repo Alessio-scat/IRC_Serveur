@@ -186,4 +186,19 @@ class Part: public Command
         int verif_is_on_channel(std::string list, User *_tabUser, int y);
 };
 
+class DDCSend: public Command
+{
+    private:
+
+    public:
+        DDCSend();
+        ~DDCSend();
+        // DDCSend(DDCSend const &src);
+        // DDCSend &operator=(DDCSend const &rhs);
+
+        void execute_cmd(std::string str);
+        void execute_cmd(const std::string& dccCommand, std::string& fileName, std::deque<struct pollfd> _pfds, User* _tabUser, int i);
+        void handleFileTransfer(const std::string& fileName, User* _tabUser, int i ,std::deque<struct pollfd> _pfds);
+};
+
 #endif
