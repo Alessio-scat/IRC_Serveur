@@ -202,7 +202,7 @@ void Server::Run_Server(void)
             connect_client();
 
         // Gestion des données reçues des clients
-        for (int i = 1; i <= MAX_USERS; i++)
+        for (int i = 1; i < MAX_USERS; i++)
         {
             if (_pfds[i].revents & POLLIN)
             {
