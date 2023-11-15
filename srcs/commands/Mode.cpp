@@ -290,7 +290,7 @@ void Mode::addRemoveChanOperator(Channel &channel, User *_tabUser, int index, bo
         return ;
     }
     int who = 0;
-    for (; who <= MAX_USERS; who++)
+    for (; who < MAX_USERS; who++)
     {
         if (_tabUser[who].getNickname() == this->_who)
         {
@@ -312,7 +312,7 @@ void Mode::addRemoveChanOperator(Channel &channel, User *_tabUser, int index, bo
             std::string word;
             while (ss >> word)
             {
-                for (int j = 1;j <= MAX_USERS; j++)
+                for (int j = 1;j < MAX_USERS; j++)
                 {
                     if (word == _tabUser[j].getNickname() || word == "@" + _tabUser[j].getNickname())
                         send(_pfds[j].fd, message.c_str(), message.size(), 0);

@@ -78,7 +78,7 @@ void Message::messageToChannel(std::string str, User *_tabUser, int i, std::dequ
         std::string word;
         while (ss >> word)
         {
-            for (int j = 1; j <= MAX_USERS; j++)
+            for (int j = 1; j < MAX_USERS; j++)
             {
                 if ((word == _tabUser[j].getNickname() || word == "@" + _tabUser[j].getNickname()) && word != _tabUser[i].getNickname() && word != "@" + _tabUser[i].getNickname())
                     send(_pfds[j].fd, str.c_str(), str.size(), 0);
@@ -97,7 +97,7 @@ void Message::messageToSomeone(std::string str, User *_tabUser, int i, std::dequ
     }
     std::string destName = str.substr(pos + 1, size);
     str = ":" + _tabUser[i].getNickname() + " " + str + "\r\n";
-    for (int j = 1; j <= MAX_USERS; j++)
+    for (int j = 1; j < MAX_USERS; j++)
     {
         if (destName == _tabUser[j].getNickname())
         {
@@ -135,7 +135,7 @@ void   Message::messageToChannelOp(std::string str, User *_tabUser, int i, std::
     while (ss >> word)
     {
         std::cout << GREEN << word << RESET << std::endl;
-        for (int j = 1; j <= MAX_USERS; j++)
+        for (int j = 1; j < MAX_USERS; j++)
         {
             if (word == "@" + _tabUser[j].getNickname() && word != "@" + _tabUser[i].getNickname())
                 send(_pfds[j].fd, str.c_str(), str.size(), 0);
