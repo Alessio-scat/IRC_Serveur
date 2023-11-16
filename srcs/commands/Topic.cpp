@@ -47,8 +47,8 @@ void Topic::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struc
 
     if (str.find('#') == std::string::npos)
     {
+        errNeedMoreParams(_tabUser[i].getNickname(), "TOPIC", i, _pfds);
         std::cout << "ERROR: TOPIC need more param" << std::endl;
-        // throw ERR_NEEDMOREPARAMS();
         return ;
     }
     tmpChannel = str.substr(6, endChannel - 6);

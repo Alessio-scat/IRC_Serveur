@@ -111,3 +111,9 @@ int clientIsChannelOperator(std::string channelFind, User *_tabUser, int i, std:
     
     return (0);
 }
+
+void errNeedMoreParams(std::string source, std::string command, int i, std::deque<struct pollfd> _pfds)
+{
+    std::string message = ERR_NEEDMOREPARAMS(source, command);
+    writeInfd(message, i, _pfds);
+}
