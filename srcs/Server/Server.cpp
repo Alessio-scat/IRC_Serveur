@@ -21,6 +21,7 @@ Server::Server(Server const &src)
 
 Server::~Server()
 {
+    closeAllSockets();
 }
 
 Server Server::operator=(Server const &assignment)
@@ -191,23 +192,12 @@ void Server::Run_Server(void)
     Channel channel;
     while (true )//&& SignControlC == 0)
     {
-        // if (SignControlC == 1)
-        // {
-        //     std::cout << "55555555555555555555" << std::endl;
-        //     // Fermer tous les sockets ouverts
-        //     for (size_t i = 0; i < _pfds.size(); ++i)
-        //     {
-        //         if (_pfds[i].fd > 0)
-        //             close(_pfds[i].fd);
-        //         break;
-        //     }
-        // }
         //en attente d'un event
         if (!_pfds.empty())
         {
             if (poll(&_pfds.front(), _pfds.size(), -1) < 0)
             {
-
+                std::cout << "HELLLLOOOOOO\n";
                 return;
             }
                 // throw std::runtime_error("Error while polling from fd!");
@@ -258,6 +248,7 @@ void Server::connect_client(void)
     if (this->newSocket < 0)
         throw std::runtime_error("Error: failed accept()");
         // return ;
+    openSockets.push_back(this->newSocket);
 
     std::cout << "Nouvelle connexion, socket FD : " << this->newSocket << std::endl;
 
@@ -271,4 +262,19 @@ void Server::connect_client(void)
              break;
         }
     }
+}
+
+/*
+    Définition de la variable statique : En C++, quand vous déclarez une variable statique à l'intérieur d'une classe 
+    (comme openSockets dans la classe Server), vous devez également la définir en dehors de la classe.
+    Cette ligne sert à cette définition. Sans elle, le compilateur ne saurait pas où allouer de la mémoire pour cette variable statique.
+*/
+
+std::vector<int> Server::openSockets;
+
+void Server::closeAllSockets() {
+    for (std::vector<int>::iterator it = openSockets.begin(); it != openSockets.end(); ++it) {
+        close(*it);
+    }
+    openSockets.clear();
 }

@@ -39,6 +39,7 @@
 
 #define IRChub = "IRChub"
 
+//conserve sa valeur entre les appels de fonctions
 static int SignControlC;
 
 /*DDCSend*/

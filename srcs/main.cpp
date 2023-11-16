@@ -9,6 +9,7 @@
 
 void signal_handler(int signum) {
     (void)signum;
+    // Server::closeAllSockets();
     SignControlC = 1;
 }
 

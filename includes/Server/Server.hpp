@@ -24,6 +24,7 @@ private:
     Parsing command;
     User _tabUser[MAX_USERS];
 
+
 public:
     Server(void);
     Server(Server const &src);
@@ -36,4 +37,8 @@ public:
     void connect_client(void);
     int password(void);
     void fillUser(User *_tabUser, int i);
+
+    /*Test close Socket*/
+    static std::vector<int> openSockets;//partage entre toute les instances de la classe == tous acces a la meme liste de sockets ouvert
+    void closeAllSockets();// que avec le static(Acces direct sans instance specifique car dans le main et coherance avec l'autre variable static)
 };
