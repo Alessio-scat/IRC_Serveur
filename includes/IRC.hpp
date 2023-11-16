@@ -69,7 +69,6 @@ static int SignControlC;
 #define RPL_TOPICWHOTIME(nick, channel, who, time)      ":IRChub 333 " + nick + " " + channel + " " + who + " " + time + "\r\n"
 
 /*MODE*/
-#define c(nick, who)     ":IRChub 401 " + nick + " " + who + " :No such nick/channel\r\n"
 #define RPL_UMODEIS(network, nick, mode)      ":" + network + " 221 " + nick + " " + mode + "\r\n"
 #define RPL_CREATIONTIME(network, nick, channel, time)      ":" + network + " 329 " + nick + " " + channel + " " + time + "\r\n"
 #define ERR_UNKNOWNMODE(network, nick, mode)      ":" + network + " 472 " + nick + " " + mode + " :is unknown mode char to me\r\n"
@@ -80,6 +79,8 @@ static int SignControlC;
 #define RPL_MODEREMOVEL(nick, channel)      ":" + nick + " MODE #" + channel + " -l \r\n"
 #define RPL_MODEADDK(nick, channel, nb)      ":" + nick + " MODE #" + channel + " +k " + nb + "\r\n"
 #define RPL_MODEREMOVEK(nick, channel)      ":" + nick + " MODE #" + channel + " -k \r\n"
+#define RPL_MODEADDI(nick, channel)      ":" + nick + " MODE #" + channel + " +i \r\n"
+#define RPL_MODEREMOVEI(nick, channel)      ":" + nick + " MODE #" + channel + " -i \r\n"
 
 
 

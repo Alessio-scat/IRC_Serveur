@@ -111,9 +111,17 @@ void Mode::changeMode(Channel &channel, User *_tabUser, int index, std::deque<st
         if (this->_opt[i] == 'i')
         {
             if (this->_opt[0] == '+')
+            {
                 addMode('i', channel);
+                std::string message = RPL_MODEADDI(_tabUser[i].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()));
+                writeInfd(message, i, _pfds);
+            }
             else
+            {
                 removeMode('i', channel);
+                std::string message = RPL_MODEREMOVEI(_tabUser[i].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()));
+                writeInfd(message, i, _pfds);
+            }
         }
         else if (this->_opt[i] == 't')
         {
