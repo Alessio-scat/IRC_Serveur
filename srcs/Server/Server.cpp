@@ -101,44 +101,6 @@ int Server::password(int i)
     return (0);
 }
 
-// void Server::fillUser(User *_tabUser, int i)
-// {
-//     std::string bufferStr(this->buffer);
-//     std::string nickname, username;
-
-//     size_t indexNick = bufferStr.find("NICK");
-//     size_t indexUser = bufferStr.find("USER");
-
-//     int sizeNick = 0;
-//     int sizeUser = 0;
-
-//     if (indexNick != std::string::npos) {
-//         // sizeNick = bufferStr.find(" ", indexNick + 5) - (indexNick + 5);
-//         i = indexNick + 5;
-//         while (bufferStr[i] > 32 && bufferStr[i])
-//         {
-//             sizeNick++;
-//             i++;
-//         }
-//         nickname = bufferStr.substr(indexNick + 5, sizeNick);
-//     }
-
-//     if (indexUser != std::string::npos) {
-//         sizeUser = bufferStr.find(" ", indexUser + 5) - (indexUser + 5);
-//         username = bufferStr.substr(indexUser + 5, sizeUser);
-//     }
-
-//     if (!nickname.empty()) {
-//         _tabUser[i].setNickname(nickname);
-//         std::cout << "Nickname :" << "|" << _tabUser[i].getNickname() << "|" << std::endl;
-//     }
-
-//     if (!username.empty()) {
-//         _tabUser[i].setUsername(username);
-//         std::cout << "Username :" << "|" << _tabUser[i].getUsername() << "|" << std::endl;
-//     }
-// }
-
 void Server::fillUser(User *_tabUser, int i)
 {
     std::string bufferStr(this->buffer);
