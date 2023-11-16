@@ -186,4 +186,20 @@ class Part: public Command
         int verif_is_on_channel(std::string list, User *_tabUser, int y);
 };
 
+class Quit: public Command
+{
+    private:
+        std::string _reason;
+
+    public:
+        Quit(void);
+        ~Quit(void);
+        Quit(Quit const &src);
+        Quit &operator=(Quit const &rhs);
+        void parse_cmd(std::string str);
+        void execute_cmd(std::string str);
+        void execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser, int y, Channel &channel);
+        // int verif_is_on_channel(std::string list, User *_tabUser, int y);
+};
+
 #endif
