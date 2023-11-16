@@ -33,12 +33,8 @@ void Bot::identificationBotInServer()
 
 int Bot::Bot_Start()
 {
-    std::cout << _name << std::endl;
-    std::cout << _BotHost << std::endl;
-    std::cout << _BotPassword << std::endl;
-    std::cout << _BotIp << std::endl;
-    _BotSocket = socket(AF_INET, SOCK_STREAM, 0);
-    std::cout << "|" << _BotSocket << "|" << std::endl;  
+    //créer une nouvelle socket, qui est un point d'extrémité pour envoyer et recevoir des données sur un réseau.
+    _BotSocket = socket(AF_INET, SOCK_STREAM, 0);  
     if (_BotSocket < 0)
     {
         std::cout << "Erreur lors de la création du socket serveur" << std::endl;
@@ -46,9 +42,12 @@ int Bot::Bot_Start()
         return 1;
     }
 
-    _BotServerAddr.sin_family = AF_INET;
+    //Configure l'adresse du seveur
+    _BotServerAddr.sin_family = AF_INET;//indique que l'adresse est une adresse IPv4
     _BotServerAddr.sin_port = htons(_BotHost);
-    _BotServerAddr.sin_addr.s_addr = INADDR_ANY;
+    _BotServerAddr.sin_addr.s_addr = INADDR_ANY; // indique que la socket sera liée à toutes les adresses IP disponibles sur la machine hôte
+
+    //Etablir une connexion entre une socket et une adresse specifique 
     if (connect(_BotSocket, (const struct sockaddr*)&_BotServerAddr, sizeof(_BotServerAddr)) < 0)
     {
         std::cout << "Error: connection in server" << std::endl;
@@ -56,6 +55,7 @@ int Bot::Bot_Start()
     }
     usleep(1000);
     identificationBotInServer();
+
     if (Bot_Run() == 1)
         return 1;
 
@@ -116,22 +116,18 @@ int Bot::Bot_Run()
         }
         else if (bytes_received < 0) 
         {
-            // Gérer les erreurs spécifiques pour les sockets non bloquants
             if (errno == EAGAIN || errno == EWOULDBLOCK) 
             {
-                // Pas de données disponibles pour le moment, continuez la boucle
                 continue;
             } 
             else 
             {
-                // Une autre erreur est survenue, affichez-la et quittez la boucle
                 std::cerr << "Erreur de reception: " << strerror(errno) << std::endl;
                 break;
             }
         }
         else 
         {
-            // bytes_received == 0, le serveur a fermé la connexion
             std::cout << "Le serveur a fermé la connexion." << std::endl;
             break;
         }
@@ -139,6 +135,14 @@ int Bot::Bot_Run()
 
     return 0;
 }
+
+/*
+    EAGAIN : Signifie "try again" (réessayez). Ce code d'erreur est utilisé pour indiquer 
+    qu'aucune donnée n'est disponible pour le moment et que vous devriez réessayer ultérieurement.
+
+    EWOULDBLOCK : C'est souvent synonyme de EAGAIN, en particulier dans le contexte des sockets. 
+    Il indique également que l'opération sur une socket non bloquante ne peut pas être complétée immédiatement et devrait être réessayée plus tard.
+*/
 
 int Bot::Bot_Stop()
 {

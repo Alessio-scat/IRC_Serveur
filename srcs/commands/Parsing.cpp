@@ -3,6 +3,10 @@
 #include "../../includes/Channel/Channel.hpp"
 #include "../../includes/Server/Server.hpp"
 
+/*
+    usage upload fichier: /dcc send <nickname> <chemin_du_fichier>
+*/
+
 void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct pollfd> _pfds, Channel &channel)
 {
     std::string str;
