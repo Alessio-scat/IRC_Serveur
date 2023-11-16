@@ -232,8 +232,6 @@ void Server::Run_Server(void)
                 else
                 {
                     this->buffer[bytesRead] = '\0';
-                    std::cout << "bytesRead : " << bytesRead << std::endl;
-                    this->buffer[bytesRead] = '\0';
                     if (password())
                     {
                         close(_pfds[i].fd);
