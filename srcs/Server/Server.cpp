@@ -71,7 +71,7 @@ void Server::Start_Server(void)
     close(this->serverSocket);
 }
 
-int Server::password(void)
+int Server::password(int i)
 {
     std::string str;
     std::string mdp;
@@ -91,6 +91,7 @@ int Server::password(void)
             if (mdp != this->_mdp)
             {
                 std::cout << "<client> :Password incorrect\n";
+                writeInfd(ERR_PASSWDMISMATCH(_tabUser[i].getNickname()), i, _pfds);
                 return (1);
             }
         }
@@ -231,9 +232,9 @@ void Server::Run_Server(void)
                 {
                     this->buffer[bytesRead] = '\0';
                     std::cout << "bytesRead : " << bytesRead << std::endl;
-                    this->buffer[bytesRead] = '\0';
-                    if (password())
+                    if (password(i))
                     {
+                        std::cout << "mdp faux\n";
                         close(_pfds[i].fd);
                         _pfds[i].fd = 0;
                     }
