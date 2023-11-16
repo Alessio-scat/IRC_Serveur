@@ -35,7 +35,7 @@ public:
     void Start_Server(void);
     void Run_Server(void);
     void connect_client(void);
-    int password(void);
+    int password(int i);
     void fillUser(User *_tabUser, int i);
 
     /*Test close Socket*/
