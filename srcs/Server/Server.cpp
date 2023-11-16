@@ -224,6 +224,7 @@ void Server::Run_Server(void)
                 }
                 else
                 {
+                    this->buffer[bytesRead] = '\0';
                     std::cout << "bytesRead : " << bytesRead << std::endl;
                     if (password())
                     {
@@ -232,7 +233,6 @@ void Server::Run_Server(void)
                     }
                     std::cout << GREEN << i << RESET << std::endl;
                     fillUser(_tabUser, i); 
-                    this->buffer[bytesRead] = '\0';
                     std::cout << CURSIVE << UNDER << "buffer" << RESET << CURSIVE << ": " << "|" << this->buffer << "|" << RESET << std::endl;
                     if (static_cast<std::string>(this->buffer).find("\n") != std::string::npos)
                     {
