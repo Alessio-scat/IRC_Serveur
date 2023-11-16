@@ -3,6 +3,10 @@
 #include "../../includes/Channel/Channel.hpp"
 #include "../../includes/Server/Server.hpp"
 
+/*
+    usage upload fichier: /dcc send <nickname> <chemin_du_fichier>
+*/
+
 void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct pollfd> _pfds, Channel &channel)
 {
     std::string str;
@@ -58,6 +62,12 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
         {
             Part part;
             part.execute_cmd(str, _pfds, _tabUser, i, channel);
+        }
+        pos = str.find("QUIT");
+        if (pos !=  std::string::npos)
+        {
+            Quit quit;
+            quit.execute_cmd(str, _pfds, _tabUser, i, channel);
         }
     }
 }

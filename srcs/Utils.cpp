@@ -18,6 +18,7 @@ void            writeInfd(const std::string& message, int i, std::deque<struct p
     // std::string buffer = message + "\n";
     if (send(_pfds[i].fd, buffer.c_str(), buffer.length(), 0) < 0)
         throw std::runtime_error("Error while sending a message to a client!");
+        // return ;
 }
 
 std::string listUserChannel(const std::map<std::string, std::list<std::string> >& channel, User *_tabUser, std::string join, int userCmd)

@@ -19,7 +19,10 @@ Server::Server(Server const &src)
     *this = src;
 }
 
-Server::~Server(){}
+Server::~Server()
+{
+    closeAllSockets();
+}
 
 Server Server::operator=(Server const &assignment)
 {
@@ -149,6 +152,7 @@ void Server::fillUser(User *_tabUser, int i)
         return;
     if (indexNick != std::string::npos && indexUser != std::string::npos)
     {
+        std::cout << GREEN << "\nbuffer : " << this->buffer << "||" <<std::endl;
         sizeNick = (indexUser - 2) - (indexNick + 4) - 1;
         sizeUser = bufferStr.find(" 0 *") - (indexUser + 4) - 1;
         nickname = bufferStr.substr(indexNick + 5, sizeNick + 1);
@@ -200,11 +204,14 @@ void Server::Run_Server(void)
     while (true)
     {
         //en attente d'un event
-
         if (!_pfds.empty())
         {
             if (poll(&_pfds.front(), _pfds.size(), -1) < 0)
-                throw std::runtime_error("Error while polling from fd!");
+            {
+                std::cout << "HELLLLOOOOOO\n";
+                return;
+            }
+                // throw std::runtime_error("Error while polling from fd!");
         }
 
         // event de connexion
@@ -226,6 +233,7 @@ void Server::Run_Server(void)
                 {
                     this->buffer[bytesRead] = '\0';
                     std::cout << "bytesRead : " << bytesRead << std::endl;
+                    this->buffer[bytesRead] = '\0';
                     if (password())
                     {
                         close(_pfds[i].fd);
@@ -272,6 +280,7 @@ void Server::Run_Server(void)
             }
         }
     }
+
 }
 
 void Server::connect_client(void)
@@ -281,6 +290,8 @@ void Server::connect_client(void)
     this->newSocket = accept(this->serverSocket, (struct sockaddr*)&this->newAddr, &this->addrSize);
     if (this->newSocket < 0)
         throw std::runtime_error("Error: failed accept()");
+        // return ;
+    openSockets.push_back(this->newSocket);
 
     std::cout << "Nouvelle connexion, socket FD : " << this->newSocket << std::endl;
 
@@ -294,4 +305,19 @@ void Server::connect_client(void)
              break;
         }
     }
+}
+
+/*
+    Définition de la variable statique : En C++, quand vous déclarez une variable statique à l'intérieur d'une classe 
+    (comme openSockets dans la classe Server), vous devez également la définir en dehors de la classe.
+    Cette ligne sert à cette définition. Sans elle, le compilateur ne saurait pas où allouer de la mémoire pour cette variable statique.
+*/
+
+std::vector<int> Server::openSockets;
+
+void Server::closeAllSockets() {
+    for (std::vector<int>::iterator it = openSockets.begin(); it != openSockets.end(); ++it) {
+        close(*it);
+    }
+    openSockets.clear();
 }
