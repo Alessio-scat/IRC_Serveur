@@ -147,6 +147,7 @@ void Server::fillUser(User *_tabUser, int i)
         return;
     if (indexNick != std::string::npos && indexUser != std::string::npos)
     {
+        std::cout << GREEN << "\nbuffer : " << this->buffer << "||" <<std::endl;
         sizeNick = (indexUser - 2) - (indexNick + 4) - 1;
         sizeUser = bufferStr.find(" 0 *") - (indexUser + 4) - 1;
         nickname = bufferStr.substr(indexNick + 5, sizeNick + 1);
@@ -223,6 +224,7 @@ void Server::Run_Server(void)
                 else
                 {
                     std::cout << "bytesRead : " << bytesRead << std::endl;
+                    this->buffer[bytesRead] = '\0';
                     if (password())
                     {
                         close(_pfds[i].fd);
@@ -230,7 +232,6 @@ void Server::Run_Server(void)
                     }
                     std::cout << GREEN << i << RESET << std::endl;
                     fillUser(_tabUser, i); 
-                    this->buffer[bytesRead] = '\0';
                     std::cout << CURSIVE << UNDER << "buffer" << RESET << CURSIVE << ": " << "|" << this->buffer << "|" << RESET << std::endl;
                     if (static_cast<std::string>(this->buffer).find("\n") != std::string::npos)
                     {
