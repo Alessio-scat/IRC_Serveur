@@ -94,6 +94,9 @@ class Mode: public Command
 
         void addModeL(Channel &channel, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
         void removeModeL(Channel &channel, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
+
+        void addModeI(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds);
+        void removeModeI(Channel &channel, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
 };
 
 class Topic: public Command

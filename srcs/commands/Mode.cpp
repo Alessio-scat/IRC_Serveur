@@ -111,17 +111,9 @@ void Mode::changeMode(Channel &channel, User *_tabUser, int index, std::deque<st
         if (this->_opt[i] == 'i')
         {
             if (this->_opt[0] == '+')
-            {
-                addMode('i', channel);
-                std::string message = RPL_MODEADDI(_tabUser[i].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()));
-                writeInfd(message, i, _pfds);
-            }
+                addModeI(channel, _tabUser, index, _pfds);
             else
-            {
-                removeMode('i', channel);
-                std::string message = RPL_MODEREMOVEI(_tabUser[i].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()));
-                writeInfd(message, i, _pfds);
-            }
+                removeModeI(channel, _tabUser, index, _pfds);
         }
         else if (this->_opt[i] == 't')
         {
@@ -249,12 +241,31 @@ void Mode::addModeO(Channel &channel, User *_tabUser, int index, std::deque<stru
     printListChanOperator(_tabUser, index);
 }
 
+
 void Mode::removeModeO(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds)
 {
     // _tabUser[index].setOperateur(false);
     addRemoveChanOperator(channel, _tabUser, index, 0, _pfds);
     removeMode('o', channel);
     printListChanOperator(_tabUser, index);
+}
+
+void Mode::addModeI(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds)
+{
+    if (clientIsChannelOperator(_channelMode, _tabUser, index, _pfds) == 1)
+        return ;
+    addMode('i', channel);
+    std::string message = RPL_MODEADDI(_tabUser[index].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()));
+    writeInfd(message, index, _pfds);
+}
+
+void Mode::removeModeI(Channel &channel, User *_tabUser, int i, std::deque<struct pollfd> _pfds)
+{
+    if (clientIsChannelOperator(_channelMode, _tabUser, i, _pfds) == 1)
+        return ;
+    removeMode('i', channel);
+    std::string message = RPL_MODEREMOVEI(_tabUser[i].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()));
+    writeInfd(message, i, _pfds);
 }
 
 int Mode::isWhoInChannel(Channel &channel)
