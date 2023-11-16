@@ -160,7 +160,9 @@ void Mode::addModeL(Channel &channel, User *_tabUser, int i, std::deque<struct p
         writeInfd(ERR_NEEDMOREPARAMS(_tabUser[i].getUsername(), "Usage /mode (+l)"), i, _pfds);
         return ;
     }
-    
+    if (clientIsChannelOperator(_channelMode, _tabUser, i, _pfds) == 1)
+        return ;
+
     _limit = std::atoi(_who.c_str());
     if (_limit <= 0)
     {
