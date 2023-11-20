@@ -106,17 +106,26 @@ int Invite::InviteClient(User *_tabUser, std::deque<struct pollfd> _pfds, int y)
 int Invite::User_on_channel(const std::map<std::string, std::list<std::string> >& channel, User *_tabUser)
 {
     int y;
-    for (y = 0; y < MAX_USERS; y++)
+    int exist = 0;
+
+    for (y = 1; y < MAX_USERS; y++)
     {
         if (_tabUser[y].getNickname() == _nickInvite)
-            break ;
+        {
+            exist = 1;
+            break;
+        }
     }
+    if (exist == 0)
+        return (0);
 
     for (std::map<std::string, std::list<std::string> >::const_iterator it = channel.begin(); it != channel.end(); ++it) {
         if (it->first == this->_channelInvite)
         {
             for (std::list<std::string>::const_iterator subIt = it->second.begin(); subIt != it->second.end(); ++subIt)
             {
+                std::cout << *subIt << std::endl;
+                std::cout << _tabUser[y].getNickname() << std::endl;
                 if (*subIt == _tabUser[y].getNickname()){
                     return 1;
                 }
