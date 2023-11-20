@@ -71,7 +71,7 @@ static int SignControlC;
 /*MODE*/
 #define RPL_UMODEIS(network, nick, mode)      ":" + network + " 221 " + nick + " " + mode + "\r\n"
 #define RPL_CREATIONTIME(network, nick, channel, time)      ":" + network + " 329 " + nick + " " + channel + " " + time + "\r\n"
-#define ERR_UNKNOWNMODE(network, nick, mode)      ":" + network + " 472 " + nick + " " + mode + " :is unknown mode char to me\r\n"
+// #define ERR_UNKNOWNMODE(network, nick, mode)      ":" + network + " 472 " + nick + " " + mode + " :is unknown mode char to me\r\n"
 #define RPL_CHANNELMODEIS(network, nick, channel, mode)      ":" + network + " 324 " + nick + " " + channel + " " + mode + "\r\n"
 #define RPL_MODEADDO(nick, channel, who)      ":" + nick + " MODE #" + channel + " +o " + who + "\r\n"
 #define RPL_MODEREMOVEO(nick, channel, who)      ":" + nick + " MODE #" + channel + " -o " + who + "\r\n"
@@ -82,7 +82,7 @@ static int SignControlC;
 #define RPL_MODEADDI(nick, channel)      ":" + nick + " MODE #" + channel + " +i \r\n"
 #define RPL_MODEREMOVEI(nick, channel)      ":" + nick + " MODE #" + channel + " -i \r\n"
 
-
+#define ERR_UNKNOWNMODE(nick, mode)    ": 472 " + nick + " " + mode + " :is unknown mode char to me"
 
 // #define RPL_MODEADDK(nick, channel, password)            ":" + nick + " MODE #" + channel + " +k " + password + "\r\n"
 

@@ -87,16 +87,16 @@ class Mode: public Command
         void removeModeT(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds);
         void addModeK(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds);
         void removeModeK(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds);
+        void addModeL(Channel &channel, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
+        void removeModeL(Channel &channel, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
+        void addModeI(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds);
+        void removeModeI(Channel &channel, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
 
         void printListChanOperator(User *_tabUser, int index);
         int isWhoInChannel(Channel &channel);
         int isUserChannelOperatorInChannel(User *_tabUser, int index);
 
-        void addModeL(Channel &channel, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
-        void removeModeL(Channel &channel, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
-
-        void addModeI(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds);
-        void removeModeI(Channel &channel, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
+        void unknowMode(User *_tabUser, int index, std::deque<struct pollfd> _pfds, int i);
 };
 
 class Topic: public Command
