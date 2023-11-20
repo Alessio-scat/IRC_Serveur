@@ -98,7 +98,7 @@ void Join::connectChannelKey(Channel &channel)
     // }
 }
 
-void Join::ParseJoinCmd(std::string &str, Channel &channel)
+int Join::ParseJoinCmd(std::string &str, Channel &channel)
 {
     std::istringstream iss(str);
     std::string token;
@@ -116,9 +116,18 @@ void Join::ParseJoinCmd(std::string &str, Channel &channel)
             if (subtoken == "JOIN")
                 _cmd = subtoken;
             else if (subtoken[0] == '#' || subtoken[0] == '&')
+            {
+                if (subtoken[1] == '\0' || subtoken[1] == ' ')
+                    return 1;
+                    // std::cout << "69696969|" << subtoken << "|" << std::endl;
                 _tokensChannel.push_back(subtoken);
+            }
             else
+            {
+
+                std::cout << "aaaaaa69696969|" << subtoken << "|" << std::endl;
                 _tokensKey.push_back(subtoken);
+            }
                 
         }
     }
@@ -126,7 +135,7 @@ void Join::ParseJoinCmd(std::string &str, Channel &channel)
     for (size_t i = 0; i < _tokensKey.size(); i++)
         channel.mapMode[_tokensChannel[i]].push_back('k');
 
-
+    return 0;
 }
 
 void Join::add_user_inChannel(Channel &channel, User *_tabUser, Join &join, int i, std::deque<struct pollfd> _pfds, std::string tokenChannel)
@@ -243,7 +252,11 @@ void Join::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct
         // writeInfd(ERR_NEEDMOREPARAMS(_tabUser[i].getUsername(), _channelJoin), i, _pfds);
         return ;
     }
-    ParseJoinCmd(str, channel);
+    if (ParseJoinCmd(str, channel) == 1)
+    {
+        writeInfd(ERR_NOSUCHCHANNEL(_tabUser[i].getUsername(), "#"), i, _pfds);
+        return ;
+    }
 
     for (size_t k = 0; k < _tokensChannel.size(); k++)
     {
