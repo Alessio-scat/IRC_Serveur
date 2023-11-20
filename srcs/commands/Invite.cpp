@@ -92,7 +92,10 @@ int Invite::InviteClient(User *_tabUser, std::deque<struct pollfd> _pfds, int y)
         }
     }
     if (verif == 0)
+    {
+        std::cout << "88888888888888" << std::endl;
         return 1;
+    }
     if (clientIsChannelOperator(_channelInvite, _tabUser, y, _pfds) == 1)
         return 2;
     std::string message = ":" + _tabUser[y].getUsername() + " INVITE " + _nickInvite + " " + _channelInvite + "\r\n";
@@ -106,17 +109,27 @@ int Invite::InviteClient(User *_tabUser, std::deque<struct pollfd> _pfds, int y)
 int Invite::User_on_channel(const std::map<std::string, std::list<std::string> >& channel, User *_tabUser)
 {
     int y;
-    for (y = 0; y < MAX_USERS; y++)
+    int exist = 0;
+
+    for (y = 1; y < MAX_USERS; y++)
     {
         if (_tabUser[y].getNickname() == _nickInvite)
-            break ;
+        {
+            exist = 1;
+            break;
+        }
     }
+    std::cout << y << std::endl;
+    if (exist == 0)
+        return (0);
 
     for (std::map<std::string, std::list<std::string> >::const_iterator it = channel.begin(); it != channel.end(); ++it) {
         if (it->first == this->_channelInvite)
         {
             for (std::list<std::string>::const_iterator subIt = it->second.begin(); subIt != it->second.end(); ++subIt)
             {
+                std::cout << *subIt << std::endl;
+                std::cout << _tabUser[y].getNickname() << std::endl;
                 if (*subIt == _tabUser[y].getNickname()){
                     return 1;
                 }
@@ -153,7 +166,7 @@ void Invite::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User 
         writeInfd(ERR_USERONCHANNEL(_tabUser[y].getNickname(), _cmd), y, _pfds);
         return ;
     }
-
+    
     int verif = InviteClient(_tabUser, _pfds, y);
     if (verif == 1)
     {
