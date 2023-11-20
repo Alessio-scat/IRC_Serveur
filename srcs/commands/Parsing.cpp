@@ -3,10 +3,6 @@
 #include "../../includes/Channel/Channel.hpp"
 #include "../../includes/Server/Server.hpp"
 
-/*
-    usage upload fichier: /dcc send <nickname> <chemin_du_fichier>
-*/
-
 void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct pollfd> _pfds, Channel &channel)
 {
     std::string str;
@@ -32,7 +28,6 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
         {
             Topic topic; 
             topic.execute_cmd(str, _tabUser, i, _pfds, channel);
-            ///ERREUR PARSING _channelTopic QUAND PAS DE TOPIC
         }
         pos = str.find("JOIN");
         if (pos !=  std::string::npos)
@@ -40,8 +35,6 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
             std::cout << GREEN << _tabUser[i].getNickname() << RESET << std::endl;
             Join join;
             join.execute_cmd(str, _tabUser, i, _pfds, channel, join);
-            // join.add_user_inChannel(channel, _tabUser, join, i, _pfds);
-            // join.verifModeChannel(channel, _tabUser, i);
         }
         pos = str.find("MODE");
         if (pos !=  std::string::npos)

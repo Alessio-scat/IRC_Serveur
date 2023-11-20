@@ -14,9 +14,6 @@ int main(int ac, char **av)
     if (bot.Bot_Start() == 1)
         return 1;
 
-    // if (bot.Bot_Run() == 1)
-    //     return 1;
-
     if (bot.Bot_Stop() == 1)
         return 1;
 

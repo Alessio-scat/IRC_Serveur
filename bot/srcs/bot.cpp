@@ -37,8 +37,7 @@ int Bot::Bot_Start()
     _BotSocket = socket(AF_INET, SOCK_STREAM, 0);  
     if (_BotSocket < 0)
     {
-        std::cout << "Erreur lors de la création du socket serveur" << std::endl;
-        // perror("Erreur lors de la création du socket serveur");
+        std::cout << "Error: failed to connection to server." << std::endl;
         return 1;
     }
 
@@ -97,7 +96,6 @@ int Bot::Bot_Run()
 
             if (searchWordInBot(strBuffer, "MONSTRE") == true) 
             {
-                std::cout << "ooooooooooooooooooo" << std::endl;
                 std::string monstre_cmd = "PRIVMSG #bot :DOUBLE MONSTRE\r\n";
                 send(_BotSocket, monstre_cmd.c_str(), monstre_cmd.length(), 0);
             } 
@@ -122,13 +120,13 @@ int Bot::Bot_Run()
             } 
             else 
             {
-                std::cerr << "Erreur de reception: " << strerror(errno) << std::endl;
+                std::cerr << "Reception error: " << strerror(errno) << std::endl;
                 break;
             }
         }
         else 
         {
-            std::cout << "Le serveur a fermé la connexion." << std::endl;
+            std::cout << "The server has closed the connection." << std::endl;
             break;
         }
     }

@@ -129,7 +129,6 @@ class Join: public Command
     private:
         std::vector<std::string> _tokensChannel;
         std::vector<std::string> _tokensKey;
-        // std::map<std::string, std::string > _mapChannelKey;
         std::string _channelJoin;
         std::string _cmd;
         int _isMode;
@@ -161,12 +160,9 @@ private:
     void   messageToSomeone(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds, int pos);
 public:
     Message(void);
-    // Message(std::string str, User &user);
-    // Message(Message const &src);
     ~Message();
     Message(Message const &src);
     Message &operator=(Message const &rhs);
-    // Message operator=(Message const &rhs);
     void execute_cmd(std::string str);
     void execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds, Channel &channel);
 };
@@ -174,7 +170,6 @@ public:
 class Part: public Command
 {
     private:
-        // std::string _channel;
         std::string _reason;
         std::vector<std::string> channel;
 
@@ -202,7 +197,6 @@ class Quit: public Command
         void parse_cmd(std::string str);
         void execute_cmd(std::string str);
         void execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser, int y, Channel &channel);
-        // int verif_is_on_channel(std::string list, User *_tabUser, int y);
 };
 
 #endif

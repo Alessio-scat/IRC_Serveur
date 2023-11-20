@@ -12,7 +12,6 @@ INC_FILE				= 	IRC \
 							Server/Server \
 							user/User \
 							commands/Command \
-							Server/ErrorValue \
 							commands/Parsing \
 							Channel/Channel \
 							Utils

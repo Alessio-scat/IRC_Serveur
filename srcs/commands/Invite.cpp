@@ -36,21 +36,17 @@ void Invite::ParseInviteCmd(std::string &str)
     std::istringstream ss(str);
     std::string token;
     int i = 0;
-    // ft_trim(str);
 
     while (ss >> token)
     {
-        std::cout << UNDER << "str|" << token << "|" << RESET << std::endl;
         if (i == 0)
         {
             _cmd = token;
-            std::cout << UNDER << "cmd|" << _cmd << "|" << RESET << std::endl;
             i = 1;
         }
         else if (i == 1)
         {
             _nickInvite = token;
-            std::cout << UNDER << "_nickInvite|" << _nickInvite << "|" << RESET << std::endl;
             i = 2;
         }
         else if (i == 2)
@@ -61,7 +57,6 @@ void Invite::ParseInviteCmd(std::string &str)
                 break;
             }
             _channelInvite = token;
-            std::cout << UNDER << "_channelInvite|" << _channelInvite << "|" << RESET << std::endl;
             break;
         }
     }
@@ -83,25 +78,22 @@ int Invite::InviteClient(User *_tabUser, std::deque<struct pollfd> _pfds, int y)
     int verif = 0;
     for (i = 0; i < MAX_USERS; i++)
     {
-        std::cout << "|" <<_tabUser[i].getNickname() << "|" << std::endl;
         if (_tabUser[i].getNickname() == _nickInvite)
         {
-            std::cout << "YOUHOUUUUUUUUUUU" << std::endl;
             verif = 1;
             break ;
         }
     }
+
     if (verif == 0)
-    {
-        std::cout << "88888888888888" << std::endl;
         return 1;
-    }
+
     if (clientIsChannelOperator(_channelInvite, _tabUser, y, _pfds) == 1)
         return 2;
+    
     std::string message = ":" + _tabUser[y].getUsername() + " INVITE " + _nickInvite + " " + _channelInvite + "\r\n";
     write(_pfds[i].fd, message.c_str(), message.size());
     write(_pfds[y].fd, message.c_str(), message.size());
-    std::cout << GREEN << "IN INVIteeeeeee : " << _tabUser[y].getNickname() << RESET << std::endl;
     _tabUser[i]._mapModeUser[true].push_back(this->_channelInvite);
     return 0;
 }
@@ -149,7 +141,6 @@ void Invite::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User 
 
     if (_cmd.empty() || _nickInvite.empty() || _channelInvite.empty())
     {
-        std::cout << "COUCOU" << std::endl;
         writeInfd(ERR_NEEDMOREPARAMS(_tabUser[y].getNickname(), _cmd), y, _pfds);
         return ;
     }
@@ -175,9 +166,4 @@ void Invite::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User 
     }
     else if (verif == 2)
         return ;
-    // if (InviteClient(_tabUser, _pfds, y) == 1)
-    // {
-    //     writeInfd(ERR_INVALIDINPUT(_tabUser[y].getNickname(), _cmd), y, _pfds);
-    //     return ;
-    // }
 }

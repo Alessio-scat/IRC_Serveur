@@ -23,7 +23,6 @@ void Quit::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_
 {
     parse_cmd(str);
     str = ":" + _tabUser[y].getNickname() + " QUIT " + this->_reason + "\r\n";
-    // send(_pfds[y].fd, str.c_str(), str.size(), 0);
     for (int j = 1; j < MAX_USERS; j++)
         send(_pfds[j].fd, str.c_str(), str.size(), 0);
     for (std::map<std::string, std::list<std::string> >::const_iterator it = channel.mapChannel.begin(); it != channel.mapChannel.end(); ++it)
@@ -44,17 +43,5 @@ void Quit::parse_cmd(std::string str)
     if (pos != std::string::npos)
         this->_reason = str.substr(pos + 1, str.size() - pos);
 }
-
-// int Quit::verif_is_on_channel(std::string list, User *_tabUser, int y)
-// {
-//     std::istringstream ss(list);
-//     std::string word;
-//     while (ss >> word)
-//     {
-//         if (word == _tabUser[y].getNickname() || word == "@" + _tabUser[y].getNickname())
-//             return 0;
-//     }
-//     return 1;
-// }
 
 Quit::~Quit(){}

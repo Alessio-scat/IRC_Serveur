@@ -2,11 +2,6 @@
 
 Message::Message(void){}
 
-// Message::Message(Message const &src)
-// {
-//     *this = src;
-// }
-
 void Message::execute_cmd(std::string str)
 {
     (void)str;
@@ -71,7 +66,6 @@ void Message::messageToChannel(std::string str, User *_tabUser, int i, std::dequ
             size++;
         }
         std::string channelName = str.substr(pos, size);
-        std::cout << "|" << channelName << "|" << std::endl;
         list = listUserChannel(channel.mapChannel, _tabUser, channelName, i);
         str = ":" + _tabUser[i].getNickname() + " " + str + "\r\n";
         std::istringstream ss(list);
@@ -120,10 +114,8 @@ void   Message::messageToChannelOp(std::string str, User *_tabUser, int i, std::
         size++;
     }
     std::string channelName = str.substr(pos, size);
-    std::cout << "channName|" << channelName << "|" << std::endl;
     list = listUserChannel(channel.mapChannel, _tabUser, channelName, i);
     str = str.substr(pos, str.size() - pos - 1);
-    std::cout << "|" << str << "|\n";
     str = ":" + _tabUser[i].getNickname() + " PRIVMSG " + str + "\r\n";
     if (list.empty())
     {
@@ -142,9 +134,3 @@ void   Message::messageToChannelOp(std::string str, User *_tabUser, int i, std::
         }
     }
 }
-
-// Message Message::operator=(Message const &rhs)
-// {
-//     (void)rhs;
-//     return (*this);
-// }
