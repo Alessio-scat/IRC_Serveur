@@ -37,6 +37,7 @@ public:
     void connect_client(void);
     int password(int i);
     void fillUser(User *_tabUser, int i);
+    void fillUserCtrlD(User *_tabUser, int i, std::string newBuffer);
 
     /*Test close Socket*/
     static std::vector<int> openSockets;//partage entre toute les instances de la classe == tous acces a la meme liste de sockets ouvert

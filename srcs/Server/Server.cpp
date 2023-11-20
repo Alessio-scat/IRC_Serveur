@@ -189,6 +189,58 @@ void Server::fillUser(User *_tabUser, int i)
     }
 }
 
+void Server::fillUserCtrlD(User *_tabUser, int i, std::string newBuffer)
+{
+    std::string bufferStr(newBuffer);
+    std::string nickname, username;
+
+    size_t indexNick = bufferStr.find("NICK");
+    size_t indexUser = bufferStr.find("USER");
+
+    int sizeNick = 0;
+    int sizeUser = 0;
+    if (_tabUser[i].getNickname() != "" && _tabUser[i].getUsername() != "")
+        return;
+    if (indexNick != std::string::npos && indexUser != std::string::npos)
+    {
+        std::cout << GREEN << "\nbuffer : " << this->buffer << "||" <<std::endl;
+        sizeNick = (indexUser - 2) - (indexNick + 4) - 1;
+        sizeUser = bufferStr.find(" 0 *") - (indexUser + 4) - 1;
+        nickname = bufferStr.substr(indexNick + 5, sizeNick + 1);
+        username = bufferStr.substr(indexUser + 5, sizeUser + 1);
+        ft_trim(nickname);
+        ft_trim(username);
+        if (nickname == "")
+            return ;
+        _tabUser[i].setNickname(nickname);
+        _tabUser[i].setUsername(username);
+        std::cout << "Nickname :" << "|" << _tabUser[i].getNickname() << "|" << std::endl;
+        std::cout << "Username :" << "|" << _tabUser[i].getUsername() << "|" << std::endl;
+        return ;
+    }
+    if (indexNick != std::string::npos) {
+        std::cout << GREEN << "\nbuffer : " << this->buffer << "||" <<std::endl;
+        sizeNick = bufferStr.find(" ", indexNick + 5) - (indexNick + 5);
+        nickname = bufferStr.substr(indexNick + 5, sizeNick);
+        ft_trim(nickname);
+        _tabUser[i].setNickname(nickname);
+        std::cout << "Nickname :" << "|" << _tabUser[i].getNickname() << "|\n" << std::endl;
+        return;
+    }
+
+    if (indexUser != std::string::npos) {
+        std::cout << GREEN << "\nbuffer : " << this->buffer << "||\n" <<std::endl;
+        sizeUser = bufferStr.find(" ", indexUser + 5) - (indexUser + 5);
+        username = bufferStr.substr(indexUser + 5, sizeUser);
+        ft_trim(username);
+        _tabUser[i].setUsername(username);
+        std::cout << "Username :" << "|" << _tabUser[i].getUsername() << "|" << std::endl;
+        return;
+    }
+}
+
+
+
 char* stringToCharArray(const std::string& str) {
     char* result = new char[str.length() + 1]; // +1 for null-terminator
     std::strcpy(result, str.c_str());
@@ -241,6 +293,7 @@ void Server::Run_Server(void)
                         _pfds[i].fd = 0;
                     }
                     std::cout << GREEN << i << RESET << std::endl;
+                    // char* newBuffer = NULL;
                     fillUser(_tabUser, i); 
                     std::cout << CURSIVE << UNDER << "buffer" << RESET << CURSIVE << ": " << "|" << this->buffer << "|" << RESET << std::endl;
                     if (static_cast<std::string>(this->buffer).find("\n") != std::string::npos)
@@ -261,8 +314,9 @@ void Server::Run_Server(void)
                             std::cout << GREEN << "BUFFER" << RESET << ": |" << this->buffer << "|" << std::endl;
                             std::cout << GREEN << "SIGNAL" << RESET << ": |" << _tabUser[i].getBufferSignal() << "|" << std::endl;
                             if (_tabUser[i].getNickname() != "" && _tabUser[i].getUsername() != "")
-                            command.whatCommand(newBuffer, _tabUser, i, _pfds, channel);
-
+                                command.whatCommand(newBuffer, _tabUser, i, _pfds, channel);
+                            else 
+                                fillUserCtrlD(_tabUser, i, newBuffer);
                         }
                         
                         _tabUser[i].setBufferSignal("");

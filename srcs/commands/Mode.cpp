@@ -175,7 +175,6 @@ void Mode::addModeL(Channel &channel, User *_tabUser, int i, std::deque<struct p
     }
     if (clientIsChannelOperator(_channelMode, _tabUser, i, _pfds) == 1)
         return ;
-
     _limit = std::atoi(_who.c_str());
     if (_limit <= 0)
     {
@@ -248,6 +247,8 @@ std::string Mode::getWho(void)
 
 void Mode::addModeO(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds)
 {
+    if (clientIsChannelOperator(_channelMode, _tabUser, index, _pfds) == 1)
+        return ;
     if (this->_who == "")
     {
         std::string message = ERR_NEEDMOREPARAMS(_tabUser[index].getNickname(), "MODE o");
@@ -264,6 +265,8 @@ void Mode::addModeO(Channel &channel, User *_tabUser, int index, std::deque<stru
 
 void Mode::removeModeO(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds)
 {
+    if (clientIsChannelOperator(_channelMode, _tabUser, index, _pfds) == 1)
+        return ;
     if (this->_who == "")
     {
         std::string message = ERR_NEEDMOREPARAMS(_tabUser[index].getNickname(), "MODE o");
