@@ -68,6 +68,8 @@ void Kick::parse_cmd(std::string str)
         pos2 = pos;
         while(str[pos2] != ' ' && str[pos2])
             pos2++;
+        if (str[pos2] == '\0')
+            return;
         this->_channel = str.substr(pos, pos2 - pos);
     }
     pos = str.find(" ", pos2 + 1);
