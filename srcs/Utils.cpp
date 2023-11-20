@@ -95,3 +95,18 @@ void errNeedMoreParams(std::string source, std::string command, int i, std::dequ
     std::string message = ERR_NEEDMOREPARAMS(source, command);
     writeInfd(message, i, _pfds);
 }
+
+void sendAll(std::string message, Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds, std::string channelFind)
+{
+    std::string list = listUserChannel(channel.mapChannel, _tabUser, channelFind, index);
+    std::istringstream ss(list);
+    std::string word;
+    while (ss >> word)
+    {
+        for (int j = 1;j < MAX_USERS; j++)
+        {
+            if (word == _tabUser[j].getNickname() || word == "@" + _tabUser[j].getNickname())
+                send(_pfds[j].fd, message.c_str(), message.size(), 0);
+        }
+    }
+}

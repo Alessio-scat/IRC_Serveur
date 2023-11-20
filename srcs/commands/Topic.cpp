@@ -70,19 +70,19 @@ void Topic::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struc
     {
         this->_msgTopic = "";
         channel.mapTopic[this->getChannelTopic()] = this->getMsgTopic();
-        this->rplTopic(_tabUser, i, _pfds);
+        this->rplTopic(_tabUser, i, _pfds, channel);
         return ;
     }
     this->_msgTopic = tmpTopic.substr(1);
     this->rplTopicWhoTime(_tabUser, i, _pfds);
-    this->rplTopic(_tabUser, i, _pfds);
+    this->rplTopic(_tabUser, i, _pfds, channel);
     channel.mapTopic[this->getChannelTopic()] = this->getMsgTopic();
 }
 
-void Topic::rplTopic(User *_tabUser, int i, std::deque<struct pollfd> _pfds)
+void Topic::rplTopic(User *_tabUser, int i, std::deque<struct pollfd> _pfds, Channel &channel)
 {
     std::string message = RPL_TOPIC(_tabUser[i].getNickname(), this->_channelTopic, this->_msgTopic);
-    writeInfd(message, i, _pfds);
+    sendAll(message, channel, _tabUser, i, _pfds, this->_channelTopic);
 }
 
 void Topic::rplTopicWhoTime(User *_tabUser, int i, std::deque<struct pollfd> _pfds)
@@ -98,7 +98,7 @@ void Topic::checkTopic(std::string tmpChannel, Channel &channel, User *_tabUser,
 {
     this->_channelTopic = tmpChannel;
     this->_msgTopic = channel.mapTopic[this->getChannelTopic()];
-    this->rplTopic(_tabUser, i, _pfds);
+    this->rplTopic(_tabUser, i, _pfds, channel);
 }
 
 std::string Topic::getChannelTopic(void)

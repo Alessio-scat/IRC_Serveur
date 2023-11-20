@@ -95,7 +95,6 @@ class Mode: public Command
         int isUserChannelOperatorInChannel(User *_tabUser, int index);
 
         void unknowMode(User *_tabUser, int index, std::deque<struct pollfd> _pfds, int i);
-        void sendAll(std::string message, Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds);
 };
 
 class Topic: public Command
@@ -112,7 +111,7 @@ class Topic: public Command
         void execute_cmd(std::string str);
         void execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct pollfd> _pfds, Channel &channel);
         void checkTopic(std::string tmpChannel, Channel &channel, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
-        void rplTopic(User *_tabUser, int i, std::deque<struct pollfd> _pfds);
+        void rplTopic(User *_tabUser, int i, std::deque<struct pollfd> _pfds, Channel &channel);
         void rplTopicWhoTime(User *_tabUser, int i, std::deque<struct pollfd> _pfds);
         std::string getChannelTopic(void);
         std::string getMsgTopic(void);
