@@ -29,8 +29,6 @@ void Mode::execute_cmd(std::string str, Channel &channel)
     size_t endChannel = str.find(" ", 6);
     size_t startOpt;
     size_t endOpt;
-    // size_t startWho;
-    // size_t endWho;
     std::string tmpChannel;
     std::string tmpOpt;
     std::string tmpWho;
@@ -228,7 +226,6 @@ void Mode::removeModeO(Channel &channel, User *_tabUser, int index, std::deque<s
         writeInfd(message, index, _pfds);
         return ;
     }
-    // _tabUser[index].setOperateur(false);
     addRemoveChanOperator(channel, _tabUser, index, 0, _pfds);
     removeMode('o', channel);
 }

@@ -209,7 +209,6 @@ void Server::Run_Server(void)
                         
                         if (_tabUser[i].getBufferSignal() != "")
                         {
-                            //BUFFER SIGNAL EST REMPLI IL FAUT CONCATENER
                             std::string toAppend = _tabUser[i].getBufferSignal();
                             size_t newSize = toAppend.size() + strlen(this->buffer) + 1;
                             char* newBuffer = new char[newSize];
@@ -229,7 +228,6 @@ void Server::Run_Server(void)
                     else
                         _tabUser[i].setBufferSignal(this->buffer);
                 }
-                // _pfds[i].events |= POLLOUT;
             }
         }
     }
@@ -243,7 +241,6 @@ void Server::connect_client(void)
     this->newSocket = accept(this->serverSocket, (struct sockaddr*)&this->newAddr, &this->addrSize);
     if (this->newSocket < 0)
         throw std::runtime_error("Error: failed accept()");
-        // return ;
     openSockets.push_back(this->newSocket);
 
     std::cout << "Nouvelle connexion, socket FD : " << this->newSocket << std::endl;
@@ -259,12 +256,6 @@ void Server::connect_client(void)
         }
     }
 }
-
-/*
-    Définition de la variable statique : En C++, quand vous déclarez une variable statique à l'intérieur d'une classe 
-    (comme openSockets dans la classe Server), vous devez également la définir en dehors de la classe.
-    Cette ligne sert à cette définition. Sans elle, le compilateur ne saurait pas où allouer de la mémoire pour cette variable statique.
-*/
 
 std::vector<int> Server::openSockets;
 

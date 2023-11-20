@@ -26,7 +26,6 @@
 
 #include "user/User.hpp"
 #include "Utils.hpp"
-// #include "user/AllClient.hpp"
 
 #define GREEN2 "\033[1;32m"
 #define GREEN "\e[92;5;118m"
@@ -35,7 +34,7 @@
 #define CURSIVE	"\e[33;3m"
 #define RED "\033[0;31m"
 #define BOLD "\x1b[1m"
-#define UNDER "\x1b[4m" //souligné
+#define UNDER "\x1b[4m"
 
 #define IRChub = "IRChub"
 

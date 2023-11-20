@@ -2,14 +2,12 @@
 #include "../includes/IRC.hpp"
 #include "../includes/user/User.hpp"
 #include "../includes/Server/Server.hpp"
-// #include "../includes/Server/Server.hpp"
 #include "../includes/IRC.hpp"
 #include "../includes/Channel/Channel.hpp"
 
 
 void signal_handler(int signum) {
     (void)signum;
-    // Server::closeAllSockets();
     SignControlC = 1;
 }
 
@@ -37,7 +35,5 @@ int main(int ac, char **av)
     {
         std::cerr << e.what() << std::endl;
     }
-    // Server server = Server(av[1], av[2]);
-    // server.Start_Server();
     return 0;
 }
