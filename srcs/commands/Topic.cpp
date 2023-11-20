@@ -52,6 +52,12 @@ void Topic::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struc
     }
     tmpChannel = str.substr(6, endChannel - 6);
     ft_trim(tmpChannel);
+    if (isInChannel(tmpChannel, _tabUser[i].getNickname(), channel))
+    {
+        std::string message = ERR_NOTONCHANNEL(_tabUser[i].getNickname(), tmpChannel);
+        writeInfd(message, i, _pfds);
+        return ;
+    }
     if (isModePresentInChannel(channel, tmpChannel, 't'))
     {
         if (clientIsChannelOperator(tmpChannel, _tabUser, i, _pfds))
