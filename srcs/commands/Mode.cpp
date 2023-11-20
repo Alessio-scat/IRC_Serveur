@@ -123,6 +123,21 @@ void Mode::changeMode(Channel &channel, User *_tabUser, int index, std::deque<st
     }
 }
 
+void Mode::sendAll(std::string message, Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds)
+{
+    std::string list = listUserChannel(channel.mapChannel, _tabUser, this->_channelMode, index);
+    std::istringstream ss(list);
+    std::string word;
+    while (ss >> word)
+    {
+        for (int j = 1;j < MAX_USERS; j++)
+        {
+            if (word == _tabUser[j].getNickname() || word == "@" + _tabUser[j].getNickname())
+                send(_pfds[j].fd, message.c_str(), message.size(), 0);
+        }
+    }
+}
+
 void Mode::unknowMode(User *_tabUser, int index, std::deque<struct pollfd> _pfds, int i)
 {
     if (this->_opt[i] != '\r' && this->_opt[i] != '\n')
@@ -302,17 +317,7 @@ void Mode::addRemoveChanOperator(Channel &channel, User *_tabUser, int index, bo
         {
             _tabUser[who]._chanOperator.push_back(this->_channelMode);
             std::string message = RPL_MODEADDO(_tabUser[index].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()), this->getWho());
-            std::string list = listUserChannel(channel.mapChannel, _tabUser, this->_channelMode, index);
-            std::istringstream ss(list);
-            std::string word;
-            while (ss >> word)
-            {
-                for (int j = 1;j < MAX_USERS; j++)
-                {
-                    if (word == _tabUser[j].getNickname() || word == "@" + _tabUser[j].getNickname())
-                        send(_pfds[j].fd, message.c_str(), message.size(), 0);
-                }
-            }
+            sendAll(message, channel, _tabUser, index, _pfds);
         }
     }
     else
@@ -323,17 +328,7 @@ void Mode::addRemoveChanOperator(Channel &channel, User *_tabUser, int index, bo
                 return ;
             _tabUser[who]._chanOperator.erase(std::remove(_tabUser[who]._chanOperator.begin(), _tabUser[who]._chanOperator.end(), this->_channelMode), _tabUser[who]._chanOperator.end());
             std::string message = RPL_MODEREMOVEO(_tabUser[index].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()), this->getWho());
-            std::string list = listUserChannel(channel.mapChannel, _tabUser, this->_channelMode, index);
-            std::istringstream ss(list);
-            std::string word;
-            while (ss >> word)
-            {
-                for (int j = 1;j < MAX_USERS; j++)
-                {
-                    if (word == _tabUser[j].getNickname() || word == "@" + _tabUser[j].getNickname())
-                        send(_pfds[j].fd, message.c_str(), message.size(), 0);
-                }
-            }
+            sendAll(message, channel, _tabUser, index, _pfds);
         }
     }
 }

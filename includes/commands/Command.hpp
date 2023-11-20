@@ -95,6 +95,7 @@ class Mode: public Command
         int isUserChannelOperatorInChannel(User *_tabUser, int index);
 
         void unknowMode(User *_tabUser, int index, std::deque<struct pollfd> _pfds, int i);
+        void sendAll(std::string message, Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds);
 };
 
 class Topic: public Command
