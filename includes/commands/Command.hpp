@@ -113,8 +113,6 @@ class Topic: public Command
         void checkTopic(std::string tmpChannel, Channel &channel, User *_tabUser, int i, std::deque<struct pollfd> _pfds);
         void rplTopic(User *_tabUser, int i, std::deque<struct pollfd> _pfds);
         void rplTopicWhoTime(User *_tabUser, int i, std::deque<struct pollfd> _pfds);
-        void printTopic(std::string channelTopic, std::map<std::string, std::string>& mapTopic);
-        void printMapTopic(const std::map<std::string, std::string>& mapTopic);
         std::string getChannelTopic(void);
         std::string getMsgTopic(void);
         void getCurrentTime(struct timeval& tv);
