@@ -29,7 +29,6 @@ void Message::execute_cmd(std::string str, User *_tabUser, int i, std::deque<str
             writeInfd(ERR_NOTEXTTOSEND(_tabUser[i].getNickname()), i, _pfds);
             return;
         }
-        std::cout << str[pos2] << std::endl;
         if(str[pos2 - 1] == '%' && (str[pos2 - 2] == '@' || str[pos2 - 2] == ' '))
         {
             if (str[pos2 - 2] == '@' && str[pos2 - 3] != ' ')
@@ -126,7 +125,6 @@ void   Message::messageToChannelOp(std::string str, User *_tabUser, int i, std::
     std::string word;
     while (ss >> word)
     {
-        std::cout << GREEN << word << RESET << std::endl;
         for (int j = 1; j < MAX_USERS; j++)
         {
             if (word == "@" + _tabUser[j].getNickname() && word != "@" + _tabUser[i].getNickname())
