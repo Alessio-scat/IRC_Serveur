@@ -115,7 +115,6 @@ void Server::fillUserCtrlD(User *_tabUser, int i, std::string newBuffer)
         return;
     if (indexNick != std::string::npos && indexUser != std::string::npos)
     {
-        std::cout << GREEN << "\nbuffer : " << this->buffer << "||" <<std::endl;
         sizeNick = (indexUser - 2) - (indexNick + 4) - 1;
         sizeUser = bufferStr.find(" 0 *") - (indexUser + 4) - 1;
         nickname = bufferStr.substr(indexNick + 5, sizeNick + 1);
@@ -126,27 +125,21 @@ void Server::fillUserCtrlD(User *_tabUser, int i, std::string newBuffer)
             return ;
         _tabUser[i].setNickname(nickname);
         _tabUser[i].setUsername(username);
-        std::cout << "Nickname :" << "|" << _tabUser[i].getNickname() << "|" << std::endl;
-        std::cout << "Username :" << "|" << _tabUser[i].getUsername() << "|" << std::endl;
         return ;
     }
     if (indexNick != std::string::npos) {
-        std::cout << GREEN << "\nbuffer : " << this->buffer << "||" <<std::endl;
         sizeNick = bufferStr.find(" ", indexNick + 5) - (indexNick + 5);
         nickname = bufferStr.substr(indexNick + 5, sizeNick);
         ft_trim(nickname);
         _tabUser[i].setNickname(nickname);
-        std::cout << "Nickname :" << "|" << _tabUser[i].getNickname() << "|\n" << std::endl;
         return;
     }
 
     if (indexUser != std::string::npos) {
-        std::cout << GREEN << "\nbuffer : " << this->buffer << "||\n" <<std::endl;
         sizeUser = bufferStr.find(" ", indexUser + 5) - (indexUser + 5);
         username = bufferStr.substr(indexUser + 5, sizeUser);
         ft_trim(username);
         _tabUser[i].setUsername(username);
-        std::cout << "Username :" << "|" << _tabUser[i].getUsername() << "|" << std::endl;
         return;
     }
 }
@@ -172,10 +165,7 @@ void Server::Run_Server(void)
         if (!_pfds.empty())
         {
             if (poll(&_pfds.front(), _pfds.size(), -1) < 0)
-            {
-                std::cout << "HELLLLOOOOOO\n";
                 return;
-            }
                 // throw std::runtime_error("Error while polling from fd!");
         }
 
@@ -197,10 +187,8 @@ void Server::Run_Server(void)
                 else
                 {
                     this->buffer[bytesRead] = '\0';
-                    std::cout << "bytesRead : " << bytesRead << std::endl;
                     if (password(i))
                     {
-                        std::cout << "mdp faux\n";
                         close(_pfds[i].fd);
                         _pfds[i].fd = 0;
                     }
@@ -218,24 +206,18 @@ void Server::Run_Server(void)
                             }
                         }
                     }
-                    std::cout << CURSIVE << UNDER << "buffer" << RESET << CURSIVE << ": " << "|" << this->buffer << "|" << RESET << std::endl;
                     if (static_cast<std::string>(this->buffer).find("\n") != std::string::npos)
                     {
                         
                         if (_tabUser[i].getBufferSignal() != "")
                         {
                             //BUFFER SIGNAL EST REMPLI IL FAUT CONCATENER
-                            std::cout << "BUFFER SIGNAL : |" << _tabUser[i].getBufferSignal() << "|" << std::endl;
                             std::string toAppend = _tabUser[i].getBufferSignal();
                             size_t newSize = toAppend.size() + strlen(this->buffer) + 1;
                             char* newBuffer = new char[newSize];
                             std::strcpy(newBuffer, toAppend.c_str());
                             std::strcat(newBuffer, this->buffer);
-                            std::cout << "newBuffer: " << newBuffer << std::endl;
-
                             _tabUser[i].setBufferSignal("");
-                            std::cout << GREEN << "BUFFER" << RESET << ": |" << this->buffer << "|" << std::endl;
-                            std::cout << GREEN << "SIGNAL" << RESET << ": |" << _tabUser[i].getBufferSignal() << "|" << std::endl;
                             if (_tabUser[i].getNickname() != "" && _tabUser[i].getUsername() != "")
                                 command.whatCommand(newBuffer, _tabUser, i, _pfds, channel);
                             else 
@@ -243,16 +225,11 @@ void Server::Run_Server(void)
                         }
                         
                         _tabUser[i].setBufferSignal("");
-                        std::cout << GREEN << "BUFFER" << RESET << ": |" << this->buffer << "|" << std::endl;
-                        std::cout << GREEN << "SIGNAL" << RESET << ": |" << _tabUser[i].getBufferSignal() << "|" << std::endl;
                         if (_tabUser[i].getNickname() != "" && _tabUser[i].getUsername() != "")
                             command.whatCommand(this->buffer, _tabUser, i, _pfds, channel);
                     }
                     else
-                    {
-                        std::cout << "Ya eu un ctrl-D" << std::endl;
                         _tabUser[i].setBufferSignal(this->buffer);
-                    }
                 }
                 // _pfds[i].events |= POLLOUT;
             }

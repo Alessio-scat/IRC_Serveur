@@ -38,7 +38,6 @@ void Kick::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_
     }
     str = ":" + _tabUser[y].getNickname() + " " + str + "\r\n";
     std::string list = listUserChannel(channel.mapChannel, _tabUser, this->_channel, y);
-    std::cout << GREEN << list << RESET << std::endl;
     if (verif_is_on_channel(list) == 1)
     {
         writeInfd(ERR_USERNOTINCHANNEL(_tabUser[y].getNickname(), this->_user, this->_channel), y, _pfds);

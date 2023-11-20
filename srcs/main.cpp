@@ -31,7 +31,6 @@ int main(int ac, char **av)
     }
     catch(const std::runtime_error& e)
     {
-        std::cout << GREEN << "11111111111111111111" << RESET << std::endl;
         std::cerr << e.what() << std::endl;
     }
     catch (const std::logic_error &e)

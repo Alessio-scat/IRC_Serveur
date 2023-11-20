@@ -33,7 +33,6 @@ void Part::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_
         }
         str = ":" + _tabUser[y].getNickname() + " PART " + this->channel[k] + "\r\n";
         std::string list = listUserChannel(channel.mapChannel, _tabUser, this->channel[k], y);
-        std::cout << GREEN << list << RESET << std::endl;
         if (list.empty())
         {
             writeInfd(ERR_NOSUCHCHANNEL(_tabUser[y].getNickname(), this->channel[k]), y, _pfds);

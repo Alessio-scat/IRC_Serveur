@@ -30,19 +30,15 @@ std::string listUserChannel(const std::map<std::string, std::list<std::string> >
         {
             for (std::list<std::string>::const_iterator subIt = it->second.begin(); subIt != it->second.end(); ++subIt)
             {
-                std::cout << CURSIVE << *subIt << " " << RESET;
                 if (i == 0 && it->second.size() == 1)
                 {
                     for (int j = 1; j < MAX_USERS; j++)
                     {
-                        // std::cout << "222222222222222222222222 : " << _tabUser[j].getNickname() << std::endl;
                         if (*subIt == _tabUser[j].getNickname() && *subIt == _tabUser[userCmd].getNickname())
                         {
-                            // std::cout << "333333333333333333333333" << std::endl;
                             _tabUser[j]._chanOperator.push_back(join);
                         }
                     }
-                    // list += "@" + *subIt;
                 }
                 if (i == 0)
                 {
@@ -70,7 +66,6 @@ std::string listUserChannel(const std::map<std::string, std::list<std::string> >
                         }
                     } 
                 }
-                // std::cout << "11111111111111111111111111111 : " << i << std::endl;
                 i++;
             }
         }
@@ -103,7 +98,6 @@ int clientIsChannelOperator(std::string channelFind, User *_tabUser, int i, std:
     }
     if (it == _tabUser[i]._chanOperator.end())
     {
-        std::cout << "ERROR: Client not channel operator" << std::endl;
         std::string message = ERR_CHANOPRIVSNEEDED(_tabUser[i].getNickname(), channelFind);
         writeInfd(message, i, _pfds);
         return (1);
