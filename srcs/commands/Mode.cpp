@@ -131,9 +131,7 @@ void Mode::changeMode(Channel &channel, User *_tabUser, int index, std::deque<st
         }
         else if (this->_opt[i] == 'o')
         {
-            if (this->_who == "")
-                std::cout << "ERROR: MODE o need who" << std::endl;
-            else if (this->_opt[0] == '+')
+            if (this->_opt[0] == '+')
                 addModeO(channel, _tabUser, index, _pfds);
             else if (this->_opt[0] == '-')
                 removeModeO(channel, _tabUser, index, _pfds);
@@ -162,7 +160,7 @@ void Mode::unknowMode(User *_tabUser, int index, std::deque<struct pollfd> _pfds
         std::string mode = ss.str();
         // std::cout << "|" << mode << "| :is not a recognised channel mode." << std::endl;
         // std::cout << "USER: |" << _tabUser[index].getUsername() << "|" << std::endl;
-        std::string message = ERR_UNKNOWNMODE(_tabUser[index].getUsername(), mode);
+        std::string message = ERR_UNKNOWNMODE(_tabUser[index].getNickname(), mode);
         // std::cout << "MESSAGE : " << message << std::endl;
         writeInfd(message, index, _pfds);
     }
@@ -172,7 +170,7 @@ void Mode::addModeL(Channel &channel, User *_tabUser, int i, std::deque<struct p
 {
     if (!_who.size())
     {
-        writeInfd(ERR_NEEDMOREPARAMS(_tabUser[i].getUsername(), "Usage /mode (+l)"), i, _pfds);
+        writeInfd(ERR_NEEDMOREPARAMS(_tabUser[i].getNickname(), "Usage /mode (+l)"), i, _pfds);
         return ;
     }
     if (clientIsChannelOperator(_channelMode, _tabUser, i, _pfds) == 1)
@@ -181,7 +179,7 @@ void Mode::addModeL(Channel &channel, User *_tabUser, int i, std::deque<struct p
     _limit = std::atoi(_who.c_str());
     if (_limit <= 0)
     {
-        writeInfd(ERR_INVALIDINPUT(_tabUser[i].getUsername(), "Usage /mode (+l)"), i, _pfds);
+        writeInfd(ERR_INVALIDINPUT(_tabUser[i].getNickname(), "Usage /mode (+l)"), i, _pfds);
         return ;
     }
     channel._mapChannelLimit[_channelMode] = _limit;
@@ -250,6 +248,13 @@ std::string Mode::getWho(void)
 
 void Mode::addModeO(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds)
 {
+    if (this->_who == "")
+    {
+        std::string message = ERR_NEEDMOREPARAMS(_tabUser[index].getNickname(), "MODE o");
+        writeInfd(message, index, _pfds);
+        std::cout << "ERROR: MODE o need who" << std::endl;
+        return ;
+    }
     _tabUser[index].setOperateur(true);
     addRemoveChanOperator(channel, _tabUser, index, 1, _pfds);
     addMode('o', channel);
@@ -259,6 +264,13 @@ void Mode::addModeO(Channel &channel, User *_tabUser, int index, std::deque<stru
 
 void Mode::removeModeO(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds)
 {
+    if (this->_who == "")
+    {
+        std::string message = ERR_NEEDMOREPARAMS(_tabUser[index].getNickname(), "MODE o");
+        writeInfd(message, index, _pfds);
+        std::cout << "ERROR: MODE o need who" << std::endl;
+        return ;
+    }
     // _tabUser[index].setOperateur(false);
     addRemoveChanOperator(channel, _tabUser, index, 0, _pfds);
     removeMode('o', channel);
@@ -405,6 +417,8 @@ void Mode::addModeT(Channel &channel, User *_tabUser, int index, std::deque<stru
     }
     addMode('t', channel);
     printListMode(channel);
+    std::string message = RPL_MODEADDT(_tabUser[index].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()));
+    writeInfd(message, index, _pfds);
 }
 
 void Mode::removeModeT(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds)
@@ -418,6 +432,8 @@ void Mode::removeModeT(Channel &channel, User *_tabUser, int index, std::deque<s
     }
     removeMode('t', channel);
     printListMode(channel);
+    std::string message = RPL_MODEREMOVET(_tabUser[index].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()));
+    writeInfd(message, index, _pfds);
 }
 
 void Mode::addModeK(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds)
@@ -434,6 +450,8 @@ void Mode::addModeK(Channel &channel, User *_tabUser, int index, std::deque<stru
     }
     if (!this->_who.size())
     {
+        std::string message = ERR_NEEDMOREPARAMS(_tabUser[index].getNickname(), "MODE k");
+        writeInfd(message, index, _pfds);
         std::cout << "ERROR: MODE k need key" << std::endl;
         return ;
     }
@@ -463,6 +481,8 @@ void Mode::removeModeK(Channel &channel, User *_tabUser, int index, std::deque<s
     
     if (iterator == channel._mapChannelKey.end())
     {
+        std::string message = ERR_NEEDMOREPARAMS(_tabUser[index].getNickname(), "MODE k");
+        writeInfd(message, index, _pfds);
         std::cout << "MODE k doesn't exist" << std::endl;
         return ;
     }

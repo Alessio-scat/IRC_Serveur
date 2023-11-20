@@ -81,6 +81,8 @@ static int SignControlC;
 #define RPL_MODEREMOVEK(nick, channel)      ":" + nick + " MODE #" + channel + " -k \r\n"
 #define RPL_MODEADDI(nick, channel)      ":" + nick + " MODE #" + channel + " +i \r\n"
 #define RPL_MODEREMOVEI(nick, channel)      ":" + nick + " MODE #" + channel + " -i \r\n"
+#define RPL_MODEADDT(nick, channel)      ":" + nick + " MODE #" + channel + " +t \r\n"
+#define RPL_MODEREMOVET(nick, channel)      ":" + nick + " MODE #" + channel + " -t \r\n"
 
 #define ERR_UNKNOWNMODE(nick, mode)    ": 472 " + nick + " " + mode + " :is unknown mode char to me"
 
