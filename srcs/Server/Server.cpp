@@ -241,7 +241,19 @@ void Server::Run_Server(void)
                         _pfds[i].fd = 0;
                     }
                     std::cout << GREEN << i << RESET << std::endl;
-                    fillUser(_tabUser, i); 
+                    fillUser(_tabUser, i);
+                    if (_tabUser[i].getNickname() != "")
+                    {
+                        for(int j = 1; j < MAX_USERS; j++)
+                        {
+                            if (_tabUser[i].getNickname() == _tabUser[j].getNickname() && j != i)
+                            {
+                                close(_pfds[i].fd);
+                                _pfds[i].fd = 0;
+                                _tabUser[i].setNickname(""); 
+                            }
+                        }
+                    }
                     std::cout << CURSIVE << UNDER << "buffer" << RESET << CURSIVE << ": " << "|" << this->buffer << "|" << RESET << std::endl;
                     if (static_cast<std::string>(this->buffer).find("\n") != std::string::npos)
                     {
