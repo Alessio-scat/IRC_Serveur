@@ -148,10 +148,25 @@ void Mode::changeMode(Channel &channel, User *_tabUser, int index, std::deque<st
                 // removeMode('l', channel);
         }
         else
-            std::cout << this->_opt[i] << " :is not a recognised channel mode." << std::endl;
+            unknowMode(_tabUser, index, _pfds, i);
     }
 }
 
+void Mode::unknowMode(User *_tabUser, int index, std::deque<struct pollfd> _pfds, int i)
+{
+    if (this->_opt[i] != '\r' && this->_opt[i] != '\n')
+    {
+        // std::cout << "|" << this->_opt[i] << "| :is not a recognised channel mode." << std::endl;
+        std::stringstream ss;
+        ss << this->_opt[i];
+        std::string mode = ss.str();
+        // std::cout << "|" << mode << "| :is not a recognised channel mode." << std::endl;
+        // std::cout << "USER: |" << _tabUser[index].getUsername() << "|" << std::endl;
+        std::string message = ERR_UNKNOWNMODE(_tabUser[index].getUsername(), mode);
+        // std::cout << "MESSAGE : " << message << std::endl;
+        writeInfd(message, index, _pfds);
+    }
+}
 
 void Mode::addModeL(Channel &channel, User *_tabUser, int i, std::deque<struct pollfd> _pfds)
 {
