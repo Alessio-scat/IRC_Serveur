@@ -2,25 +2,9 @@
 # include "../../includes/Utils.hpp"
 # include "../../includes/Server/Server.hpp"
 
-// std::string printMap(const std::map<std::string, std::list<std::string> >& channel, User *_tabUser, std::string join);
-
 Join::Join(void){}
 
 void Join::execute_cmd(std::string str){(void)str;}
-
-/*
-    ERR_NEEDMOREPARAMS (461) 
-    OK! -- ERR_BADCHANNELKEY (475)
-    ERR_BANNEDFROMCHAN (474)
-    ERR_CHANNELISFULL (471)
-    OK! -- ERR_INVITEONLYCHAN (473)
-    OK! -- ERR_BADCHANMASK (476)
-    OK! -- RPL_NAMREPLY (353)  
-*/
-
-/* ***********************************************************
-                *** VERIF MODE +i +l +k ***
-*/
 
 int Join::verifModeI(User *_tabUser, int y, std::string &tokenChannel)
 {
@@ -92,10 +76,6 @@ void Join::connectChannelKey(Channel &channel)
     {
         channel._mapChannelKey[_tokensChannel[i]] = _tokensKey[i];
     }
-
-    // for (std::map<std::string, std::string>::iterator it = channel._mapChannelKey.begin(); it != channel._mapChannelKey.end(); ++it) {
-    //     std::cout << "Clé : " << it->first << ", Valeur : " << it->second << std::endl;
-    // }
 }
 
 int Join::ParseJoinCmd(std::string &str, Channel &channel)
@@ -119,13 +99,10 @@ int Join::ParseJoinCmd(std::string &str, Channel &channel)
             {
                 if (subtoken[1] == '\0' || subtoken[1] == ' ')
                     return 1;
-                    // std::cout << "69696969|" << subtoken << "|" << std::endl;
                 _tokensChannel.push_back(subtoken);
             }
             else
             {
-
-                std::cout << "aaaaaa69696969|" << subtoken << "|" << std::endl;
                 _tokensKey.push_back(subtoken);
             }
                 
@@ -145,10 +122,8 @@ void Join::add_user_inChannel(Channel &channel, User *_tabUser, Join &join, int 
     std::string word;
 
     channel.mapChannel[tokenChannel].push_back(_tabUser[i].getNickname());
-    // list = printMap(channel.mapChannel, _tabUser, tokenChannel);
     list = listUserChannel(channel.mapChannel, _tabUser, tokenChannel, i);
     std::istringstream ss(list);
-    std::cout << "coucou\n";
     while (ss >> word)
     {
         for (int j = 1;j < MAX_USERS; j++)
@@ -175,66 +150,16 @@ int Join::verifModeChannel(Channel &channel, User *_tabUser, int y, std::string 
                 {
                     if (verifModeI(_tabUser, y, tokenChannel) == 1)
                         return 1;
-                    // _isMode = 1;
-                    // for (std::map<bool, std::list<std::string> >::iterator it = _tabUser[y]._mapModeUser.begin(); it != _tabUser[y]._mapModeUser.end(); ++it)
-                    // {
-                    //     if (it->first == true)
-                    //     {
-                    //         for (std::list<std::string>::const_iterator subIt = it->second.begin(); subIt != it->second.end(); ++subIt)
-                    //         {
-                    //             if (*subIt == tokenChannel)
-                    //                 _isInvitation = 1;
-                    //         }
-                    //     }
-                    // }
-
-                    // if (_isMode == 1 && _isInvitation != 1)
-                    //     return 1;
                 }
                 else if (*vecIt == 'k')
                 {
                     if (verifModeK(channel, _tabUser, y, tokenChannel) == 2)
                         return 2;
-                    // if (!_tokensKey.size())
-                    //     return 2;
-                    // for (size_t i = 0; i < _tokensKey.size(); i++)
-                    // {
-                    //     std::string list = listUserChannel(channel.mapChannel, _tabUser, tokenChannel, y);
-                    //     if (list.empty())
-                    //         connectChannelKey(channel);
-                    //     else
-                    //     {
-                    //         for (std::map<std::string, std::string>::iterator it = channel._mapChannelKey.begin(); it != channel._mapChannelKey.end(); ++it)
-                    //         {
-                    //             if (it->first == _tokensChannel[i])
-                    //             {
-                    //                 if (it->second != _tokensKey[i])
-                    //                     return 2;
-
-                    //             }
-                    //         }
-                    //     }
-                    // }
                 }
                 else if (*vecIt == 'l')
                 {
                     if (verifModeL(channel, _tabUser, y, tokenChannel) == 3)
                         return 3;
-                    // std::string list = listUserChannel(channel.mapChannel, _tabUser, tokenChannel, y);
-                    // std::istringstream iss(list);
-                    // std::string token;
-                    // int number = 0;
-                    // while (iss >> token)
-                    //     number++;
-                    // for (std::map<std::string, int>::iterator it = channel._mapChannelLimit.begin(); it != channel._mapChannelLimit.end(); ++it)
-                    // {
-                    //     if (it->first == tokenChannel)
-                    //     {
-                    //         if (it->second <= number)
-                    //             return 3;
-
-                    //     }
-                    // }
                 }
             }
         }
@@ -247,9 +172,8 @@ void Join::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct
 {
     if (str.find('#') == std::string::npos && str.find('&') == std::string::npos)
     {
-        std::string test = "channel";
-        writeInfd(ERR_BADCHANMASK(test), i, _pfds);
-        // writeInfd(ERR_NEEDMOREPARAMS(_tabUser[i].getUsername(), _channelJoin), i, _pfds);
+        std::string name = "channel";
+        writeInfd(ERR_BADCHANMASK(name), i, _pfds);
         return ;
     }
     if (ParseJoinCmd(str, channel) == 1)
@@ -286,7 +210,6 @@ void Join::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struct
         }
         writeInfd(RPL_JOIN(_tabUser[i].getNickname(), _tokensChannel[j]), i, _pfds);
         add_user_inChannel(channel, _tabUser, join, i, _pfds, _tokensChannel[j]);
-        std::cout << "yo Nick " << _tabUser[i].getNickname() << " and User " << _tabUser[i].getUsername() << " enter in " << _tokensChannel[j] << std::endl;
     }
 }
 

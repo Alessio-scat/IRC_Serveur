@@ -26,7 +26,6 @@ Kick &Kick::operator=(Kick const &rhs)
 void Kick::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_tabUser, int y, Channel &channel)
 {
     parse_cmd(str);
-    std::cout << GREEN << "|" << this->_user << "|" << RESET << std::endl;
     if (this->_channel.empty() || this->_user.empty())
     {
         writeInfd(ERR_NEEDMOREPARAMS(_tabUser[y].getNickname(), "KICK"), y, _pfds);

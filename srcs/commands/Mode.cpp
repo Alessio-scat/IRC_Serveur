@@ -36,26 +36,13 @@ void Mode::execute_cmd(std::string str, Channel &channel)
     std::string tmpWho;
 
     if (str.find('#') == std::string::npos)
-    {
-        std::cout << "ERROR: MODE need more param" << std::endl;
-        // throw ERR_NEEDMOREPARAMS();
         return ;
-    }
     tmpChannel = str.substr(5, endChannel - 5);
     if (tmpChannel.size() < 2)
-    {
-        std::cout << "ERROR: MODE wrong channel" << std::endl;
-        // throw ERR_NOSUCHCHANNEL();
         return ;
-    }
     this->_channelMode = tmpChannel;
-    std::cout << "channelMode : " << this->_channelMode << std::endl;
     if (str.find("+") == std::string::npos && str.find("-") == std::string::npos)
-    {
-        std::cout << "ERROR: MODE wrong opt" << std::endl;
-        // Checking the topic for the channel
         return ;
-    }
     if (str.find("+") != std::string::npos && str.find("-") != std::string::npos)
     {
         int tmpPosAdd = str.find("+");
@@ -84,19 +71,9 @@ void Mode::execute_cmd(std::string str, Channel &channel)
     }
     tmpOpt = str.substr(startOpt, endOpt - startOpt);
     this->_opt = tmpOpt;
-    std::cout << "option Mode : " << this->_opt << std::endl;
-    // while (str[endOpt] == ' ')
-    //     endOpt++;
-    // startWho = endOpt;
-    // endWho = endOpt;
-    // while (str[endWho] != ' ' && endWho <= str.size())
-    //     endWho++;
-    // tmpWho = str.substr(startWho, endWho - startWho);
-    // ft_trim(tmpWho);
     tmpWho = str.substr(endOpt, str.size() - endOpt);
     ft_trim(tmpWho);
     this->_who = tmpWho;
-    std::cout << "who : |" << this->_who << "|" << std::endl;
     channel.mapTopic[this->getChannelMode()];
 }
 
@@ -142,10 +119,8 @@ void Mode::changeMode(Channel &channel, User *_tabUser, int index, std::deque<st
         {
             if (this->_opt[0] == '+')
                 addModeL(channel, _tabUser, index, _pfds);
-                // addMode('l', channel);
             else
                 removeModeL(channel, _tabUser, index, _pfds);
-                // removeMode('l', channel);
         }
         else
             unknowMode(_tabUser, index, _pfds, i);
@@ -156,14 +131,10 @@ void Mode::unknowMode(User *_tabUser, int index, std::deque<struct pollfd> _pfds
 {
     if (this->_opt[i] != '\r' && this->_opt[i] != '\n')
     {
-        // std::cout << "|" << this->_opt[i] << "| :is not a recognised channel mode." << std::endl;
         std::stringstream ss;
         ss << this->_opt[i];
         std::string mode = ss.str();
-        // std::cout << "|" << mode << "| :is not a recognised channel mode." << std::endl;
-        // std::cout << "USER: |" << _tabUser[index].getUsername() << "|" << std::endl;
         std::string message = ERR_UNKNOWNMODE(_tabUser[index].getUsername(), mode);
-        // std::cout << "MESSAGE : " << message << std::endl;
         writeInfd(message, index, _pfds);
     }
 }
@@ -226,7 +197,6 @@ void Mode::removeMode(char mode, Channel &channel)
 
 void Mode::printListMode(Channel &channel)
 {
-    std::cout << "CHANNELMODE : |" << this->_channelMode << "|" << std::endl;
     std::vector<char>::iterator iterator = channel.mapMode[this->_channelMode].begin();
 
     std::cout << "List of mode : [";
@@ -259,7 +229,6 @@ void Mode::addModeO(Channel &channel, User *_tabUser, int index, std::deque<stru
 
 void Mode::removeModeO(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds)
 {
-    // _tabUser[index].setOperateur(false);
     addRemoveChanOperator(channel, _tabUser, index, 0, _pfds);
     removeMode('o', channel);
     printListChanOperator(_tabUser, index);
@@ -289,7 +258,6 @@ int Mode::isWhoInChannel(Channel &channel)
 
     while (iterator != channel.mapChannel[this->_channelMode].end())
     {
-        // std::cout << "iterator : |" << *iterator << "|" << std::endl;
         if (*iterator == this->_who)
             return (0);
         iterator++;
@@ -299,7 +267,6 @@ int Mode::isWhoInChannel(Channel &channel)
 
 int Mode::isUserChannelOperatorInChannel(User *_tabUser, int index)
 {
-    // _tabUser->_chanOperator.push_back(this->_channelMode);
     std::list<std::string>::iterator iterator = _tabUser[index]._chanOperator.begin();
 
     /////////////////////////// Print list of mode
@@ -316,8 +283,6 @@ int Mode::isUserChannelOperatorInChannel(User *_tabUser, int index)
     ///////////////////////////
     while (iterator != _tabUser[index]._chanOperator.end())
     {
-        // std::cout << "A trouver: " << this->_channelMode << std::endl;
-        // std::cout << "iterator : |" << *iterator << "|" << std::endl;
         if (*iterator == this->_channelMode)
             return (0);
         iterator++;
@@ -352,11 +317,7 @@ void Mode::addRemoveChanOperator(Channel &channel, User *_tabUser, int index, bo
         if (isAdd == 1)
         {
             _tabUser[who]._chanOperator.push_back(this->_channelMode);
-            std::cout << "ChannelOperator ajouté : " << this->_channelMode << std::endl;
-            std::cout << "\x1B[32m" << _tabUser[who].getNickname() << " is now OPERATOR" << "\x1B[0m" << std::endl;
-            // std::cout << "WHO " << this->_who << std::endl;
             std::string message = RPL_MODEADDO(_tabUser[index].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()), this->getWho());
-            // std::cout << "message : |" << message << "|" << std::endl;
             std::string list = listUserChannel(channel.mapChannel, _tabUser, this->_channelMode, index);
             std::istringstream ss(list);
             std::string word;

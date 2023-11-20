@@ -20,7 +20,6 @@ private:
     socklen_t addrSize;
     std::deque<struct pollfd> _pfds;
     int serverSocket;
-    // Command command;
     Parsing command;
     User _tabUser[MAX_USERS];
 
