@@ -20,7 +20,6 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
         if (pos !=  std::string::npos)
         {
             Invite invite;
-            std::cout << CURSIVE << buffer << RESET << std::endl;
             invite.execute_cmd(str, _pfds, _tabUser, i, channel);
         }
         pos = str.find("TOPIC");
@@ -32,7 +31,7 @@ void Parsing::whatCommand(char *buffer, User *_tabUser, int i, std::deque<struct
         pos = str.find("JOIN");
         if (pos !=  std::string::npos)
         {
-            std::cout << GREEN << _tabUser[i].getNickname() << RESET << std::endl;
+
             Join join;
             join.execute_cmd(str, _tabUser, i, _pfds, channel, join);
         }

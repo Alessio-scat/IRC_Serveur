@@ -111,7 +111,6 @@ int Invite::User_on_channel(const std::map<std::string, std::list<std::string> >
             break;
         }
     }
-    std::cout << y << std::endl;
     if (exist == 0)
         return (0);
 
@@ -120,8 +119,6 @@ int Invite::User_on_channel(const std::map<std::string, std::list<std::string> >
         {
             for (std::list<std::string>::const_iterator subIt = it->second.begin(); subIt != it->second.end(); ++subIt)
             {
-                std::cout << *subIt << std::endl;
-                std::cout << _tabUser[y].getNickname() << std::endl;
                 if (*subIt == _tabUser[y].getNickname()){
                     return 1;
                 }

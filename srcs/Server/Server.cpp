@@ -89,7 +89,6 @@ int Server::password(int i)
                 return (1);
             mdp = str.substr(pos + 5, sizeStr + 1 - (pos + 5));
             ft_trim(mdp);
-            // std::cout << "MDP: |" << mdp << "|" << std::endl;
             if (mdp != this->_mdp)
             {
                 std::cout << "<client> :Password incorrect\n";
@@ -192,7 +191,6 @@ void Server::Run_Server(void)
                         close(_pfds[i].fd);
                         _pfds[i].fd = 0;
                     }
-                    std::cout << GREEN << i << RESET << std::endl;
                     fillUserCtrlD(_tabUser, i, this->buffer);
                     if (_tabUser[i].getNickname() != "")
                     {
