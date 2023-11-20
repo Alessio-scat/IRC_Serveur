@@ -18,8 +18,6 @@ class Channel
         std::map<std::string, std::vector<char> > mapMode;
         std::map<std::string, std::string > _mapChannelKey;
         std::map<std::string, int > _mapChannelLimit;
-
-    
 };
 
 int isInChannel(std::string channelFind, std::string nick, Channel &channel);
