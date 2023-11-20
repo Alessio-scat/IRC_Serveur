@@ -36,7 +36,6 @@ public:
     void Run_Server(void);
     void connect_client(void);
     int password(int i);
-    void fillUser(User *_tabUser, int i);
     void fillUserCtrlD(User *_tabUser, int i, std::string newBuffer);
 
     /*Test close Socket*/
