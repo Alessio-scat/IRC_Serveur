@@ -323,7 +323,17 @@ void Mode::addRemoveChanOperator(Channel &channel, User *_tabUser, int index, bo
                 return ;
             _tabUser[who]._chanOperator.erase(std::remove(_tabUser[who]._chanOperator.begin(), _tabUser[who]._chanOperator.end(), this->_channelMode), _tabUser[who]._chanOperator.end());
             std::string message = RPL_MODEREMOVEO(_tabUser[index].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()), this->getWho());
-            send(_pfds[index].fd, message.c_str(), message.size(), 0);
+            std::string list = listUserChannel(channel.mapChannel, _tabUser, this->_channelMode, index);
+            std::istringstream ss(list);
+            std::string word;
+            while (ss >> word)
+            {
+                for (int j = 1;j < MAX_USERS; j++)
+                {
+                    if (word == _tabUser[j].getNickname() || word == "@" + _tabUser[j].getNickname())
+                        send(_pfds[j].fd, message.c_str(), message.size(), 0);
+                }
+            }
         }
     }
 }
