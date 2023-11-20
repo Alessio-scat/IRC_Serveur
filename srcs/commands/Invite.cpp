@@ -116,21 +116,17 @@ int Invite::User_on_channel(const std::map<std::string, std::list<std::string> >
             break;
         }
     }
-    std::cout << y << std::endl;
     if (exist == 0)
         return (0);
 
     for (std::map<std::string, std::list<std::string> >::const_iterator it = channel.begin(); it != channel.end(); ++it) {
         if (it->first == this->_channelInvite)
         {
-            std::cout << "BBBBBBBBBBBBBBBB\n";
             for (std::list<std::string>::const_iterator subIt = it->second.begin(); subIt != it->second.end(); ++subIt)
             {
-                std::cout << "AAAAAAAAAAAAA\n";
                 std::cout << *subIt << std::endl;
                 std::cout << _tabUser[y].getNickname() << std::endl;
                 if (*subIt == _tabUser[y].getNickname()){
-                    std::cout << "CCCCCCCCCCCCCCCCCCC\n";
                     return 1;
                 }
             }
