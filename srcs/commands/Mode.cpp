@@ -143,14 +143,29 @@ void Mode::addModeL(Channel &channel, User *_tabUser, int i, std::deque<struct p
         writeInfd(ERR_NEEDMOREPARAMS(_tabUser[i].getNickname(), "Usage /mode (+l)"), i, _pfds);
         return ;
     }
+
     if (clientIsChannelOperator(_channelMode, _tabUser, i, _pfds) == 1)
         return ;
+
     _limit = std::atoi(_who.c_str());
     if (_limit <= 0)
     {
         writeInfd(ERR_INVALIDINPUT(_tabUser[i].getNickname(), "Usage /mode (+l)"), i, _pfds);
         return ;
     }
+
+    std::string list = listUserChannel(channel.mapChannel, _tabUser, _channelMode, i);
+    std::istringstream iss(list);
+    std::string token;
+    int number = 0;
+    while (iss >> token)
+        number++;
+    if (number > _limit)
+    {
+        writeInfd(ERR_INVALIDINPUT(_tabUser[i].getNickname(), "Usage /mode (+l), inconsistency"), i, _pfds);
+        return ;
+    }
+
     channel._mapChannelLimit[_channelMode] = _limit;
     addMode('l', channel);
     std::string message = RPL_MODEADDL(_tabUser[i].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()), this->getWho());
