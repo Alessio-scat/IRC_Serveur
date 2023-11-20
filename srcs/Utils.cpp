@@ -78,20 +78,6 @@ std::string listUserChannel(const std::map<std::string, std::list<std::string> >
     return (list);
 }
 
-void printListMode(std::string channelFind, Channel &channel)
-{
-    std::cout << "CHANNELFIND : |" << channelFind << "|" << std::endl;
-    std::vector<char>::iterator iterator = channel.mapMode[channelFind].begin();
-
-    std::cout << "List of mode : [";
-    while (iterator != channel.mapMode[channelFind].end())
-    {
-        std::cout << *iterator << " ";
-        iterator++;
-    }
-    std::cout << "]" << std::endl;
-}
-
 int clientIsChannelOperator(std::string channelFind, User *_tabUser, int i, std::deque<struct pollfd> _pfds)
 {
     std::list<std::string>::iterator it = _tabUser[i]._chanOperator.begin();

@@ -52,7 +52,6 @@ void Topic::execute_cmd(std::string str, User *_tabUser, int i, std::deque<struc
         return ;
     }
     tmpChannel = str.substr(6, endChannel - 6);
-    printListMode(tmpChannel, channel);
     ft_trim(tmpChannel);
     if (isModePresentInChannel(channel, tmpChannel, 't'))
     {

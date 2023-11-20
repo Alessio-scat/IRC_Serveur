@@ -192,19 +192,6 @@ void Mode::removeMode(char mode, Channel &channel)
     }
 }
 
-void Mode::printListMode(Channel &channel)
-{
-    std::vector<char>::iterator iterator = channel.mapMode[this->_channelMode].begin();
-
-    std::cout << "List of mode : [";
-    while (iterator != channel.mapMode[this->_channelMode].end())
-    {
-        std::cout << *iterator << " ";
-        iterator++;
-    }
-    std::cout << "]" << std::endl;
-}
-
 std::string Mode::getChannelMode(void)
 {
     return (this->_channelMode);
@@ -223,13 +210,11 @@ void Mode::addModeO(Channel &channel, User *_tabUser, int index, std::deque<stru
     {
         std::string message = ERR_NEEDMOREPARAMS(_tabUser[index].getNickname(), "MODE o");
         writeInfd(message, index, _pfds);
-        std::cout << "ERROR: MODE o need who" << std::endl;
         return ;
     }
     _tabUser[index].setOperateur(true);
     addRemoveChanOperator(channel, _tabUser, index, 1, _pfds);
     addMode('o', channel);
-    printListChanOperator(_tabUser, index);
 }
 
 
@@ -241,13 +226,11 @@ void Mode::removeModeO(Channel &channel, User *_tabUser, int index, std::deque<s
     {
         std::string message = ERR_NEEDMOREPARAMS(_tabUser[index].getNickname(), "MODE o");
         writeInfd(message, index, _pfds);
-        std::cout << "ERROR: MODE o need who" << std::endl;
         return ;
     }
     // _tabUser[index].setOperateur(false);
     addRemoveChanOperator(channel, _tabUser, index, 0, _pfds);
     removeMode('o', channel);
-    printListChanOperator(_tabUser, index);
 }
 
 void Mode::addModeI(Channel &channel, User *_tabUser, int index, std::deque<struct pollfd> _pfds)
@@ -285,18 +268,6 @@ int Mode::isUserChannelOperatorInChannel(User *_tabUser, int index)
 {
     std::list<std::string>::iterator iterator = _tabUser[index]._chanOperator.begin();
 
-    /////////////////////////// Print list of mode
-    std::cout << "CHANNELMODE : |" << this->_channelMode << "|" << std::endl;
-    std::list<std::string>::iterator iterator2 = _tabUser[index]._chanOperator.begin();
-
-    std::cout << "List of channelOp for " << _tabUser[index].getNickname() << " : [";
-    while (iterator2 != _tabUser[index]._chanOperator.end())
-    {
-        std::cout << *iterator2 << " ";
-        iterator2++;
-    }
-    std::cout << "]" << std::endl;
-    ///////////////////////////
     while (iterator != _tabUser[index]._chanOperator.end())
     {
         if (*iterator == this->_channelMode)
@@ -346,26 +317,15 @@ void Mode::addRemoveChanOperator(Channel &channel, User *_tabUser, int index, bo
                 }
             }
         }
-        else
-            std::cout << "ChannelOperator non présent : " << this->_channelMode << std::endl;
     }
     else
     {
-        if (isAdd == 1)
-            std::cout << "ChannelOperator déjà présent : " << this->_channelMode << std::endl;
-        else
+        if (isAdd != 1)
         {
             if (_tabUser[who].getNickname() == _tabUser[index].getNickname())
-            {
-                std::cout << "ERROR: You can't remove yourself from channel operator" << std::endl;
                 return ;
-            }
             _tabUser[who]._chanOperator.erase(std::remove(_tabUser[who]._chanOperator.begin(), _tabUser[who]._chanOperator.end(), this->_channelMode), _tabUser[who]._chanOperator.end());
-            std::cout << "ChannelOperator supprimé : " << this->_channelMode << std::endl;
-            std::cout << "\x1B[31m" << _tabUser[who].getNickname() << " not OPERATOR" << "\x1B[0m" << std::endl;
             std::string message = RPL_MODEREMOVEO(_tabUser[index].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()), this->getWho());
-            // std::string message = RPL_MODEREMOVEO(_tabUser[who].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()), _tabUser[who].getNickname());
-            std::cout << "message : |" << message << "|" << std::endl;
             send(_pfds[index].fd, message.c_str(), message.size(), 0);
         }
     }
@@ -375,13 +335,11 @@ void Mode::addModeT(Channel &channel, User *_tabUser, int index, std::deque<stru
 {
     if (isUserChannelOperatorInChannel(_tabUser, index))
     {
-        std::cout << "ERROR: Client not channel operator" << std::endl;
         std::string message = ERR_CHANOPRIVSNEEDED(_tabUser[index].getNickname(), this->_channelMode);
         writeInfd(message, index, _pfds);
         return ;
     }
     addMode('t', channel);
-    printListMode(channel);
     std::string message = RPL_MODEADDT(_tabUser[index].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()));
     writeInfd(message, index, _pfds);
 }
@@ -390,13 +348,11 @@ void Mode::removeModeT(Channel &channel, User *_tabUser, int index, std::deque<s
 {
     if (isUserChannelOperatorInChannel(_tabUser, index))
     {
-        std::cout << "ERROR: Client not channel operator" << std::endl;
         std::string message = ERR_CHANOPRIVSNEEDED(_tabUser[index].getNickname(), this->_channelMode);
         writeInfd(message, index, _pfds);
         return ;
     }
     removeMode('t', channel);
-    printListMode(channel);
     std::string message = RPL_MODEREMOVET(_tabUser[index].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()));
     writeInfd(message, index, _pfds);
 }
@@ -408,7 +364,6 @@ void Mode::addModeK(Channel &channel, User *_tabUser, int index, std::deque<stru
     (void)_pfds;
     if (isUserChannelOperatorInChannel(_tabUser, index))
     {
-        std::cout << "ERROR: Client not channel operator" << std::endl;
         std::string message = ERR_CHANOPRIVSNEEDED(_tabUser[index].getNickname(), this->_channelMode);
         writeInfd(message, index, _pfds);
         return ;
@@ -417,13 +372,10 @@ void Mode::addModeK(Channel &channel, User *_tabUser, int index, std::deque<stru
     {
         std::string message = ERR_NEEDMOREPARAMS(_tabUser[index].getNickname(), "MODE k");
         writeInfd(message, index, _pfds);
-        std::cout << "ERROR: MODE k need key" << std::endl;
         return ;
     }
     channel._mapChannelKey[this->_channelMode] = this->_who;
-    std::cout << "Key activate in channel " << this->_channelMode << " with key : |" << channel._mapChannelKey[this->_channelMode] << "|" << std::endl;
     addMode('k', channel);
-    printListMode(channel);
     std::string message = RPL_MODEADDK(_tabUser[index].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()), this->getWho());
     writeInfd(message, index, _pfds);
 }
@@ -436,7 +388,6 @@ void Mode::removeModeK(Channel &channel, User *_tabUser, int index, std::deque<s
     
     if (isUserChannelOperatorInChannel(_tabUser, index))
     {
-        std::cout << "ERROR: Client not channel operator" << std::endl;
         std::string message = ERR_CHANOPRIVSNEEDED(_tabUser[index].getNickname(), this->_channelMode);
         writeInfd(message, index, _pfds);
         return ;
@@ -448,26 +399,10 @@ void Mode::removeModeK(Channel &channel, User *_tabUser, int index, std::deque<s
     {
         std::string message = ERR_NEEDMOREPARAMS(_tabUser[index].getNickname(), "MODE k");
         writeInfd(message, index, _pfds);
-        std::cout << "MODE k doesn't exist" << std::endl;
         return ;
     }
     channel._mapChannelKey.erase(iterator);
-    std::cout << "Key deleted in channel " << this->_channelMode << std::endl;
     removeMode('k', channel);
-    printListMode(channel);
     std::string message = RPL_MODEREMOVEK(_tabUser[index].getNickname(), this->_channelMode.substr(1, this->_channelMode.size()));
     writeInfd(message, index, _pfds);
-}
-
-void Mode::printListChanOperator(User *_tabUser, int index)
-{
-    std::list<std::string>::iterator iterator = _tabUser[index]._chanOperator.begin();
-
-    std::cout << "List of channel operator : [";
-    while (iterator != _tabUser[index]._chanOperator.end())
-    {
-        std::cout << *iterator << " ";
-        iterator++;
-    }
-    std::cout << "]" << std::endl;
 }
