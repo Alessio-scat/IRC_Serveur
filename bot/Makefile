@@ -3,7 +3,7 @@
 NAME					=	bot
 
 CMP						=	c++
-FLG						=	-Wall -Wextra -Werror -std=c++98 -fsanitize=address
+FLG						=	-Wall -Wextra -Werror -std=c++98
 RM						=	rm -rf
 BUILD_DIR				= 	build/
 
