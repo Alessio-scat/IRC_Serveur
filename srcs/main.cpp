@@ -31,9 +31,5 @@ int main(int ac, char **av)
     {
         std::cerr << e.what() << std::endl;
     }
-    catch (const std::logic_error &e)
-    {
-        std::cerr << e.what() << std::endl;
-    }
     return 0;
 }

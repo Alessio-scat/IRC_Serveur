@@ -71,13 +71,13 @@ void Server::Start_Server(void)
     close(this->serverSocket);
 }
 
-int Server::password(int i)
+int Server::password(int i, std::string newBuffer, User *_tabUser)
 {
     std::string str;
     std::string mdp;
     size_t pos;
     size_t sizeStr;
-    std::istringstream iss(this->buffer);
+    std::istringstream iss(newBuffer);
     while (std::getline(iss, str))
     {
         sizeStr = str.size() - 1;
@@ -95,6 +95,7 @@ int Server::password(int i)
                 writeInfd(ERR_PASSWDMISMATCH(_tabUser[i].getNickname()), i, _pfds);
                 return (1);
             }
+            _tabUser[i].setPassValid(1);
         }
     }
     return (0);
@@ -151,6 +152,61 @@ char* stringToCharArray(const std::string& str) {
     return result;
 }
 
+void Server::serverPartPassword(User *_tabUser, int i, std::deque<struct pollfd> _pfds)
+{
+    if (static_cast<std::string>(this->buffer).find("\n") != std::string::npos)
+    {
+        if (_tabUser[i].getBufferSignal().find("PASS") != std::string::npos)
+        {
+            std::string toAppend = _tabUser[i].getBufferSignal();
+            size_t newSize = toAppend.size() + strlen(this->buffer) + 1;
+            char* newBuffer = new char[newSize];
+            std::strcpy(newBuffer, toAppend.c_str());
+            std::strcat(newBuffer, this->buffer);
+            _tabUser[i].setBufferSignal("");
+            if (password(i, newBuffer, _tabUser))
+            {
+                close(_pfds[i].fd);
+                _pfds[i].fd = 0;
+            }
+        }
+        if (_tabUser[i].getPassValid() == 0 && password(i, this->buffer, _tabUser) && _tabUser[i].getBufferSignal() == "")
+        {
+            close(_pfds[i].fd);
+            _pfds[i].fd = 0;
+        }
+    }
+    else 
+        _tabUser[i].setBufferSignal(this->buffer);
+}
+
+void Server::serverPartCommand(User *_tabUser, int i, std::deque<struct pollfd> _pfds, Parsing command, Channel &channel)
+{
+    if (static_cast<std::string>(this->buffer).find("\n") != std::string::npos)
+    {
+        
+        if (_tabUser[i].getBufferSignal() != "")
+        {
+            std::string toAppend = _tabUser[i].getBufferSignal();
+            size_t newSize = toAppend.size() + strlen(this->buffer) + 1;
+            char* newBuffer = new char[newSize];
+            std::strcpy(newBuffer, toAppend.c_str());
+            std::strcat(newBuffer, this->buffer);
+            _tabUser[i].setBufferSignal("");
+            if (_tabUser[i].getNickname() != "" && _tabUser[i].getUsername() != "")
+                command.whatCommand(newBuffer, _tabUser, i, _pfds, channel);
+            else 
+                fillUserCtrlD(_tabUser, i, newBuffer);
+        }
+        
+        _tabUser[i].setBufferSignal("");
+        if (_tabUser[i].getNickname() != "" && _tabUser[i].getUsername() != "")
+            command.whatCommand(this->buffer, _tabUser, i, _pfds, channel);
+    }
+    else
+        _tabUser[i].setBufferSignal(this->buffer);
+}
+
 void Server::Run_Server(void)
 {
     _pfds[0].fd = this->serverSocket;
@@ -186,8 +242,10 @@ void Server::Run_Server(void)
                 else
                 {
                     this->buffer[bytesRead] = '\0';
-                    if (password(i))
+                    serverPartPassword(_tabUser, i, _pfds);
+                    if (_tabUser[i].getPassValid() == 0 && _pfds[i].fd != 0 && _tabUser[i].getBufferSignal() == "")
                     {
+                        writeInfd(ERR_PASSWDMISMATCH(_tabUser[i].getNickname()), i, _pfds);
                         close(_pfds[i].fd);
                         _pfds[i].fd = 0;
                     }
@@ -204,29 +262,7 @@ void Server::Run_Server(void)
                             }
                         }
                     }
-                    if (static_cast<std::string>(this->buffer).find("\n") != std::string::npos)
-                    {
-                        
-                        if (_tabUser[i].getBufferSignal() != "")
-                        {
-                            std::string toAppend = _tabUser[i].getBufferSignal();
-                            size_t newSize = toAppend.size() + strlen(this->buffer) + 1;
-                            char* newBuffer = new char[newSize];
-                            std::strcpy(newBuffer, toAppend.c_str());
-                            std::strcat(newBuffer, this->buffer);
-                            _tabUser[i].setBufferSignal("");
-                            if (_tabUser[i].getNickname() != "" && _tabUser[i].getUsername() != "")
-                                command.whatCommand(newBuffer, _tabUser, i, _pfds, channel);
-                            else 
-                                fillUserCtrlD(_tabUser, i, newBuffer);
-                        }
-                        
-                        _tabUser[i].setBufferSignal("");
-                        if (_tabUser[i].getNickname() != "" && _tabUser[i].getUsername() != "")
-                            command.whatCommand(this->buffer, _tabUser, i, _pfds, channel);
-                    }
-                    else
-                        _tabUser[i].setBufferSignal(this->buffer);
+                    serverPartCommand(_tabUser, i, _pfds, command, channel);
                 }
             }
         }
