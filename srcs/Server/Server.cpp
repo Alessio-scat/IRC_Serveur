@@ -82,7 +82,6 @@ int Server::password(int i, std::string newBuffer, User *_tabUser)
     while (std::getline(iss, str))
     {
         sizeStr = str.size() - 1;
-        // pos = str.find_last_of("PASS");
         pos = str.find("PASS");
         if (pos !=  std::string::npos)
         {
@@ -96,13 +95,7 @@ int Server::password(int i, std::string newBuffer, User *_tabUser)
                 writeInfd(ERR_PASSWDMISMATCH(_tabUser[i].getNickname()), i, _pfds);
                 return (1);
             }
-            // _tabUser[i]._passValidBool = true;
         }
-        // else if (_tabUser[i]._passValidBool == false)
-        // {
-        //     writeInfd(ERR_PASSWDMISMATCH(_tabUser[i].getNickname()), i, _pfds);
-        //     return (1);
-        // }
     }
     return (0);
 }
@@ -171,9 +164,11 @@ void Server::serverPartPassword(User *_tabUser, int i, std::deque<struct pollfd>
             _tabUser[i].setBufferSignal("");
             if (password(i, newBuffer, _tabUser))
             {
+                delete [] newBuffer;
                 close(_pfds[i].fd);
                 _pfds[i].fd = 0;
             }
+            delete [] newBuffer;
         }
         if (_tabUser[i]._passValidBool == 0 && password(i, this->buffer, _tabUser) && _tabUser[i].getBufferSignal() == "")
         {
@@ -199,9 +194,15 @@ void Server::serverPartCommand(User *_tabUser, int i, std::deque<struct pollfd> 
             std::strcat(newBuffer, this->buffer);
             _tabUser[i].setBufferSignal("");
             if (_tabUser[i].getNickname() != "" && _tabUser[i].getUsername() != "")
+            {
                 command.whatCommand(newBuffer, _tabUser, i, _pfds, channel);
+                delete [] newBuffer;
+            }
             else 
+            {
                 fillUserCtrlD(_tabUser, i, newBuffer);
+                delete [] newBuffer;
+            }
         }
         
         _tabUser[i].setBufferSignal("");
@@ -226,7 +227,6 @@ void Server::Run_Server(void)
         {
             if (poll(&_pfds.front(), _pfds.size(), -1) < 0)
                 return;
-                // throw std::runtime_error("Error while polling from fd!");
         }
 
         // event de connexion
@@ -255,11 +255,6 @@ void Server::Run_Server(void)
                 {
                     this->buffer[bytesRead] = '\0';
                     serverPartPassword(_tabUser, i, _pfds);
-                    // if (_tabUser[i]._passValidBool == false && _tabUser[i].getBufferSignal() == "")
-                    // {
-                    //     close(_pfds[i].fd);
-                    //     _pfds[i].fd = 0;
-                    // }
                     fillUserCtrlD(_tabUser, i, this->buffer);
                     if (_tabUser[i].getNickname() != "")
                     {
