@@ -34,10 +34,12 @@ public:
     void Start_Server(void);
     void Run_Server(void);
     void connect_client(void);
-    int password(int i);
+    int password(int i, std::string newBuffer, User *_tabUser);
     void fillUserCtrlD(User *_tabUser, int i, std::string newBuffer);
 
     /*Test close Socket*/
     static std::vector<int> openSockets;//partage entre toute les instances de la classe == tous acces a la meme liste de sockets ouvert
     void closeAllSockets();// que avec le static(Acces direct sans instance specifique car dans le main et coherance avec l'autre variable static)
+    void serverPartCommand(User *_tabUser, int i, std::deque<struct pollfd> _pfds, Parsing command, Channel &channel);
+    void serverPartPassword(User *_tabUser, int i, std::deque<struct pollfd> _pfds);
 };
