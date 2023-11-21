@@ -180,6 +180,13 @@ void Server::Run_Server(void)
                 int bytesRead = recv(_pfds[i].fd, this->buffer, sizeof(this->buffer), 0);
                 if (bytesRead <= 0)
                 {
+                    std::cout << "close\n";
+                    if (bytesRead == 0)
+                    {
+                        Quit quit;
+                        std::string str = "QUIT :Leaving\r\n";
+                        quit.execute_cmd(str, _pfds, _tabUser, i, channel);
+                    }
                     close(_pfds[i].fd);
                     _pfds[i].fd = 0;
                 }
