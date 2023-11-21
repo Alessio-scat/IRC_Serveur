@@ -73,6 +73,7 @@ void Server::Start_Server(void)
 
 int Server::password(int i, std::string newBuffer, User *_tabUser)
 {
+
     std::string str;
     std::string mdp;
     size_t pos;
@@ -95,8 +96,16 @@ int Server::password(int i, std::string newBuffer, User *_tabUser)
                 writeInfd(ERR_PASSWDMISMATCH(_tabUser[i].getNickname()), i, _pfds);
                 return (1);
             }
+            // std::cout << i << std::endl;
             _tabUser[i].setPassValid(1);
+            // std::cout << _tabUser[i].getPassValid() << std::endl;
         }
+        // else if (_tabUser[i].getPassValid() == 0)
+        // {
+        //     std::cout << "<client> :Password incorrectttt : " << _tabUser[i].getPassValid() << " " << i << std::endl;
+        //     writeInfd(ERR_PASSWDMISMATCH(_tabUser[i].getNickname()), i, _pfds);
+        //     return (1);
+        // }
     }
     return (0);
 }
@@ -236,9 +245,13 @@ void Server::Run_Server(void)
                 int bytesRead = recv(_pfds[i].fd, this->buffer, sizeof(this->buffer), 0);
                 if (bytesRead <= 0)
                 {
-                    Quit quit;
-                    std::string str = "QUIT :Leaving\r\n";
-                    quit.execute_cmd(str, _pfds, _tabUser, i, channel);
+                    std::cout << "close\n";
+                    if (bytesRead == 0)
+                    {
+                        Quit quit;
+                        std::string str = "QUIT :Leaving\r\n";
+                        quit.execute_cmd(str, _pfds, _tabUser, i, channel);
+                    }
                     close(_pfds[i].fd);
                     _pfds[i].fd = 0;
                 }
@@ -246,12 +259,12 @@ void Server::Run_Server(void)
                 {
                     this->buffer[bytesRead] = '\0';
                     serverPartPassword(_tabUser, i, _pfds);
-                    if (_tabUser[i].getPassValid() == 0 && _pfds[i].fd != 0 && _tabUser[i].getBufferSignal() == "")
-                    {
-                        writeInfd(ERR_PASSWDMISMATCH(_tabUser[i].getNickname()), i, _pfds);
-                        close(_pfds[i].fd);
-                        _pfds[i].fd = 0;
-                    }
+                    // if (_tabUser[i].getPassValid() == 0 && _pfds[i].fd != 0 && _tabUser[i].getBufferSignal() == "")
+                    // {
+                    //     writeInfd(ERR_PASSWDMISMATCH(_tabUser[i].getNickname()), i, _pfds);
+                    //     close(_pfds[i].fd);
+                    //     _pfds[i].fd = 0;
+                    // }
                     fillUserCtrlD(_tabUser, i, this->buffer);
                     if (_tabUser[i].getNickname() != "")
                     {
@@ -262,6 +275,7 @@ void Server::Run_Server(void)
                                 close(_pfds[i].fd);
                                 _pfds[i].fd = 0;
                                 _tabUser[i].setNickname("");
+                                break ;
                             }
                         }
                     }
