@@ -33,8 +33,10 @@ public:
 
     void Start_Server(void);
     void Run_Server(void);
+    void serverPartPassword(User *_tabUser, int i, std::deque<struct pollfd> _pfds);
+    void serverPartCommand(User *_tabUser, int i, std::deque<struct pollfd> _pfds, Parsing command, Channel &channel);
     void connect_client(void);
-    int password(int i);
+    int password(int i, std::string newBuffer, User *_tabUser);
     void fillUserCtrlD(User *_tabUser, int i, std::string newBuffer);
 
     /*Test close Socket*/
