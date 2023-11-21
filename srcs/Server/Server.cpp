@@ -180,6 +180,9 @@ void Server::Run_Server(void)
                 int bytesRead = recv(_pfds[i].fd, this->buffer, sizeof(this->buffer), 0);
                 if (bytesRead <= 0)
                 {
+                    Quit quit;
+                    std::string str = "QUIT :Leaving\r\n";
+                    quit.execute_cmd(str, _pfds, _tabUser, i, channel);
                     close(_pfds[i].fd);
                     _pfds[i].fd = 0;
                 }
@@ -194,33 +197,33 @@ void Server::Run_Server(void)
                     fillUserCtrlD(_tabUser, i, this->buffer);
                     if (_tabUser[i].getNickname() != "")
                     {
-                        for(int j = 1; j < MAX_USERS; j++)
+                        for (int j = 1; j < MAX_USERS; j++)
                         {
                             if (_tabUser[i].getNickname() == _tabUser[j].getNickname() && j != i)
                             {
                                 close(_pfds[i].fd);
                                 _pfds[i].fd = 0;
-                                _tabUser[i].setNickname(""); 
+                                _tabUser[i].setNickname("");
                             }
                         }
                     }
                     if (static_cast<std::string>(this->buffer).find("\n") != std::string::npos)
                     {
-                        
+
                         if (_tabUser[i].getBufferSignal() != "")
                         {
                             std::string toAppend = _tabUser[i].getBufferSignal();
                             size_t newSize = toAppend.size() + strlen(this->buffer) + 1;
-                            char* newBuffer = new char[newSize];
+                            char *newBuffer = new char[newSize];
                             std::strcpy(newBuffer, toAppend.c_str());
                             std::strcat(newBuffer, this->buffer);
                             _tabUser[i].setBufferSignal("");
                             if (_tabUser[i].getNickname() != "" && _tabUser[i].getUsername() != "")
                                 command.whatCommand(newBuffer, _tabUser, i, _pfds, channel);
-                            else 
+                            else
                                 fillUserCtrlD(_tabUser, i, newBuffer);
                         }
-                        
+
                         _tabUser[i].setBufferSignal("");
                         if (_tabUser[i].getNickname() != "" && _tabUser[i].getUsername() != "")
                             command.whatCommand(this->buffer, _tabUser, i, _pfds, channel);

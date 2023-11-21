@@ -7,6 +7,7 @@
 
 
 void signal_handler(int signum) {
+    std::cout << "passe\n";
     (void)signum;
     SignControlC = 1;
 }
