@@ -151,28 +151,32 @@ char* stringToCharArray(const std::string& str) {
     return result;
 }
 
-void Server::serverPartPassword(User *_tabUser, int i, std::deque<struct pollfd> _pfds)
+void Server::serverPartPassword(User *_tabUser, const int i, std::deque<struct pollfd> _pfds)
 {
     if (static_cast<std::string>(this->buffer).find("\n") != std::string::npos)
     {
         if (_tabUser[i].getBufferSignal().find("PASS") != std::string::npos)
         {
+            std::cout << "A" << std::endl;
             std::string toAppend = _tabUser[i].getBufferSignal();
             size_t newSize = toAppend.size() + strlen(this->buffer) + 1;
             char* newBuffer = new char[newSize];
             std::strcpy(newBuffer, toAppend.c_str());
             std::strcat(newBuffer, this->buffer);
             _tabUser[i].setBufferSignal("");
-            std::cout << "ICI" << std::endl;
+            std::cout << "ICI" << newBuffer << std::endl;
             if (password(i, newBuffer, _tabUser))
             {
-                delete [] newBuffer;
                 close(_pfds[i].fd);
                 _pfds[i].fd = 0;
             }
             delete [] newBuffer;
         }
-
+        else if (password(i, this->buffer, _tabUser))
+        {
+            close(_pfds[i].fd);
+            _pfds[i].fd = 0;
+        }
     }
     else 
         _tabUser[i].setBufferSignal(this->buffer);
@@ -255,6 +259,7 @@ void Server::Run_Server(void)
                 else
                 {
                     this->buffer[bytesRead] = '\0';
+                    // serverPartPassword(_tabUser, i, _pfds);
                     if (password(i, this->buffer, _tabUser))
                     {
                         close(_pfds[i].fd);

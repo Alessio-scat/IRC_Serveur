@@ -41,5 +41,5 @@ public:
     static std::vector<int> openSockets;//partage entre toute les instances de la classe == tous acces a la meme liste de sockets ouvert
     void closeAllSockets();// que avec le static(Acces direct sans instance specifique car dans le main et coherance avec l'autre variable static)
     void serverPartCommand(User *_tabUser, int i, std::deque<struct pollfd> _pfds, Parsing command, Channel &channel);
-    void serverPartPassword(User *_tabUser, int i, std::deque<struct pollfd> _pfds);
+    void serverPartPassword(User *_tabUser, const int i, std::deque<struct pollfd> _pfds);
 };
