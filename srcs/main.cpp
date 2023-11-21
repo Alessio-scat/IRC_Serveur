@@ -6,8 +6,7 @@
 #include "../includes/Channel/Channel.hpp"
 
 
-void signal_handler(int signum) {
-    std::cout << "passe\n";
+void signal_handler(int signum){
     (void)signum;
     SignControlC = 1;
 }
