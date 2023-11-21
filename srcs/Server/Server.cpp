@@ -96,13 +96,13 @@ int Server::password(int i, std::string newBuffer, User *_tabUser)
                 writeInfd(ERR_PASSWDMISMATCH(_tabUser[i].getNickname()), i, _pfds);
                 return (1);
             }
-            _tabUser[i]._passValidBool = true;
+            // _tabUser[i]._passValidBool = true;
         }
-        else if (_tabUser[i]._passValidBool == false)
-        {
-            writeInfd(ERR_PASSWDMISMATCH(_tabUser[i].getNickname()), i, _pfds);
-            return (1);
-        }
+        // else if (_tabUser[i]._passValidBool == false)
+        // {
+        //     writeInfd(ERR_PASSWDMISMATCH(_tabUser[i].getNickname()), i, _pfds);
+        //     return (1);
+        // }
     }
     return (0);
 }
@@ -255,11 +255,11 @@ void Server::Run_Server(void)
                 {
                     this->buffer[bytesRead] = '\0';
                     serverPartPassword(_tabUser, i, _pfds);
-                    if (_tabUser[i]._passValidBool == false && _tabUser[i].getBufferSignal() == "")
-                    {
-                        close(_pfds[i].fd);
-                        _pfds[i].fd = 0;
-                    }
+                    // if (_tabUser[i]._passValidBool == false && _tabUser[i].getBufferSignal() == "")
+                    // {
+                    //     close(_pfds[i].fd);
+                    //     _pfds[i].fd = 0;
+                    // }
                     fillUserCtrlD(_tabUser, i, this->buffer);
                     if (_tabUser[i].getNickname() != "")
                     {
