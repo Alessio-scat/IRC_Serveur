@@ -96,16 +96,13 @@ int Server::password(int i, std::string newBuffer, User *_tabUser)
                 writeInfd(ERR_PASSWDMISMATCH(_tabUser[i].getNickname()), i, _pfds);
                 return (1);
             }
-            // std::cout << i << std::endl;
-            _tabUser[i].setPassValid(1);
-            // std::cout << _tabUser[i].getPassValid() << std::endl;
+            _tabUser[i]._passValidBool = true;
         }
-        // else if (_tabUser[i].getPassValid() == 0)
-        // {
-        //     std::cout << "<client> :Password incorrectttt : " << _tabUser[i].getPassValid() << " " << i << std::endl;
-        //     writeInfd(ERR_PASSWDMISMATCH(_tabUser[i].getNickname()), i, _pfds);
-        //     return (1);
-        // }
+        else if (_tabUser[i]._passValidBool == false)
+        {
+            writeInfd(ERR_PASSWDMISMATCH(_tabUser[i].getNickname()), i, _pfds);
+            return (1);
+        }
     }
     return (0);
 }
@@ -153,10 +150,9 @@ void Server::fillUserCtrlD(User *_tabUser, int i, std::string newBuffer)
     }
 }
 
-
-
-char* stringToCharArray(const std::string& str) {
-    char* result = new char[str.length() + 1]; // +1 for null-terminator
+char* stringToCharArray(const std::string& str)
+{
+    char* result = new char[str.length() + 1];
     std::strcpy(result, str.c_str());
     return result;
 }
@@ -179,7 +175,7 @@ void Server::serverPartPassword(User *_tabUser, int i, std::deque<struct pollfd>
                 _pfds[i].fd = 0;
             }
         }
-        if (_tabUser[i].getPassValid() == 0 && password(i, this->buffer, _tabUser) && _tabUser[i].getBufferSignal() == "")
+        if (_tabUser[i]._passValidBool == 0 && password(i, this->buffer, _tabUser) && _tabUser[i].getBufferSignal() == "")
         {
             close(_pfds[i].fd);
             _pfds[i].fd = 0;
@@ -259,12 +255,11 @@ void Server::Run_Server(void)
                 {
                     this->buffer[bytesRead] = '\0';
                     serverPartPassword(_tabUser, i, _pfds);
-                    // if (_tabUser[i].getPassValid() == 0 && _pfds[i].fd != 0 && _tabUser[i].getBufferSignal() == "")
-                    // {
-                    //     writeInfd(ERR_PASSWDMISMATCH(_tabUser[i].getNickname()), i, _pfds);
-                    //     close(_pfds[i].fd);
-                    //     _pfds[i].fd = 0;
-                    // }
+                    if (_tabUser[i]._passValidBool == false && _tabUser[i].getBufferSignal() == "")
+                    {
+                        close(_pfds[i].fd);
+                        _pfds[i].fd = 0;
+                    }
                     fillUserCtrlD(_tabUser, i, this->buffer);
                     if (_tabUser[i].getNickname() != "")
                     {

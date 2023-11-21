@@ -5,7 +5,7 @@ User::User()
     this->_nickname = "";
     this->_username = "";
     this->_operator = 0;
-    this->_passValid = 0;
+    _passValidBool = false;
 }
 
 User::User(User const &src)
@@ -22,7 +22,6 @@ User User::operator=(User const &rhs)
     this->_nickname = rhs._nickname;
     this->_username = rhs._username;
     this->_operator = rhs._operator;
-    this->_passValid = rhs._passValid;
     return(*this);
 }
 
@@ -59,14 +58,4 @@ std::string User::getBufferSignal(void)
 void User::setBufferSignal(std::string bufferSignal)
 {
     this->_bufferSignal = bufferSignal;
-}
-
-int User::getPassValid(void)
-{
-    return (this->_passValid);
-}
-
-void User::setPassValid(int passValid)
-{
-    this->_passValid = passValid;
 }

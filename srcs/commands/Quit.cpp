@@ -32,7 +32,6 @@ void Quit::execute_cmd(std::string str, std::deque<struct pollfd> _pfds, User *_
     _tabUser[y]._chanOperator.erase(_tabUser[y]._chanOperator.begin(), _tabUser[y]._chanOperator.end());
     _tabUser[y].setNickname("");
     _tabUser[y].setUsername("");
-    _tabUser[y].setPassValid(0);
 }
 
 void Quit::parse_cmd(std::string str)

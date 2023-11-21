@@ -9,9 +9,9 @@ private:
     std::string _username;
     std::string _nickname;
     bool _operator;
-    int _passValid;
 
 public:
+    bool _passValidBool;
     std::string _bufferSignal;
     std::list<std::string> _chanOperator;
     
@@ -29,8 +29,6 @@ public:
     void setOperateur(bool ope);
     std::string getBufferSignal(void);
     void setBufferSignal(std::string bufferSignal);
-    int getPassValid(void);
-    void setPassValid(int passValid);
 };
 
 #endif
