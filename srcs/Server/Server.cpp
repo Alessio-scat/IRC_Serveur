@@ -159,14 +159,12 @@ void Server::serverPartPassword(User *_tabUser, const int i, std::deque<struct p
     {
         if (_tabUser[i].getBufferSignal().find("PASS") != std::string::npos)
         {
-            std::cout << "A" << std::endl;
             std::string toAppend = _tabUser[i].getBufferSignal();
             size_t newSize = toAppend.size() + strlen(this->buffer) + 1;
             char* newBuffer = new char[newSize];
             std::strcpy(newBuffer, toAppend.c_str());
             std::strcat(newBuffer, this->buffer);
             _tabUser[i].setBufferSignal("");
-            std::cout << "ICI" << newBuffer << std::endl;
             if (password(i, newBuffer, _tabUser))
             {
                 close(_pfds[i].fd);
@@ -250,7 +248,6 @@ void Server::Run_Server(void)
                 int bytesRead = recv(_pfds[i].fd, this->buffer, sizeof(this->buffer), 0);
                 if (bytesRead <= 0)
                 {
-                    std::cout << "close\n";
                     if (bytesRead == 0)
                     {
                         Quit quit;
