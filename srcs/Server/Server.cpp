@@ -112,6 +112,8 @@ void Server::fillUserCtrlD(User *_tabUser, int i, std::string newBuffer)
     int sizeUser = 0;
     if (_tabUser[i].getNickname() != "" && _tabUser[i].getUsername() != "")
         return;
+    if (bufferStr.size() == 4)
+        return;
     if (indexNick != std::string::npos && indexUser != std::string::npos)
     {
         sizeNick = (indexUser - 2) - (indexNick + 4) - 1;
@@ -179,16 +181,15 @@ void Server::serverPartPassword(User *_tabUser, const int i, std::deque<struct p
         }
     }
     else 
+    {
         _tabUser[i].setBufferSignal(this->buffer);
+    }
 }
 
 void Server::serverPartCommand(User *_tabUser, int i, std::deque<struct pollfd> _pfds, Parsing command, Channel &channel)
 {
     if (static_cast<std::string>(this->buffer).find("\n") != std::string::npos)
     {
-        std::cout << "BUFFER: " << this->buffer << std::endl;
-        std::cout << "NICK: " << _tabUser[i].getNickname() << " " << i << std::endl;
-        std::cout << "USER: " << _tabUser[i].getUsername() << " " << i << std::endl;
         if (_tabUser[i].getBufferSignal() != "")
         {
             std::string toAppend = _tabUser[i].getBufferSignal();
@@ -214,7 +215,10 @@ void Server::serverPartCommand(User *_tabUser, int i, std::deque<struct pollfd> 
             command.whatCommand(this->buffer, _tabUser, i, _pfds, channel);
     }
     else
+    {
+        
         _tabUser[i].setBufferSignal(this->buffer);
+    }
 }
 
 void Server::Run_Server(void)
